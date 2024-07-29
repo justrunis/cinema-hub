@@ -35,7 +35,7 @@ export default function SearchBar({
         placeholder={placeHolder}
         value={searchTerm}
         onChange={handleSearchChange}
-        className="bg-base-100 text-base-content w-60 h-10 p-2 rounded-lg"
+        className="bg-base-100 text-base-content w-60 h-10 p-2 rounded-lg border border-black focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
       />
     </motion.div>
   );

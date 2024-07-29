@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./api/http";
-import BackgroundImage from "./components/UI/BackgroundImage";
 
 import Header from "./components/UI/Header";
 import Home from "./pages/Home";

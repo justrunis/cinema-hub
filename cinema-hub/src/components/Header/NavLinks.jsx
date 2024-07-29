@@ -27,7 +27,7 @@ export default function NavLinks() {
         Movies
       </NavLink>
       <NavLink
-        to="/series"
+        to="/shows"
         className={({ isActive }) =>
           `flex flex-row justify-center items-center text-sm lg:text-lg font-bold mr-5 ${
             isActive ? "text-accent" : "text-base-content hover:text-accent"
@@ -35,7 +35,7 @@ export default function NavLinks() {
         }
       >
         <FaTv className="inline mr-2" />
-        TV Series
+        TV shows
       </NavLink>
     </>
   );

@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import Button from "../components/UI/Button";
 
 export default function Home() {
   return (
@@ -15,9 +17,14 @@ export default function Home() {
       <p className="text-xl mb-8 text-black">
         Your go-to destination for the latest movies and TV shows.
       </p>
-      <button className="btn btn-primary text-primary-content">
-        Explore Now
-      </button>
+      <div className="flex gap-4">
+        <Link to="/movies">
+          <Button>Browse Movies</Button>
+        </Link>
+        <Link to="/series">
+          <Button> Browse TV Shows </Button>
+        </Link>
+      </div>
     </motion.div>
   );
 }
