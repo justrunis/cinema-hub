@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./api/http";
+import BackgroundImage from "./components/UI/BackgroundImage";
 
 import Header from "./components/UI/Header";
 import Home from "./pages/Home";
@@ -12,7 +13,7 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <main className="flex flex-col min-h-screen bg-base-300">
+          <main className="flex flex-col min-h-screen">
             <Header />
             <Routes>
               <Route path="/" element={<Home />} />

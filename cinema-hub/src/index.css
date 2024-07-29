@@ -5,3 +5,7 @@
 * {
   font-family: "Acme", sans-serif;
 }
+
+body {
+  background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
+}

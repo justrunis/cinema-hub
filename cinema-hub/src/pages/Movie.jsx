@@ -49,11 +49,15 @@ export default function Movie() {
             {data.title || data.original_title}
           </h1>
           <motion.img
-            src={`${IMAGE_URL}${data.poster_path}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            src={
+              data.poster_path
+                ? `${IMAGE_URL}${data.poster_path}`
+                : "https://via.placeholder.com/500x700.png?text=No+Image"
+            }
             alt={data.title}
-            className="rounded-lg"
-            height={500}
-            width={500}
+            className="rounded-lg w-full h-auto"
           />
         </div>
         <div className="flex flex-col gap-4">

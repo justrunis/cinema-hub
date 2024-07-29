@@ -3,15 +3,21 @@ import { motion } from "framer-motion";
 export default function Home() {
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="container text-center mx-auto"
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 50 }}
+      transition={{ duration: 0.6 }}
+      className="flex flex-col items-center justify-center min-h-screen text-base-content px-4 py-10"
     >
-      <h1 className="text-4xl font-bold mt-10">Welcome to Cinema Hub</h1>
-      <p className="mt-5 text-lg">
-        The best place to find the latest movies and TV shows.
+      <h1 className="text-5xl font-extrabold mb-4 text-accent">
+        Welcome to Cinema Hub
+      </h1>
+      <p className="text-xl mb-8 text-black">
+        Your go-to destination for the latest movies and TV shows.
       </p>
+      <button className="btn btn-primary text-primary-content">
+        Explore Now
+      </button>
     </motion.div>
   );
 }
