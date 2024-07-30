@@ -9,16 +9,32 @@ import StarRating from "../components/Movies/StarRating";
 import { round } from "../utils/formatting";
 import ShowDetail from "../components/Shows/ShowDetail";
 import ShowDetailsGrid from "../components/Shows/ShowDeailsGrid";
-import { useEffect } from "react";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { favoritesActions } from "../store/slices/favorites";
 
 export default function Show() {
   const { id } = useParams();
+
+  const dispatch = useDispatch();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["show", id],
     queryFn: ({ signal }) => fetchShowDetails({ id, signal }),
     staleTime: STALE_TIME,
   });
+
+  const isFavorite = useSelector((state) =>
+    state.favorites.shows.some((show) => show.id === data?.id)
+  );
+
+  function handleFavoriteClick() {
+    if (isFavorite) {
+      dispatch(favoritesActions.removeShow(data));
+    } else {
+      dispatch(favoritesActions.addShow(data));
+    }
+  }
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -94,6 +110,24 @@ export default function Show() {
             </a>
           </ShowDetail>
           <ShowDetailsGrid data={data} />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center gap-4"
+            transition={{ delay: 1.4 }}
+          >
+            {isFavorite ? (
+              <FaHeart
+                className="text-red-500 text-4xl cursor-pointer"
+                onClick={handleFavoriteClick}
+              />
+            ) : (
+              <FaRegHeart
+                className="text-red-500 text-4xl cursor-pointer"
+                onClick={handleFavoriteClick}
+              />
+            )}
+          </motion.div>
         </div>
       </div>
     </motion.div>

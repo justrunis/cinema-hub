@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import logo from "../assets/png/logo-color.png";
 
 const TMDB_LOGO_URL =
   "https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg";
@@ -15,14 +14,6 @@ export default function About() {
       exit={{ opacity: 0 }}
     >
       <div className="flex flex-col items-center gap-6 bg-base-100 p-8 rounded-lg shadow-lg max-w-3xl">
-        <motion.img
-          src={logo}
-          alt="Cinema Hub"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="w-40 h-auto"
-        />
         <motion.img
           src={TMDB_LOGO_URL}
           alt="The Movie Database"

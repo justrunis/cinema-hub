@@ -1,9 +1,16 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import Button from "../components/UI/Button";
+import { useSelector, useDispatch } from "react-redux";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
+import MovieCard from "../components/Movies/MovieCard";
+import ShowCard from "../components/Shows/ShowCard";
 
 export default function Favorites() {
   document.title = "Favorites";
+
+  const { movies, shows } = useSelector((state) => state.favorites);
+
+  const dispatch = useDispatch();
 
   return (
     <motion.div
@@ -17,22 +24,47 @@ export default function Favorites() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
-        className="flex flex-col items-center bg-base-100 p-8 rounded-lg shadow-lg max-w-3xl"
+        className="flex flex-col items-center gap-8 bg-base-100 p-8 rounded-lg shadow-lg max-w-3xl"
       >
         <h1 className="text-5xl font-extrabold mb-4 text-accent text-center">
-          Your Favorites
+          Favorites
         </h1>
-        <p className="text-xl mb-8 text-black text-center">
-          Your favorite movies and TV shows will appear here.
-        </p>
-        <div className="flex gap-4">
-          <Link to="/movies">
-            <Button>Browse Movies</Button>
-          </Link>
-          <Link to="/shows">
-            <Button> Browse TV Shows </Button>
-          </Link>
-        </div>
+        <Tabs>
+          <TabList>
+            <Tab>Movies</Tab>
+            <Tab>TV Shows</Tab>
+          </TabList>
+          <TabPanel>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {movies.length === 0 ? (
+                <div className="text-center text-xl text-base-content">
+                  No favorite movies added
+                </div>
+              ) : (
+                <>
+                  {movies.map((movie) => (
+                    <MovieCard key={movie.id} movie={movie} />
+                  ))}
+                </>
+              )}
+            </div>
+          </TabPanel>
+          <TabPanel>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {shows.length === 0 ? (
+                <div className="text-center text-xl text-base-content">
+                  No favorite shows added
+                </div>
+              ) : (
+                <>
+                  {shows.map((show) => (
+                    <ShowCard key={show.id} show={show} />
+                  ))}
+                </>
+              )}
+            </div>
+          </TabPanel>
+        </Tabs>
       </motion.div>
     </motion.div>
   );

@@ -7,7 +7,6 @@ import { STALE_TIME } from "../utils/constants";
 import SearchBar from "../components/UI/SearchBar";
 import { fetchTrendingShows } from "../api/http";
 import ShowCard from "../components/Shows/ShowCard";
-import { useEffect } from "react";
 
 export default function Shows() {
   const [searchParams, setSearchParams] = useSearchParams();

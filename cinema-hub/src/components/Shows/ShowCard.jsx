@@ -12,8 +12,6 @@ export default function ShowCard({ show }) {
     navigate(`/shows/${show.id}`);
   }
 
-  console.log(show.name);
-
   return (
     <Card
       key={show.id}
