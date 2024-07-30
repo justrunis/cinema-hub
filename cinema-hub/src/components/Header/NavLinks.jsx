@@ -1,5 +1,11 @@
 import { NavLink } from "react-router-dom";
-import { FaHome, FaFilm, FaTv } from "react-icons/fa";
+import {
+  FaHome,
+  FaFilm,
+  FaTv,
+  FaQuestionCircle,
+  FaHeart,
+} from "react-icons/fa";
 
 export default function NavLinks() {
   return (
@@ -8,7 +14,7 @@ export default function NavLinks() {
         to="/"
         className={({ isActive }) =>
           `flex flex-row justify-center items-center text-sm lg:text-lg font-bold mr-5 ${
-            isActive ? "text-accent" : "text-base-content hover:text-accent"
+            isActive ? "text-accent" : "text-primary-content hover:text-accent"
           }`
         }
       >
@@ -16,10 +22,21 @@ export default function NavLinks() {
         Home
       </NavLink>
       <NavLink
+        to="/favorites"
+        className={({ isActive }) =>
+          `flex flex-row justify-center items-center text-sm lg:text-lg font-bold mr-5 ${
+            isActive ? "text-accent" : "text-primary-content hover:text-accent"
+          }`
+        }
+      >
+        <FaHeart className="inline mr-2" />
+        Favorites
+      </NavLink>
+      <NavLink
         to="/movies"
         className={({ isActive }) =>
           `flex flex-row justify-center items-center text-sm lg:text-lg font-bold mr-5 ${
-            isActive ? "text-accent" : "text-base-content hover:text-accent"
+            isActive ? "text-accent" : "text-primary-content hover:text-accent"
           }`
         }
       >
@@ -30,12 +47,23 @@ export default function NavLinks() {
         to="/shows"
         className={({ isActive }) =>
           `flex flex-row justify-center items-center text-sm lg:text-lg font-bold mr-5 ${
-            isActive ? "text-accent" : "text-base-content hover:text-accent"
+            isActive ? "text-accent" : "text-primary-content hover:text-accent"
           }`
         }
       >
         <FaTv className="inline mr-2" />
         TV shows
+      </NavLink>
+      <NavLink
+        to="/about"
+        className={({ isActive }) =>
+          `flex flex-row justify-center items-center text-sm lg:text-lg font-bold mr-5 ${
+            isActive ? "text-accent" : "text-primary-content hover:text-accent"
+          }`
+        }
+      >
+        <FaQuestionCircle className="inline mr-2" />
+        About
       </NavLink>
     </>
   );

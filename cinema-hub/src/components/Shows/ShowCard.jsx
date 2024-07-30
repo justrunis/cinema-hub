@@ -1,20 +1,22 @@
 import { motion } from "framer-motion";
 import Card from "../UI/Card";
-import StarRating from "./StarRating";
+import StarRating from "../Movies/StarRating";
 import { IMAGE_URL, PLACEHOLDER_IMAGE } from "../../utils/constants";
 import { round } from "../../utils/formatting";
 import { useNavigate } from "react-router-dom";
 
-export default function MovieCard({ movie }) {
+export default function ShowCard({ show }) {
   const navigate = useNavigate();
 
   function handleClick() {
-    navigate(`/movies/${movie.id}`);
+    navigate(`/shows/${show.id}`);
   }
+
+  console.log(show.name);
 
   return (
     <Card
-      key={movie.id}
+      key={show.id}
       className="flex flex-col justify-center items-center bg-base-100 p-8 rounded-lg shadow-md"
       onClick={handleClick}
     >
@@ -22,18 +24,18 @@ export default function MovieCard({ movie }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         src={
-          movie.poster_path
-            ? `${IMAGE_URL}${movie.poster_path}`
+          show.poster_path
+            ? `${IMAGE_URL}${show.poster_path}`
             : PLACEHOLDER_IMAGE
         }
-        alt={movie.title}
+        alt={show.name || show.original_name}
         className="rounded-lg w-full h-auto"
       />
       <h2 className="text-xl font-bold mt-2">
-        {movie.original_name || movie.title}
+        {show.name || show.original_name}
       </h2>
       <div className="flex items-center gap-2">
-        <StarRating rating={movie.vote_average} />
+        <StarRating rating={show.vote_average} />
       </div>
     </Card>
   );

@@ -16,8 +16,11 @@ function PageButton({ children, className, ...props }) {
 
 export default function Pager({ totalPages, currentPage, setCurrentPage }) {
   const getItemProps = (index) => ({
-    className:
-      "btn btn-primary text-primary-content bg-accent-400 px-2 py-1 sm:px-3 sm:py-2 min-h-0",
+    className: `btn px-2 py-1 sm:px-3 sm:py-2 min-h-0 ${
+      currentPage === index
+        ? "text-base-content bg-accent text-accent-content"
+        : "bg-primary text-primary-content hover:bg-accent hover:text-accent-content"
+    }`,
     onClick: () => setCurrentPage(index),
   });
 
@@ -72,15 +75,7 @@ export default function Pager({ totalPages, currentPage, setCurrentPage }) {
       </button>
       <div className="flex items-center gap-2">
         {getPagerButtons().map((page) => (
-          <PageButton
-            key={page}
-            {...getItemProps(page)}
-            className={
-              currentPage !== page
-                ? "bg-primary hover:bg-accent text-primary-content"
-                : "bg-accent text-primary-content"
-            }
-          >
+          <PageButton key={page} {...getItemProps(page)}>
             {page}
           </PageButton>
         ))}

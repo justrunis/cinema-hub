@@ -1,20 +1,22 @@
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchMovieDetails } from "../api/http";
+import { fetchShowDetails } from "../api/http";
 import { STALE_TIME, IMAGE_URL, PLACEHOLDER_IMAGE } from "../utils/constants";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
 import ErrorIndicator from "../components/UI/ErrorIndicator";
 import StarRating from "../components/Movies/StarRating";
 import { round } from "../utils/formatting";
-import MovieDetail from "../components/Movies/MovieDetail";
+import ShowDetail from "../components/Shows/ShowDetail";
+import ShowDetailsGrid from "../components/Shows/ShowDeailsGrid";
+import { useEffect } from "react";
 
-export default function Movie() {
+export default function Show() {
   const { id } = useParams();
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["movie", id],
-    queryFn: ({ signal }) => fetchMovieDetails({ id, signal }),
+    queryKey: ["show", id],
+    queryFn: ({ signal }) => fetchShowDetails({ id, signal }),
     staleTime: STALE_TIME,
   });
 
@@ -26,7 +28,7 @@ export default function Movie() {
     return (
       <div className="flex justify-center p-6">
         <ErrorIndicator
-          title="Failed to fetch movie details"
+          title="Failed to fetch show details"
           message={error?.message || "An unknown error occurred"}
         />
       </div>
@@ -34,7 +36,7 @@ export default function Movie() {
   }
 
   if (data) {
-    document.title = `${data.title || data.original_title}`;
+    document.title = `${data.name || data.original_name}`;
   }
 
   return (
@@ -47,7 +49,7 @@ export default function Movie() {
       <div className="flex flex-col lg:flex-row items-center justify-center gap-4 bg-base-300 px-8 lg:pr-80 rounded-lg shadow-md py-6 lg:py-0">
         <div className="flex flex-col gap-4 p-8">
           <h1 className="text-3xl font-bold">
-            {data.title || data.original_title}
+            {data.name || data.original_name}
           </h1>
           <motion.img
             initial={{ opacity: 0 }}
@@ -57,13 +59,13 @@ export default function Movie() {
                 ? `${IMAGE_URL}${data.poster_path}`
                 : PLACEHOLDER_IMAGE
             }
-            alt={data.title}
+            alt={data.name}
             className="rounded-lg w-auto h-auto"
           />
         </div>
 
         <div className="flex flex-col gap-4">
-          <MovieDetail title="Details" delay={0.2}>
+          <ShowDetail title="Details" delay={0.2}>
             <ul className="flex gap-2">
               {data.genres.map((genre) => (
                 <li className="" key={genre.id}>
@@ -71,17 +73,17 @@ export default function Movie() {
                 </li>
               ))}
             </ul>
-          </MovieDetail>
-          <MovieDetail title="Rating" delay={0.4}>
+          </ShowDetail>
+          <ShowDetail title="Rating" delay={0.4}>
             <StarRating
               className="flex items-center gap-2"
-              rating={round(data.vote_average, 1)}
+              rating={round(data.vote_average / 2, 1)}
             />
-          </MovieDetail>
-          <MovieDetail title="Overview" delay={0.6}>
+          </ShowDetail>
+          <ShowDetail title="Overview" delay={0.6}>
             <p className="max-w-sm">{data.overview}</p>
-          </MovieDetail>
-          <MovieDetail title="Homepage" delay={0.8}>
+          </ShowDetail>
+          <ShowDetail title="Homepage" delay={0.8}>
             <a
               href={data.homepage}
               target="_blank"
@@ -90,13 +92,8 @@ export default function Movie() {
             >
               {data.homepage}
             </a>
-          </MovieDetail>
-          <MovieDetail title="Release Date" delay={1}>
-            <p>{data.release_date}</p>
-          </MovieDetail>
-          <MovieDetail title="Runtime" delay={1.2}>
-            <p>{data.runtime} minutes</p>
-          </MovieDetail>
+          </ShowDetail>
+          <ShowDetailsGrid data={data} />
         </div>
       </div>
     </motion.div>

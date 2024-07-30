@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Button from "../components/UI/Button";
 
-export default function Home() {
-  document.title = "Home";
+export default function Favorites() {
+  document.title = "Favorites";
 
   return (
     <motion.div
@@ -20,10 +20,10 @@ export default function Home() {
         className="flex flex-col items-center bg-base-100 p-8 rounded-lg shadow-lg max-w-3xl"
       >
         <h1 className="text-5xl font-extrabold mb-4 text-accent text-center">
-          Welcome to Cinema Hub
+          Your Favorites
         </h1>
         <p className="text-xl mb-8 text-black text-center">
-          Your go-to destination for the latest movies and TV shows.
+          Your favorite movies and TV shows will appear here.
         </p>
         <div className="flex gap-4">
           <Link to="/movies">

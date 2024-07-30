@@ -10,7 +10,6 @@ export default function SearchBar({
   const [searchTerm, setSearchTerm] = useState(value || "");
 
   useEffect(() => {
-    console.log("SearchBar:", searchTerm);
     const timeout = setTimeout(() => {
       onSearch(searchTerm);
     }, 1000);
