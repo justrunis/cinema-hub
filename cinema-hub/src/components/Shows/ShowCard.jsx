@@ -15,7 +15,7 @@ export default function ShowCard({ show }) {
   return (
     <Card
       key={show.id}
-      className="flex flex-col justify-center items-center bg-base-100 p-8 rounded-lg shadow-md"
+      className="flex flex-col justify-center items-center bg-base-100 p-4 sm:p-8 rounded-lg shadow-md"
       onClick={handleClick}
     >
       <motion.img
@@ -29,7 +29,7 @@ export default function ShowCard({ show }) {
         alt={show.name || show.original_name}
         className="rounded-lg w-full h-auto"
       />
-      <h2 className="text-xl font-bold mt-2">
+      <h2 className="text-xs lg:text-lg font-bold mt-2">
         {show.name || show.original_name}
       </h2>
       <div className="flex items-center gap-2">

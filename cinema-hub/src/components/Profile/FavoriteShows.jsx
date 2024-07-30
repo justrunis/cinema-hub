@@ -1,8 +1,11 @@
 import ShowCard from "../Shows/ShowCard";
 import { useState } from "react";
 import SearchBar from "../UI/SearchBar";
+import { useSelector } from "react-redux";
 
-export default function FavoriteShows({ shows }) {
+export default function FavoriteShows() {
+  const { shows } = useSelector((state) => state.favorites);
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredShows = shows.filter((show) =>
@@ -14,7 +17,7 @@ export default function FavoriteShows({ shows }) {
   }
 
   return (
-    <div className="max-h-96 overflow-y-auto w-full">
+    <div className="max-h-100 overflow-y-auto w-full">
       <SearchBar onSearch={handleSearch} className="w-full mb-4" />
 
       {filteredShows.length === 0 ? (
@@ -22,7 +25,7 @@ export default function FavoriteShows({ shows }) {
           <p>No favorite shows found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
           {filteredShows.map((show) => (
             <ShowCard key={show.id} show={show} />
           ))}

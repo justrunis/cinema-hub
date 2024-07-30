@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import Card from "../UI/Card";
 import StarRating from "./StarRating";
 import { IMAGE_URL, PLACEHOLDER_IMAGE } from "../../utils/constants";
-import { round } from "../../utils/formatting";
 import { useNavigate } from "react-router-dom";
 
 export default function MovieCard({ movie }) {
@@ -15,7 +14,7 @@ export default function MovieCard({ movie }) {
   return (
     <Card
       key={movie.id}
-      className="flex flex-col justify-center items-center bg-base-100 p-8 rounded-lg shadow-md"
+      className="flex flex-col justify-center items-center bg-base-100 p-4 sm:p-8 rounded-lg shadow-md"
       onClick={handleClick}
     >
       <motion.img
@@ -29,7 +28,7 @@ export default function MovieCard({ movie }) {
         alt={movie.title}
         className="rounded-lg w-full h-auto"
       />
-      <h2 className="text-xl font-bold mt-2">
+      <h2 className="text-xs lg:text-lg font-bold mt-2">
         {movie.original_name || movie.title}
       </h2>
       <div className="flex items-center gap-2">

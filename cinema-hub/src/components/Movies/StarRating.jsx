@@ -16,7 +16,7 @@ export default function StarRating({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      {width > 640 && (
+      {width > 1024 && (
         <Rating
           start={0}
           stop={10}

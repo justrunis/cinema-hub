@@ -27,23 +27,25 @@ export default function Watchlist() {
   }
 
   return (
-    <div className="max-h-96 overflow-y-auto w-full">
+    <div className="max-h-100 overflow-y-auto w-full mt-5">
       <SearchBar onSearch={handleSearch} className="w-full mb-4" />
-      {uniqueFilteredItems.length === 0 ? (
-        <div className="flex items-center justify-center text-center text-primary font-bold">
-          <p className="text-center">No movies/shows found</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {uniqueFilteredItems.map((item) =>
-            item.title ? (
-              <MovieCard key={item.id} movie={item} />
-            ) : (
-              <ShowCard key={item.id} show={item} />
-            )
-          )}
-        </div>
-      )}
+      <div className="flex items-center justify-center lg:flex-col items-center gap-2">
+        {uniqueFilteredItems.length === 0 ? (
+          <div className="flex items-center justify-center text-center text-primary font-bold">
+            <p className="text-center">No movies/shows found</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
+            {uniqueFilteredItems.map((item) =>
+              item.title ? (
+                <MovieCard key={item.id} movie={item} />
+              ) : (
+                <ShowCard key={item.id} show={item} />
+              )
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

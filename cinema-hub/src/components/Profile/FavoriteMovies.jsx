@@ -1,8 +1,11 @@
 import MovieCard from "../Movies/MovieCard";
 import { useState } from "react";
 import SearchBar from "../UI/SearchBar";
+import { useSelector } from "react-redux";
 
-export default function FavoriteMovies({ movies }) {
+export default function FavoriteMovies() {
+  const { movies } = useSelector((state) => state.favorites);
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredMovies = movies.filter((movie) =>
@@ -14,7 +17,7 @@ export default function FavoriteMovies({ movies }) {
   }
 
   return (
-    <div className="max-h-96 overflow-y-auto w-full">
+    <div className="max-h-100 overflow-y-auto w-full">
       <SearchBar onSearch={handleSearch} className="w-full mb-4" />
 
       {filteredMovies.length === 0 ? (
@@ -22,7 +25,7 @@ export default function FavoriteMovies({ movies }) {
           <p className="text-center">No favorite movies found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
           {filteredMovies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
