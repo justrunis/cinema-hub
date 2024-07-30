@@ -8,9 +8,11 @@ import ErrorIndicator from "../components/UI/ErrorIndicator";
 import StarRating from "../components/Movies/StarRating";
 import { round } from "../utils/formatting";
 import MovieDetail from "../components/Movies/MovieDetail";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaListAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { favoritesActions } from "../store/slices/favorites";
+import { watchlistActions } from "../store/slices/wathclist";
+import Button from "../components/UI/Button";
 
 export default function Movie() {
   const { id } = useParams();
@@ -27,11 +29,25 @@ export default function Movie() {
     state.favorites.movies.some((movie) => movie.id === data?.id)
   );
 
+  const isInWatchlist = useSelector((state) =>
+    state.watchlist.movies.some((movie) => movie.id === data?.id)
+  );
+
+  console.log(isFavorite, isInWatchlist);
+
   function handleFavoriteClick() {
     if (isFavorite) {
       dispatch(favoritesActions.removeMovie(data));
     } else {
       dispatch(favoritesActions.addMovie(data));
+    }
+  }
+
+  function handleWatchlistClick() {
+    if (isInWatchlist) {
+      dispatch(watchlistActions.removeMovie(data));
+    } else {
+      dispatch(watchlistActions.addMovie(data));
     }
   }
 
@@ -53,6 +69,34 @@ export default function Movie() {
   if (data) {
     document.title = `${data.title || data.original_title}`;
   }
+
+  const buttonClass = "flex items-center gap-2 btn rounded-lg";
+  const iconClass = "text-4xl cursor-pointer";
+  const textClass = "font-bold text-sm";
+
+  const favButtonProps = isFavorite
+    ? {
+        className: `${buttonClass} bg-accent text-primary-content hover:bg-red-600`,
+        icon: <FaHeart className={`text-primary ${iconClass}`} />,
+        text: "Remove from favorites",
+      }
+    : {
+        className: `${buttonClass} bg-primary text-primary-content hover:bg-accent`,
+        icon: <FaRegHeart className={`text-primary-content ${iconClass}`} />,
+        text: "Add to favorites",
+      };
+
+  const watchlistButtonProps = isInWatchlist
+    ? {
+        className: `${buttonClass} bg-accent text-primary-content hover:bg-red-600`,
+        text: "Remove from watchlist",
+        icon: <FaListAlt className={`text-primary ${iconClass}`} />,
+      }
+    : {
+        className: `${buttonClass} bg-primary text-primary-content hover:bg-accent`,
+        text: "Add to watchlist",
+        icon: <FaListAlt className={`text-primary-content ${iconClass}`} />,
+      };
 
   return (
     <motion.div
@@ -103,7 +147,7 @@ export default function Movie() {
               href={data?.homepage}
               target="_blank"
               rel="noreferrer"
-              className="text-blue-500"
+              className="text-blue-500 hover:underline"
             >
               {data?.homepage}
             </a>
@@ -120,17 +164,25 @@ export default function Movie() {
             className="flex items-center gap-4"
             transition={{ delay: 1.4 }}
           >
-            {isFavorite ? (
-              <FaHeart
-                className="text-red-500 text-4xl cursor-pointer"
-                onClick={handleFavoriteClick}
-              />
-            ) : (
-              <FaRegHeart
-                className="text-red-500 text-4xl cursor-pointer"
-                onClick={handleFavoriteClick}
-              />
-            )}
+            <Button
+              onClick={handleFavoriteClick}
+              className={favButtonProps.className}
+            >
+              {favButtonProps.icon}
+              <p className={`text-primary-content ${textClass}`}>
+                {favButtonProps.text}
+              </p>
+            </Button>
+
+            <Button
+              className={watchlistButtonProps.className}
+              onClick={handleWatchlistClick}
+            >
+              {watchlistButtonProps.icon}
+              <p className={`text-primary-content ${textClass}`}>
+                {watchlistButtonProps.text}
+              </p>
+            </Button>
           </motion.div>
         </div>
       </div>

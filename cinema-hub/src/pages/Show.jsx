@@ -104,7 +104,7 @@ export default function Show() {
               href={data.homepage}
               target="_blank"
               rel="noreferrer"
-              className="text-blue-500"
+              className="text-blue-500 hover:underline"
             >
               {data.homepage}
             </a>

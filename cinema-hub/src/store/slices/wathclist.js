@@ -18,11 +18,18 @@ const initialState = {
       poster_path: "/sdJcX2cXirwQurLLlrDLYov7hcD.jpg.jpg",
       vote_average: 8.4,
     },
+    {
+      id: 614,
+      name: "Futurama",
+      original_name: "Futurama",
+      poster_path: "/sdJcX2cXirwQurLLlrDLYov7hcD.jpg.jpg",
+      vote_average: 8.4,
+    },
   ],
 };
 
-const favoritesSlice = createSlice({
-  name: "favorites",
+const watchlistSlice = createSlice({
+  name: "watchlist",
   initialState,
   reducers: {
     addMovie(state, action) {
@@ -48,6 +55,6 @@ const favoritesSlice = createSlice({
   },
 });
 
-export const favoritesActions = favoritesSlice.actions;
+export const watchlistActions = watchlistSlice.actions;
 
-export default favoritesSlice.reducer;
+export default watchlistSlice.reducer;

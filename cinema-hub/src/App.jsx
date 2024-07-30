@@ -11,7 +11,7 @@ import Movie from "./pages/Movie";
 import About from "./pages/About";
 import Shows from "./pages/Shows";
 import Show from "./pages/Show";
-import Favorites from "./pages/Favorites";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/shows" element={<Shows />} />
                 <Route path="/shows/:id" element={<Show />} />
-                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/profile" element={<Profile />} />
               </Routes>
             </main>
           </BrowserRouter>

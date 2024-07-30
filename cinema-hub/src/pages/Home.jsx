@@ -27,10 +27,14 @@ export default function Home() {
         </p>
         <div className="flex gap-4">
           <Link to="/movies">
-            <Button>Browse Movies</Button>
+            <Button className="p-3 btn bg-primary text-primary-content rounded-lg min-h-[40px] hover:bg-accent">
+              Browse Movies
+            </Button>
           </Link>
           <Link to="/shows">
-            <Button> Browse TV Shows </Button>
+            <Button className="p-3 btn bg-primary text-primary-content rounded-lg min-h-[40px] hover:bg-accent">
+              Browse TV Shows
+            </Button>
           </Link>
         </div>
       </motion.div>
