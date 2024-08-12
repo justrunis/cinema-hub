@@ -6,8 +6,7 @@ import UserProfile from "../components/Profile/UserProfile";
 import FavoriteMovies from "../components/Profile/FavoriteMovies";
 import FavoriteShows from "../components/Profile/FavoriteShows";
 import Watchlist from "../components/Profile/Watchlist";
-import FriendsList from "../components/Profile/FriendsList";
-import SuggestedFriends from "../components/Profile/SuggestedFriends";
+import FriendsTabs from "../components/Profile/FriendsTabs";
 
 export default function Profile() {
   document.title = "Profile";
@@ -25,33 +24,33 @@ export default function Profile() {
           <TabList className="flex justify-around w-full border-b-2 border-base-300 mb-4">
             <Tab
               className="p-2 cursor-pointer text-primary hover:text-accent"
-              selectedClassName="font-bold"
+              selectedClassName="font-bold text-accent"
             >
               Profile
             </Tab>
             <Tab
               className="p-2 cursor-pointer text-primary hover:text-accent"
-              selectedClassName="font-bold"
+              selectedClassName="font-bold text-accent"
             >
               Favorite Movies
             </Tab>
             <Tab
               className="p-2 cursor-pointer text-primary hover:text-accent"
-              selectedClassName="font-bold"
+              selectedClassName="font-bold text-accent"
             >
               Favorite Shows
             </Tab>
             <Tab
               className="p-2 cursor-pointer text-primary hover:text-accent"
-              selectedClassName="font-bold"
+              selectedClassName="font-bold text-accent"
             >
               Watchlist
             </Tab>
             <Tab
               className="p-2 cursor-pointer text-primary hover:text-accent"
-              selectedClassName="font-bold"
+              selectedClassName="font-bold text-accent"
             >
-              Friends list
+              Friends
             </Tab>
           </TabList>
           <TabPanel>
@@ -67,10 +66,7 @@ export default function Profile() {
             <Watchlist />
           </TabPanel>
           <TabPanel>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <FriendsList />
-              <SuggestedFriends />
-            </div>
+            <FriendsTabs />
           </TabPanel>
         </Tabs>
       </div>

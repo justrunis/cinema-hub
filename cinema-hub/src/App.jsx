@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import store from "./store/index";
 
 import Header from "./components/UI/Header";
+import Footer from "./components/UI/Footer";
 import Home from "./pages/Home";
 import Movies from "./pages/Movies";
 import Movie from "./pages/Movie";
@@ -15,12 +16,12 @@ import Profile from "./pages/Profile";
 
 function App() {
   return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <main className="flex flex-col min-h-screen">
-              <Header />
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/movies" element={<Movies />} />
@@ -31,10 +32,11 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
               </Routes>
             </main>
-          </BrowserRouter>
-        </Provider>
-      </QueryClientProvider>
-    </>
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </Provider>
+    </QueryClientProvider>
   );
 }
 

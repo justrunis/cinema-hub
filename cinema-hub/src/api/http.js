@@ -1,4 +1,3 @@
-import axios from "axios";
 import { QueryClient } from "@tanstack/react-query";
 import { API_URL } from "../utils/constants";
 
@@ -31,7 +30,7 @@ export async function fetchTrendingMovies({ currentPage, signal, query }) {
   }
 
   const response = await fetch(
-    `${API_URL}/trending/all/day?language=en-US&api_key=${VITE_API_KEY}&page=${currentPage}&query=${query}`,
+    `${API_URL}/trending/movie/day?language=en-US&api_key=${VITE_API_KEY}&page=${currentPage}&query=${query}`,
     options
   );
 
@@ -116,6 +115,94 @@ export async function fetchShowDetails({ id, signal }) {
 
   if (!response.ok) {
     throw new Error("Failed to fetch show details");
+  }
+
+  return response.json();
+}
+
+export async function fetchMovieVideos({ id, signal }) {
+  const options = {
+    method: "GET",
+    signal,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${VITE_API_READ_ACCESS_TOKEN}`,
+    },
+  };
+
+  const response = await fetch(
+    `${API_URL}/movie/${id}/videos?language=en-US&api_key=${VITE_API_KEY}`,
+    options
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch movie videos");
+  }
+
+  return response.json();
+}
+
+export async function fetchMovieReviews({ id, signal, currentPage }) {
+  const options = {
+    method: "GET",
+    signal,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${VITE_API_READ_ACCESS_TOKEN}`,
+    },
+  };
+
+  const response = await fetch(
+    `${API_URL}/movie/${id}/reviews?language=en-US&api_key=${VITE_API_KEY}&page=${currentPage}`,
+    options
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch movie reviews");
+  }
+
+  return response.json();
+}
+
+export async function fetchShowVideos({ id, signal }) {
+  const options = {
+    method: "GET",
+    signal,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${VITE_API_READ_ACCESS_TOKEN}`,
+    },
+  };
+
+  const response = await fetch(
+    `${API_URL}/tv/${id}/videos?language=en-US&api_key=${VITE_API_KEY}`,
+    options
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch show videos");
+  }
+
+  return response.json();
+}
+
+export async function fetchShowReviews({ id, signal, currentPage }) {
+  const options = {
+    method: "GET",
+    signal,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${VITE_API_READ_ACCESS_TOKEN}`,
+    },
+  };
+
+  const response = await fetch(
+    `${API_URL}/tv/${id}/reviews?language=en-US&api_key=${VITE_API_KEY}&page=${currentPage}`,
+    options
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch show reviews");
   }
 
   return response.json();

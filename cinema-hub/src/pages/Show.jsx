@@ -12,6 +12,11 @@ import ShowDetailsGrid from "../components/Shows/ShowDeailsGrid";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { favoritesActions } from "../store/slices/favorites";
+import { watchlistActions } from "../store/slices/wathclist";
+import { FaListAlt } from "react-icons/fa";
+import Button from "../components/UI/Button";
+import ShowReviews from "../components/Shows/ShowReviews";
+import VideoPlayer from "../components/UI/VideoPlayer";
 
 export default function Show() {
   const { id } = useParams();
@@ -28,11 +33,23 @@ export default function Show() {
     state.favorites.shows.some((show) => show.id === data?.id)
   );
 
+  const isInWatchlist = useSelector((state) =>
+    state.watchlist.shows.some((show) => show.id === data?.id)
+  );
+
   function handleFavoriteClick() {
     if (isFavorite) {
       dispatch(favoritesActions.removeShow(data));
     } else {
       dispatch(favoritesActions.addShow(data));
+    }
+  }
+
+  function handleWatchlistClick() {
+    if (isInWatchlist) {
+      dispatch(watchlistActions.removeShow(data));
+    } else {
+      dispatch(watchlistActions.addShow(data));
     }
   }
 
@@ -55,6 +72,34 @@ export default function Show() {
     document.title = `${data.name || data.original_name}`;
   }
 
+  const buttonClass = "flex items-center btn rounded-lg";
+  const iconClass = "text-xl cursor-pointer";
+  const textClass = "font-bold text-sm";
+
+  const favButtonProps = isFavorite
+    ? {
+        className: `${buttonClass} bg-accent text-primary-content hover:bg-red-600`,
+        icon: <FaHeart className={`text-primary ${iconClass}`} />,
+        text: "Remove from favorites",
+      }
+    : {
+        className: `${buttonClass} bg-primary text-primary-content hover:bg-accent`,
+        icon: <FaRegHeart className={`text-primary-content ${iconClass}`} />,
+        text: "Add to favorites",
+      };
+
+  const watchlistButtonProps = isInWatchlist
+    ? {
+        className: `${buttonClass} bg-accent text-primary-content hover:bg-red-600`,
+        text: "Remove from watchlist",
+        icon: <FaListAlt className={`text-primary ${iconClass}`} />,
+      }
+    : {
+        className: `${buttonClass} bg-primary text-primary-content hover:bg-accent`,
+        text: "Add to watchlist",
+        icon: <FaListAlt className={`text-primary-content ${iconClass}`} />,
+      };
+
   return (
     <motion.div
       className="flex flex-col justify-center gap-5 items-center p-8"
@@ -62,73 +107,89 @@ export default function Show() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="flex flex-col lg:flex-row items-center justify-center gap-4 bg-base-300 px-8 lg:pr-80 rounded-lg shadow-md py-6 lg:py-0">
-        <div className="flex flex-col gap-4 p-8">
-          <h1 className="text-3xl font-bold">
-            {data.name || data.original_name}
-          </h1>
-          <motion.img
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            src={
-              data.poster_path
-                ? `${IMAGE_URL}${data.poster_path}`
-                : PLACEHOLDER_IMAGE
-            }
-            alt={data.name}
-            className="rounded-lg w-auto h-auto"
-          />
-        </div>
-
-        <div className="flex flex-col gap-4">
-          <ShowDetail title="Details" delay={0.2}>
-            <ul className="flex gap-2">
-              {data.genres.map((genre) => (
-                <li className="" key={genre.id}>
-                  {genre.name}
-                </li>
-              ))}
-            </ul>
-          </ShowDetail>
-          <ShowDetail title="Rating" delay={0.4}>
-            <StarRating
-              className="flex items-center gap-2"
-              rating={round(data.vote_average / 2, 1)}
+      <div className="flex flex-col justify-center bg-base-300 rounded-lg shadow-md pt-6 w-full">
+        <div className="flex flex-col lg:flex-row items-center justify-around">
+          <div className="flex flex-col gap-4 p-8">
+            <h1 className="text-3xl font-bold text-center">
+              {data.name || data.original_name}
+            </h1>
+            <motion.img
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              src={
+                data.poster_path
+                  ? `${IMAGE_URL}${data.poster_path}`
+                  : PLACEHOLDER_IMAGE
+              }
+              alt={data.name}
+              className="rounded-lg w-auto h-auto"
             />
-          </ShowDetail>
-          <ShowDetail title="Overview" delay={0.6}>
-            <p className="max-w-sm">{data.overview}</p>
-          </ShowDetail>
-          <ShowDetail title="Homepage" delay={0.8}>
-            <a
-              href={data.homepage}
-              target="_blank"
-              rel="noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              {data.homepage}
-            </a>
-          </ShowDetail>
-          <ShowDetailsGrid data={data} />
+          </div>
+          <div className="flex flex-col gap-4">
+            <ShowDetail title="Details" delay={0.2}>
+              <ul className="flex gap-2">
+                {data.genres.map((genre) => (
+                  <li className="" key={genre.id}>
+                    {genre.name}
+                  </li>
+                ))}
+              </ul>
+            </ShowDetail>
+            <ShowDetail title="Rating" delay={0.4}>
+              <StarRating
+                className="flex items-center gap-2"
+                rating={round(data.vote_average)}
+              />
+            </ShowDetail>
+            <ShowDetail title="Overview" delay={0.6}>
+              <p className="max-w-sm">{data.overview}</p>
+            </ShowDetail>
+            <ShowDetail title="Homepage" delay={0.8}>
+              <a
+                href={data.homepage}
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                {data.homepage}
+              </a>
+            </ShowDetail>
+          </div>
+          <div className="flex flex-col gap-4">
+            <ShowDetailsGrid data={data} />
+          </div>
+        </div>
+        <div className="self-center flex flex-col items-center justify-center gap-4 px-8 pb-6 max-w-7xl w-full">
+          <VideoPlayer id={data.id} type="tv" delay={2.4} />
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex items-center gap-4"
-            transition={{ delay: 1.4 }}
+            className="flex flex-col lg:flex-row items-center gap-2 mt-2"
+            transition={{ delay: 2.6 }}
           >
-            {isFavorite ? (
-              <FaHeart
-                className="text-red-500 text-4xl cursor-pointer"
-                onClick={handleFavoriteClick}
-              />
-            ) : (
-              <FaRegHeart
-                className="text-red-500 text-4xl cursor-pointer"
-                onClick={handleFavoriteClick}
-              />
-            )}
+            <Button
+              onClick={handleFavoriteClick}
+              className={favButtonProps.className}
+            >
+              {favButtonProps.icon}
+              <p className={`text-primary-content ${textClass}`}>
+                {favButtonProps.text}
+              </p>
+            </Button>
+            <Button
+              className={watchlistButtonProps.className}
+              onClick={handleWatchlistClick}
+            >
+              {watchlistButtonProps.icon}
+              <p className={`text-primary-content ${textClass}`}>
+                {watchlistButtonProps.text}
+              </p>
+            </Button>
           </motion.div>
         </div>
+      </div>
+      <div className="flex flex-col items-center justify-center gap-4 bg-base-300 px-8 rounded-lg shadow-md py-6 w-full">
+        <ShowReviews id={data?.id} />
       </div>
     </motion.div>
   );

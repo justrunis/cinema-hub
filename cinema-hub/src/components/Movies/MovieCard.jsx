@@ -3,6 +3,7 @@ import Card from "../UI/Card";
 import StarRating from "./StarRating";
 import { IMAGE_URL, PLACEHOLDER_IMAGE } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
+import { round } from "../../utils/formatting";
 
 export default function MovieCard({ movie }) {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export default function MovieCard({ movie }) {
         {movie.original_name || movie.title}
       </h2>
       <div className="flex items-center gap-2">
-        <StarRating rating={movie.vote_average} />
+        <StarRating rating={round(movie?.vote_average, 1)} />
       </div>
     </Card>
   );

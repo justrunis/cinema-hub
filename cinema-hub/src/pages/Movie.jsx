@@ -13,6 +13,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { favoritesActions } from "../store/slices/favorites";
 import { watchlistActions } from "../store/slices/wathclist";
 import Button from "../components/UI/Button";
+import VideoPlayer from "../components/UI/VideoPlayer";
+import MovieReviews from "../components/Movies/MovieReviews";
 
 export default function Movie() {
   const { id } = useParams();
@@ -32,8 +34,6 @@ export default function Movie() {
   const isInWatchlist = useSelector((state) =>
     state.watchlist.movies.some((movie) => movie.id === data?.id)
   );
-
-  console.log(isFavorite, isInWatchlist);
 
   function handleFavoriteClick() {
     if (isFavorite) {
@@ -105,63 +105,72 @@ export default function Movie() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="flex flex-col lg:flex-row items-center justify-center gap-4 bg-base-300 px-8 lg:pr-80 rounded-lg shadow-md py-6 lg:py-0">
-        <div className="flex flex-col gap-4 p-8">
-          <h1 className="text-3xl font-bold">
-            {data?.title || data?.original_title}
-          </h1>
-          <motion.img
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            src={
-              data?.poster_path
-                ? `${IMAGE_URL}${data.poster_path}`
-                : PLACEHOLDER_IMAGE
-            }
-            alt={data?.title}
-            className="rounded-lg w-auto h-auto"
-          />
-        </div>
-
-        <div className="flex flex-col gap-4">
-          <MovieDetail title="Details" delay={0.2}>
-            <ul className="flex gap-2">
-              {data?.genres.map((genre) => (
-                <li className="" key={genre.id}>
-                  {genre.name}
-                </li>
-              ))}
-            </ul>
-          </MovieDetail>
-          <MovieDetail title="Rating" delay={0.4}>
-            <StarRating
-              className="flex items-center gap-2"
-              rating={round(data?.vote_average, 1)}
+      <div className="flex flex-col justify-center bg-base-300 rounded-lg shadow-md pt-6 w-full">
+        <div className="flex flex-col lg:flex-row items-center justify-around">
+          <div className="flex flex-col gap-4 p-8">
+            <h1 className="text-3xl font-bold text-center">
+              {data?.title || data?.original_title}
+            </h1>
+            <motion.img
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              src={
+                data?.poster_path
+                  ? `${IMAGE_URL}${data.poster_path}`
+                  : PLACEHOLDER_IMAGE
+              }
+              alt={data?.title}
+              className="rounded-lg w-auto h-auto"
             />
-          </MovieDetail>
-          <MovieDetail title="Overview" delay={0.6}>
-            <p className="max-w-sm">{data?.overview}</p>
-          </MovieDetail>
-          <MovieDetail title="Homepage" delay={0.8}>
-            <a
-              href={data?.homepage}
-              target="_blank"
-              rel="noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              {data?.homepage}
-            </a>
-          </MovieDetail>
-          <MovieDetail title="Release Date" delay={1}>
-            <p>{data?.release_date}</p>
-          </MovieDetail>
-          <MovieDetail title="Runtime" delay={1.2}>
-            <p>{data?.runtime} minutes</p>
-          </MovieDetail>
+          </div>
+          <div className="flex flex-col gap-4">
+            <MovieDetail title="Details" delay={0.2}>
+              <ul className="flex gap-2">
+                {data?.genres.map((genre) => (
+                  <li className="" key={genre.id}>
+                    {genre.name}
+                  </li>
+                ))}
+              </ul>
+            </MovieDetail>
+            <MovieDetail title="Rating" delay={0.4}>
+              <StarRating
+                className="flex items-center gap-2"
+                rating={round(data?.vote_average, 1)}
+              />
+            </MovieDetail>
+            <MovieDetail title="Overview" delay={0.6}>
+              <p className="max-w-sm">{data?.overview}</p>
+            </MovieDetail>
+            <MovieDetail title="Homepage" delay={0.8}>
+              <a
+                href={data?.homepage}
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                {data?.homepage}
+              </a>
+            </MovieDetail>
+          </div>
+          <div className="flex flex-col gap-4">
+            <MovieDetail title="Release Date" delay={1}>
+              <p>{data?.release_date}</p>
+            </MovieDetail>
+            <MovieDetail title="Runtime" delay={1.2}>
+              <p>{data?.runtime} minutes</p>
+            </MovieDetail>
+            <MovieDetail title="Reviews" delay={1.4}>
+              <p>{data?.vote_count} reviews</p>
+            </MovieDetail>
+          </div>
+        </div>
+        <div className="self-center flex flex-col items-center justify-center gap-4 px-8 pb-6 max-w-7xl w-full">
+          <VideoPlayer id={data?.id} type="movie" />
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex items-center gap-4"
+            className="flex flex-col lg:flex-row items-center gap-4"
             transition={{ delay: 1.4 }}
           >
             <Button
@@ -185,6 +194,10 @@ export default function Movie() {
             </Button>
           </motion.div>
         </div>
+      </div>
+
+      <div className="flex flex-col items-center justify-center gap-4 bg-base-300 px-8 rounded-lg shadow-md py-6 w-full">
+        <MovieReviews id={data?.id} />
       </div>
     </motion.div>
   );

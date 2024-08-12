@@ -17,7 +17,7 @@ export default function ShowDetailsGrid({ data }) {
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 gap-4 my-4">
       {details.map((detail, index) => (
         <motion.div
           key={detail.title}

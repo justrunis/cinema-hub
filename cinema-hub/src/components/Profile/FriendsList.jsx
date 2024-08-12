@@ -53,8 +53,8 @@ export default function FriendsList() {
         className="w-full"
         placeHolder="Search friends..."
       />
-      <h1 className="text-2xl font-bold my-4">Friends List</h1>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <h1 className="text-2xl font-bold my-4 text-center">Friends List</h1>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {filteredFriends.map((friend) => (
           <div className="flex flex-col justify-center items-center gap-2 bg-gray-200 p-8 rounded-lg mr-4">
             <h2 className="text-lg text-center font-semibold">{friend.name}</h2>
