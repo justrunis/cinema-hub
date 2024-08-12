@@ -16,14 +16,15 @@ Welcome to CinemaHub, an app that utilizes the TMDB (The Movie Database) to prov
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/your-username/cinemahub.git`
-2. Navigate to the project directory: `cd cinemahub`
+1. Clone the repository: `git clone https://github.com/justrunis/cinema-hub.git`
+2. Navigate to the project directory: `cd cinema-hub`
 3. Install the dependencies: `npm install`
 4. Set up the TMDB API key:
    - Visit the TMDB website (https://www.themoviedb.org/) and sign up for an API key.
    - Create a `.env` file in the project root directory.
-   - Add the following line to the `.env` file: `TMDB_API_KEY=your-api-key`
-5. Start the app: `npm start`
+   - Add the following lines to the `.env` file:
+     `VITE_API_KEY=your-api-key VITE_API_READ_ACCESS_TOKEN=your_read_access_token`
+5. Start the app: `npm run dev`
 
 ## Usage
 
