@@ -17,6 +17,7 @@ import { FaListAlt } from "react-icons/fa";
 import Button from "../components/UI/Button";
 import ShowReviews from "../components/Shows/ShowReviews";
 import VideoPlayer from "../components/UI/VideoPlayer";
+import { Link } from "react-router-dom";
 
 export default function Show() {
   const { id } = useParams();
@@ -107,7 +108,15 @@ export default function Show() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="flex flex-col justify-center bg-base-300 rounded-lg shadow-md pt-6 w-full">
+      <div className="flex flex-col justify-center bg-base-300 rounded-lg shadow-md p-6 w-full">
+        <div className="flex justify-start px-4 py-6 gap-4">
+          <Link
+            to={`/shows`}
+            className="text-accent hover:underline text-start"
+          >
+            Go back to all shows
+          </Link>
+        </div>
         <div className="flex flex-col lg:flex-row items-center justify-around">
           <div className="flex flex-col gap-4 p-8">
             <h1 className="text-3xl font-bold text-center">

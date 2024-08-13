@@ -12,6 +12,8 @@ import Movie from "./pages/Movie";
 import About from "./pages/About";
 import Shows from "./pages/Shows";
 import Show from "./pages/Show";
+import ShowSeason from "./pages/ShowSeason";
+import ShowEpisode from "./pages/ShowEpisode";
 import Profile from "./pages/Profile";
 
 function App() {
@@ -29,6 +31,14 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/shows" element={<Shows />} />
                 <Route path="/shows/:id" element={<Show />} />
+                <Route
+                  path="/shows/:id/season/:season"
+                  element={<ShowSeason />}
+                />
+                <Route
+                  path="/shows/:id/season/:season/episode/:episode"
+                  element={<ShowEpisode />}
+                />
                 <Route path="/profile" element={<Profile />} />
               </Routes>
             </main>

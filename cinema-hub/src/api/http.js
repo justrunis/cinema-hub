@@ -207,3 +207,47 @@ export async function fetchShowReviews({ id, signal, currentPage }) {
 
   return response.json();
 }
+
+export async function fetchShowSeasonDetails({ id, season, signal }) {
+  const options = {
+    method: "GET",
+    signal,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${VITE_API_READ_ACCESS_TOKEN}`,
+    },
+  };
+
+  const response = await fetch(
+    `${API_URL}/tv/${id}/season/${season}?language=en-US&api_key=${VITE_API_KEY}`,
+    options
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch show season details");
+  }
+
+  return response.json();
+}
+
+export async function fetchShowEpisodeDetails({ id, season, episode, signal }) {
+  const options = {
+    method: "GET",
+    signal,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${VITE_API_READ_ACCESS_TOKEN}`,
+    },
+  };
+
+  const response = await fetch(
+    `${API_URL}/tv/${id}/season/${season}/episode/${episode}?language=en-US&api_key=${VITE_API_KEY}`,
+    options
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch show episode details");
+  }
+
+  return response.json();
+}
