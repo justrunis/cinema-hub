@@ -15,6 +15,7 @@ import { watchlistActions } from "../store/slices/wathclist";
 import Button from "../components/UI/Button";
 import VideoPlayer from "../components/UI/VideoPlayer";
 import MovieReviews from "../components/Movies/MovieReviews";
+import MovieCredits from "../components/Movies/MovieCredits";
 
 export default function Movie() {
   const { id } = useParams();
@@ -97,6 +98,8 @@ export default function Movie() {
         text: "Add to watchlist",
         icon: <FaListAlt className={`text-primary-content ${iconClass}`} />,
       };
+
+  console.log(data);
 
   return (
     <motion.div
@@ -193,6 +196,9 @@ export default function Movie() {
               </p>
             </Button>
           </motion.div>
+          <div className="flex flex-col items-center justify-center gap-4 px-8">
+            <MovieCredits id={data?.id} />
+          </div>
         </div>
       </div>
 

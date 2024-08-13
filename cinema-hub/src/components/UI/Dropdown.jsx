@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+import Button from "../UI/Button";
 
 export default function Dropdown({ title = "Dropwdown", children, className }) {
   const [open, setOpen] = useState(false);
@@ -10,11 +11,14 @@ export default function Dropdown({ title = "Dropwdown", children, className }) {
   };
 
   return (
-    <>
-      <button onClick={toggleDropdown} className={className}>
+    <div className={className}>
+      <Button
+        onClick={toggleDropdown}
+        className="flex justify-center items-center gap-2 p-4 text-primary hover:text-accent"
+      >
         <span>{title}</span>
         <span>{open ? <FaArrowUp /> : <FaArrowDown />}</span>
-      </button>
+      </Button>
       <motion.div
         className={`${open ? "block" : "hidden"} w-full`}
         initial={{ opacity: 0, height: 0 }}
@@ -24,6 +28,6 @@ export default function Dropdown({ title = "Dropwdown", children, className }) {
       >
         {children}
       </motion.div>
-    </>
+    </div>
   );
 }
