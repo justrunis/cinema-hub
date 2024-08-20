@@ -71,9 +71,12 @@ export default function Movies() {
     );
   }
 
+  const buttonStyle =
+    "btn btn-primary text-primary-content shadow-lg text-sm md:text-base py-1 px-2 md:py-2 md:px-4";
+
   return (
     <>
-      <div className="flex flex-col items-center justify-center mx-auto bg-base-200 rounded-lg mt-5">
+      <div className="container flex flex-col items-center justify-center mx-auto bg-base-200 rounded-lg mt-5 p-4">
         <SearchBar
           onSearch={handleSearch}
           className="p-4"
@@ -82,7 +85,7 @@ export default function Movies() {
         />
         <div className="grid grid-cols-2 sm:grid-cols-4 justify-center gap-2 p-2 md:gap-4 md:p-4">
           <Button
-            className={`btn btn-primary text-primary-content text-sm md:text-base py-1 px-2 md:py-2 md:px-4 ${
+            className={`${buttonStyle} ${
               queryFunction === "trending" ? "text-gray-900" : ""
             }`}
             onClick={() => setQueryFunction("trending")}
@@ -91,7 +94,7 @@ export default function Movies() {
             <FaArrowTrendUp className="inline-block ml-1" />
           </Button>
           <Button
-            className={`btn btn-primary text-primary-content text-sm md:text-base py-1 px-2 md:py-2 md:px-4 ${
+            className={`${buttonStyle} ${
               queryFunction === "now_playing" ? "text-gray-900" : ""
             }`}
             onClick={() => setQueryFunction("now_playing")}
@@ -100,7 +103,7 @@ export default function Movies() {
             <FaPlay className="inline-block ml-1" />
           </Button>
           <Button
-            className={`btn btn-primary text-primary-content text-sm md:text-base py-1 px-2 md:py-2 md:px-4 ${
+            className={`${buttonStyle} ${
               queryFunction === "top_rated" ? "text-gray-900" : ""
             }`}
             onClick={() => setQueryFunction("top_rated")}
@@ -109,7 +112,7 @@ export default function Movies() {
             <FaRegStar className="inline-block ml-1" />
           </Button>
           <Button
-            className={`btn btn-primary text-primary-content text-sm md:text-base py-1 px-2 md:py-2 md:px-4 ${
+            className={`${buttonStyle} ${
               queryFunction === "upcoming" ? "text-gray-900" : ""
             }`}
             onClick={() => setQueryFunction("upcoming")}
