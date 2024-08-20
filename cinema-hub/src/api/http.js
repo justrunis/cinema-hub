@@ -54,6 +54,24 @@ export async function fetchTrendingMovies({ currentPage, signal, query }) {
   return makeApiRequest(endpoint, { signal, params });
 }
 
+export async function fetchNowPlayingMovies({ currentPage, signal, query }) {
+  const endpoint = query ? "/search/movie" : "/movie/now_playing";
+  const params = { page: currentPage, query };
+  return makeApiRequest(endpoint, { signal, params });
+}
+
+export async function fetchTopRatedMovies({ currentPage, signal, query }) {
+  const endpoint = query ? "/search/movie" : "/movie/top_rated";
+  const params = { page: currentPage, query };
+  return makeApiRequest(endpoint, { signal, params });
+}
+
+export async function fetchUpcomingMovies({ currentPage, signal, query }) {
+  const endpoint = query ? "/search/movie" : "/movie/upcoming";
+  const params = { page: currentPage, query };
+  return makeApiRequest(endpoint, { signal, params });
+}
+
 export async function fetchMovieDetails({ id, signal }) {
   return makeApiRequest(`/movie/${id}`, { signal });
 }
