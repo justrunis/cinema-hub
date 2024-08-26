@@ -6,6 +6,9 @@ import store from "./store/index";
 
 import Header from "./components/UI/Header";
 import Footer from "./components/UI/Footer";
+
+import Register from "./pages/Register";
+
 import Home from "./pages/Home";
 import Movies from "./pages/Movies";
 import Movie from "./pages/Movie";
@@ -26,6 +29,7 @@ function App() {
             <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/register" element={<Register />} />
                 <Route path="/movies" element={<Movies />} />
                 <Route path="/movies/:id" element={<Movie />} />
                 <Route path="/about" element={<About />} />
