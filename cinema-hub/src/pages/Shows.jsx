@@ -5,24 +5,37 @@ import Pager from "../components/UI/Pager";
 import { useSearchParams } from "react-router-dom";
 import { STALE_TIME } from "../utils/constants";
 import SearchBar from "../components/UI/SearchBar";
-import { fetchTrendingShows } from "../api/http";
+import {
+  fetchTrendingShows,
+  fetchOnTheAirShows,
+  fetchTopRatedShows,
+  fetchAiringTodayShows,
+} from "../api/http";
 import ShowCard from "../components/Shows/ShowCard";
+import { useState } from "react";
+import Button from "../components/UI/Button";
+import { FaArrowTrendUp } from "react-icons/fa6";
+import { FaPlay, FaRegStar, FaRegCalendarAlt } from "react-icons/fa";
 
 export default function Shows() {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const currentQuery = searchParams.get("query") || "";
 
+  const [queryFunction, setQueryFunction] = useState("trending");
+
   document.title = "TV Shows";
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["shows", currentPage, currentQuery],
+    queryKey: ["shows", currentPage, currentQuery, queryFunction],
     queryFn: ({ signal }) =>
-      fetchTrendingShows({
-        currentPage,
-        signal,
-        query: currentQuery,
-      }),
+      queryFunction === "trending"
+        ? fetchTrendingShows({ currentPage, signal, query: currentQuery })
+        : queryFunction === "on_the_air"
+        ? fetchOnTheAirShows({ currentPage, signal, query: currentQuery })
+        : queryFunction === "airing_today"
+        ? fetchAiringTodayShows({ currentPage, signal, query: currentQuery })
+        : fetchTopRatedShows({ currentPage, signal, query: currentQuery }),
     staleTime: STALE_TIME,
   });
 
@@ -57,14 +70,57 @@ export default function Shows() {
     );
   }
 
+  const buttonStyle =
+    "btn btn-primary text-primary-content shadow-lg text-sm md:text-base py-1 px-2 md:py-2 md:px-4";
+
   return (
     <>
-      <SearchBar
-        onSearch={handleSearch}
-        className="p-4"
-        placeHolder="Search Shows..."
-        value={currentQuery}
-      />
+      <div className="container flex flex-col items-center justify-center mx-auto bg-base-200 rounded-lg mt-5 p-4">
+        <SearchBar
+          onSearch={handleSearch}
+          className="p-4"
+          placeHolder="Search Shows..."
+          value={currentQuery}
+        />
+        <div className="grid grid-cols-2 sm:grid-cols-4 justify-center gap-2 p-2 md:gap-4 md:p-4">
+          <Button
+            className={`${buttonStyle} ${
+              queryFunction === "trending" ? "text-gray-900" : ""
+            }`}
+            onClick={() => setQueryFunction("trending")}
+          >
+            Trending
+            <FaArrowTrendUp className="inline-block ml-1" />
+          </Button>
+          <Button
+            className={`${buttonStyle} ${
+              queryFunction === "on_the_air" ? "text-gray-900" : ""
+            }`}
+            onClick={() => setQueryFunction("on_the_air")}
+          >
+            On The Air
+            <FaRegCalendarAlt className="inline-block ml-1" />
+          </Button>
+          <Button
+            className={`${buttonStyle} ${
+              queryFunction === "airing_today" ? "text-gray-900" : ""
+            }`}
+            onClick={() => setQueryFunction("airing_today")}
+          >
+            Airing Today
+            <FaPlay className="inline-block ml-1" />
+          </Button>
+          <Button
+            className={`${buttonStyle} ${
+              queryFunction === "top_rated" ? "text-gray-900" : ""
+            }`}
+            onClick={() => setQueryFunction("top_rated")}
+          >
+            Top Rated
+            <FaRegStar className="inline-block ml-1" />
+          </Button>
+        </div>
+      </div>
       {data?.results.length === 0 ? (
         <div className="flex items-center mt-4 justify-center text-center text-primary font-bold">
           <p>No shows found for the query</p>

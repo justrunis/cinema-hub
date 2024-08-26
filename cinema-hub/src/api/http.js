@@ -96,6 +96,24 @@ export async function fetchTrendingShows({ currentPage, signal, query }) {
   return makeApiRequest(endpoint, { signal, params });
 }
 
+export async function fetchTopRatedShows({ currentPage, signal, query }) {
+  const endpoint = query ? "/search/tv" : "/tv/top_rated";
+  const params = { page: currentPage, query };
+  return makeApiRequest(endpoint, { signal, params });
+}
+
+export async function fetchOnTheAirShows({ currentPage, signal, query }) {
+  const endpoint = query ? "/search/tv" : "/tv/on_the_air";
+  const params = { page: currentPage, query };
+  return makeApiRequest(endpoint, { signal, params });
+}
+
+export async function fetchAiringTodayShows({ currentPage, signal, query }) {
+  const endpoint = query ? "/search/tv" : "/tv/airing_today";
+  const params = { page: currentPage, query };
+  return makeApiRequest(endpoint, { signal, params });
+}
+
 export async function fetchShowDetails({ id, signal }) {
   return makeApiRequest(`/tv/${id}`, { signal });
 }
