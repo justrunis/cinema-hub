@@ -21,6 +21,7 @@ import Show from "./pages/Show";
 import ShowSeason from "./pages/ShowSeason";
 import ShowEpisode from "./pages/ShowEpisode";
 import Profile from "./pages/Profile";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
         <BrowserRouter>
           <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow">
+            <main className="flex-grow flex flex-col justify-center items-center">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/register" element={<Register />} />
@@ -49,6 +50,7 @@ function App() {
                 />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="*" element={<PageNotFound />} />
               </Routes>
             </main>
             <Footer />
