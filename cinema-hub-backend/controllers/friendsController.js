@@ -9,6 +9,51 @@ exports.getFriends = async (req, res) => {
   res.status(200).json(friends);
 };
 
+exports.getSuggestedFriends = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Find all friends of the user
+    const friends = await Friend.find({ user: userId });
+
+    // Extract the IDs of the user's friends
+    const friendIds = friends.map((friend) => friend.friend);
+
+    // Find all users excluding the current user and the user's friends
+    const suggestedFriends = await User.find({
+      _id: { $nin: [userId, ...friendIds] }, // Exclude the current user and their friends
+    });
+
+    // Send the filtered list of users as a JSON response
+    res.status(200).json(suggestedFriends);
+  } catch (error) {
+    // Handle any errors that occur
+    res.status(500).json({
+      message: "An error occurred while fetching suggested friends.",
+      error,
+    });
+  }
+};
+
+exports.getFriendsList = async (req, res) => {
+  const userId = req.user._id;
+
+  const friends = await Friend.find({ user: userId }).populate("friend");
+
+  res.status(200).json(friends);
+};
+
+exports.getFriendsRequests = async (req, res) => {
+  const userId = req.user._id;
+
+  const friends = await Friend.find({
+    friend: userId,
+    status: "pending",
+  }).populate("user");
+
+  res.status(200).json(friends);
+};
+
 exports.addFriend = async (req, res) => {
   const userId = req.user._id;
   const { friendId } = req.body;
