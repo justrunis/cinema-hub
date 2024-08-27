@@ -6,8 +6,6 @@ const connectDB = async () => {
       `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@cluster0.zxzalz3.mongodb.net/cinema-hub?retryWrites=true&w=majority&appName=Cluster0`
     );
     console.log("MongoDB connected successfully");
-
-    // Optionally, you can add additional logic to check or create default users here
   } catch (err) {
     console.error("MongoDB connection error:", err);
     process.exit(1); // Exit the process with failure code

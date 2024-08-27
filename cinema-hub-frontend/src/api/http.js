@@ -190,15 +190,42 @@ export async function loginUser({ formData }) {
 
 /**
  * Get all users
- * @returns {Promise} object containing all users
+ * @param {*} page Page number
+ * @param {*} limit Number of users per page
+ * @returns {Promise} object containing the users array, nextPage, and previousPage
  */
-export async function fetchUsers() {
-  const response = await fetch(SERVER_URL + "/admin/users", {
-    headers: {
-      accept: "application/json",
-    },
-  });
-  return response.json();
+export async function fetchUsers({ page = 1, limit = 10 }) {
+  try {
+    const response = await fetch(
+      `${SERVER_URL}/admin/users?page=${page}&limit=${limit}`,
+      {
+        headers: {
+          accept: "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.results) {
+      // Process the data.results and handle pagination links (data.next, data.previous)
+      return {
+        users: data.results,
+        nextPage: data.next ? data.next.page : null,
+        previousPage: data.previous ? data.previous.page : null,
+        totalPages: data.totalPages,
+      };
+    } else {
+      return { users: [], nextPage: null, previousPage: null, totalPages: 0 };
+    }
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return { users: [], nextPage: null, previousPage: null, totalPages: 0 };
+  }
 }
 
 /**

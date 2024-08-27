@@ -10,16 +10,24 @@ import UserDeleteModal from "../components/Admin/UserDeleteModal";
 import { useState } from "react";
 import { queryClient } from "../api/http";
 import { makeFirstLetterUpperCase } from "../utils/formatting";
+import Pager from "../components/UI/Pager";
 
 export default function Admin() {
   const [editUser, setEditUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const [page, setPage] = useState(1);
+
+  const userLimit = 10;
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["users"],
-    queryFn: fetchUsers,
+    queryKey: ["users", { page }],
+    queryFn: () => fetchUsers({ page, limit: userLimit }),
     staleTime: STALE_TIME,
   });
+
+  console.log(data);
 
   document.title = "Admin";
 
@@ -130,6 +138,20 @@ export default function Admin() {
             ))}
           </tbody>
         </motion.table>
+        {data?.totalPages > 1 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="flex justify-center mt-4"
+          >
+            <Pager
+              totalPages={data.totalPages}
+              currentPage={page}
+              setCurrentPage={setPage}
+            />
+          </motion.div>
+        )}
       </div>
       {data.users.length === 0 && (
         <p className="text-xl mb-8 text-black text-center">No users found</p>
