@@ -1,12 +1,7 @@
 import { NavLink } from "react-router-dom";
-import {
-  FaHome,
-  FaFilm,
-  FaTv,
-  FaQuestionCircle,
-  FaHeart,
-} from "react-icons/fa";
+import { FaHome, FaFilm, FaTv, FaQuestionCircle } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
+import { RiAdminFill } from "react-icons/ri";
 
 export default function NavLinks() {
   return (
@@ -65,6 +60,17 @@ export default function NavLinks() {
       >
         <FaQuestionCircle className="inline mr-2" />
         About
+      </NavLink>
+      <NavLink
+        to="/admin"
+        className={({ isActive }) =>
+          `flex flex-row justify-center items-center text-sm lg:text-lg font-bold mr-5 ${
+            isActive ? "text-accent" : "text-primary-content hover:text-accent"
+          }`
+        }
+      >
+        <RiAdminFill className="inline mr-2" />
+        Admin
       </NavLink>
     </>
   );

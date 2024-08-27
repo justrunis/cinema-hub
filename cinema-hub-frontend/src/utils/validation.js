@@ -15,7 +15,7 @@ const validatePasswordRepeat = (password, passwordRepeat) => {
   return password === passwordRepeat;
 };
 
-export const validateForm = (formData) => {
+export const validateRegistrationForm = (formData) => {
   if (!validateUsername(formData.username)) {
     return "Invalid username. Username must be at least 3 characters long.";
   }
@@ -30,6 +30,18 @@ export const validateForm = (formData) => {
 
   if (!validatePasswordRepeat(formData.password, formData.passwordRepeat)) {
     return "Passwords do not match.";
+  }
+
+  return null; // Return null if the form data is valid
+};
+
+export const validateLoginForm = (formData) => {
+  if (!validateUsername(formData.username)) {
+    return "Invalid username. Username must be at least 3 characters long.";
+  }
+
+  if (!validatePassword(formData.password)) {
+    return "Invalid password. Password must be at least 6 characters long.";
   }
 
   return null; // Return null if the form data is valid

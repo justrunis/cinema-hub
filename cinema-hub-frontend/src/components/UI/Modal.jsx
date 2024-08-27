@@ -8,17 +8,11 @@ export default function Modal({ children, open, onClose, className = "" }) {
 
   useEffect(() => {
     const modal = dialog.current;
-    const body = document.body;
     if (open) {
       modal.style.display = "block";
-      body.classList.add("modal-open");
     } else {
       modal.style.display = "none";
-      body.classList.remove("modal-open");
     }
-    return () => {
-      body.classList.remove("modal-open");
-    };
   }, [open]);
 
   return createPortal(
@@ -31,12 +25,11 @@ export default function Modal({ children, open, onClose, className = "" }) {
           className="backdrop"
         />
       )}
-      <motion.dialog
+      <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: open ? 1 : 0, y: open ? 0 : 30 }}
         exit={{ opacity: 0, y: 30 }}
         className={`modal-class ${className}`}
-        onClose={onClose}
         ref={dialog}
         key="modal"
       >
@@ -44,7 +37,7 @@ export default function Modal({ children, open, onClose, className = "" }) {
           <IoCloseCircleOutline />
         </div>
         {children}
-      </motion.dialog>
+      </motion.div>
     </AnimatePresence>,
     document.getElementById("modal")
   );

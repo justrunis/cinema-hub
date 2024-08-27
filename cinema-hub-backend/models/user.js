@@ -26,6 +26,14 @@ const userSchema = new Schema({
     required: true,
     trim: true,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
   watchlist: {
     type: Array,
     default: [],

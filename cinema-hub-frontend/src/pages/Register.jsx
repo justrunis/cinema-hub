@@ -2,7 +2,9 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import Input from "../components/UI/Input";
 import Button from "../components/UI/Button";
-import { validateForm } from "../utils/validation";
+import { validateRegistrationForm } from "../utils/validation";
+import { createUser } from "../api/http";
+import { Link } from "react-router-dom";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -43,13 +45,19 @@ export default function Register() {
     },
   ];
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    const validationResponse = validateForm(formData);
+    const validationResponse = validateRegistrationForm(formData);
     if (validationResponse) {
       alert(validationResponse);
     } else {
-      alert("Form submitted successfully!");
+      const response = await createUser({ formData });
+      if (response.status === 201) {
+        alert("User created successfully!");
+        clear();
+      } else {
+        alert(response.data.message);
+      }
     }
   }
 
@@ -113,6 +121,19 @@ export default function Register() {
             >
               Clear
             </Button>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+            className="flex flex-col items-center"
+          >
+            <Link
+              to="/login"
+              className="text-accent underline my-2 hover:text-primary"
+            >
+              Already have an account? Log in here.
+            </Link>
           </motion.div>
         </form>
       </motion.div>
