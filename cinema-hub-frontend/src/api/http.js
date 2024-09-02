@@ -245,6 +245,45 @@ export async function addToFavorites({
   return response.json();
 }
 
+export async function removeFavorite({ token, itemId }) {
+  console.log(token, itemId);
+  if (!token) {
+    throw new Error("Authorization token is missing!");
+  }
+
+  const response = await fetch(SERVER_URL + `/favorites/${itemId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function isItemFavorite({ token, itemId }) {
+  if (!token) {
+    throw new Error("Authorization token is missing!");
+  }
+
+  const response = await fetch(SERVER_URL + `/favorites/isFavorite/${itemId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
 /**
  * Get all users
  * @param {*} page Page number

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addToFavorites } from "../../api/http";
+import { addToFavorites, removeFavorite } from "../../api/http";
 
 const initialState = {
   movies: [
@@ -63,6 +63,15 @@ const favoritesSlice = createSlice({
         vote_average: action.payload.vote_average,
       });
       state.favorites.push(action.payload);
+    },
+    removeFavorite(state, action) {
+      removeFavorite({
+        token: action.payload.token,
+        itemId: action.payload.id,
+      });
+      state.favorites = state.favorites.filter(
+        (item) => item.itemId !== action.payload
+      );
     },
   },
 });

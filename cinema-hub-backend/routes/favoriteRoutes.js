@@ -12,6 +12,9 @@ router.get("/", auth, favoriteController.getFavorites);
 router.post("/", auth, favoriteController.addFavorite);
 
 // DELETE /favorites/:id
-router.delete("/:id", favoriteController.deleteFavorite);
+router.delete("/:id", auth, favoriteController.deleteFavorite);
+
+// GET /favorites/isFavorite/:id
+router.get("/isFavorite/:id", auth, favoriteController.isFavorite);
 
 module.exports = router;

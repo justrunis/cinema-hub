@@ -57,7 +57,7 @@ exports.addFavorite = async (req, res) => {
 };
 
 exports.isFavorite = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user.id;
   const itemId = req.params.id;
 
   const favorite = await Favorite.findOne({ user: userId, itemId: itemId });
@@ -70,16 +70,17 @@ exports.isFavorite = async (req, res) => {
 };
 
 exports.deleteFavorite = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user.id;
   const favoriteId = req.params.id;
 
-  const favorite = await Favorite.findOne({ _id: favoriteId, user: userId });
+  const favorite = await Favorite.findOneAndDelete({
+    itemId: favoriteId,
+    user: userId,
+  });
 
   if (!favorite) {
     return res.status(404).json({ message: "Favorite not found." });
   }
-
-  await favorite.remove();
 
   res.status(200).json({ message: "Favorite deleted." });
 };
