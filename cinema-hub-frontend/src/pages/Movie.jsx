@@ -16,6 +16,7 @@ import Button from "../components/UI/Button";
 import VideoPlayer from "../components/UI/VideoPlayer";
 import MovieReviews from "../components/Movies/MovieReviews";
 import MovieCredits from "../components/Movies/MovieCredits";
+import { useState } from "react";
 
 export default function Movie() {
   const { id } = useParams();
@@ -51,6 +52,7 @@ export default function Movie() {
       token: localStorage.getItem("cinema-hub-token"),
     };
     dispatch(favoritesActions.addFavorite(payload));
+    window.location.reload();
   }
 
   function removeFavorite() {
@@ -59,6 +61,7 @@ export default function Movie() {
       id: data?.id,
     };
     dispatch(favoritesActions.removeFavorite(payload));
+    window.location.reload();
   }
 
   function handleWatchlistClick() {
