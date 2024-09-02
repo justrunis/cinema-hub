@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { addToFavorites } from "../../api/http";
 
 const initialState = {
   movies: [
@@ -19,7 +20,10 @@ const initialState = {
       vote_average: 8.4,
     },
   ],
+  favorites: [],
 };
+
+const token = localStorage.getItem("token");
 
 const favoritesSlice = createSlice({
   name: "favorites",
@@ -33,6 +37,9 @@ const favoritesSlice = createSlice({
         (movie) => movie.id !== action.payload.id
       );
     },
+    setFavorites(state, action) {
+      state.favorites = action.payload;
+    },
     getMovieById(state, action) {
       return state.movies.find((movie) => movie.id === action.payload.id);
     },
@@ -44,6 +51,18 @@ const favoritesSlice = createSlice({
     },
     getShowById(state, action) {
       return state.shows.find((show) => show.id === action.payload.id);
+    },
+    addFavorite(state, action) {
+      addToFavorites({
+        token: action.payload.token,
+        itemId: action.payload.itemId,
+        movieId: action.payload.id,
+        itemType: action.payload.itemType,
+        title: action.payload.title || action.payload.name,
+        poster_path: action.payload.poster_path,
+        vote_average: action.payload.vote_average,
+      });
+      state.favorites.push(action.payload);
     },
   },
 });

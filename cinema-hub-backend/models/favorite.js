@@ -2,18 +2,18 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const favoriteSchema = new Schema({
+const favoriteSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
   itemId: {
-    type: String, // ID of the movie or TV show from TMDB
+    type: Number,
     required: true,
   },
   itemType: {
-    type: String, // Can be 'movie' or 'tv'
+    type: String,
     required: true,
   },
   title: {
@@ -34,7 +34,7 @@ const favoriteSchema = new Schema({
   },
   addedAt: {
     type: Date,
-    default: Date.now,
+    required: true,
   },
 });
 

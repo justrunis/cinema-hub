@@ -19,7 +19,3 @@ exports.getUser = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-exports.logoutUser = async (req, res) => {
-  res.status(200).json({ message: "Logout successful." });
-};

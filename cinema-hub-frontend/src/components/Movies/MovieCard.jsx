@@ -9,7 +9,7 @@ export default function MovieCard({ movie }) {
   const navigate = useNavigate();
 
   function handleClick() {
-    navigate(`/movies/${movie.id}`);
+    navigate(`/movies/${movie.itemId}`);
   }
 
   return (

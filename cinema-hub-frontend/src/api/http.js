@@ -195,6 +195,56 @@ export async function loginUser({ formData }) {
   return { data, status: response.status };
 }
 
+export async function fetchUsersFavorites({ token }) {
+  const response = await fetch(SERVER_URL + "/favorites", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function addToFavorites({
+  token,
+  itemId,
+  movieId,
+  itemType,
+  title,
+  poster_path,
+  vote_average,
+}) {
+  if (!token) {
+    throw new Error("Authorization token is missing!");
+  }
+
+  const response = await fetch(SERVER_URL + "/favorites", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      itemId,
+      movieId,
+      itemType,
+      title,
+      poster_path,
+      vote_average,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
 /**
  * Get all users
  * @param {*} page Page number

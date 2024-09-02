@@ -40,7 +40,17 @@ export default function Movie() {
     if (isFavorite) {
       dispatch(favoritesActions.removeMovie(data));
     } else {
-      dispatch(favoritesActions.addMovie(data));
+      const payload = {
+        itemId: data.id,
+        itemType: "movie",
+        title: data.title || data.original_title,
+        original_name: data.original_name || data.title || "Unknown",
+        poster_path: data.poster_path,
+        vote_average: data.vote_average,
+        token: localStorage.getItem("cinema-hub-token"),
+      };
+      console.log("PAYLOAD: ", payload);
+      dispatch(favoritesActions.addFavorite(payload));
     }
   }
 

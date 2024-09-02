@@ -1,33 +1,41 @@
 import MovieCard from "../Movies/MovieCard";
 import { useState } from "react";
-import SearchBar from "../UI/SearchBar";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { favoritesActions } from "../../store/slices/favorites";
+import { fetchUsersFavorites } from "../../api/http";
+import { STALE_TIME } from "../../utils/constants";
+import { useQuery } from "@tanstack/react-query";
+import LoadingIndicator from "../UI/LoadingIndicator";
+import ErrorIndicator from "../UI/ErrorIndicator";
 
 export default function FavoriteMovies() {
-  const { movies } = useSelector((state) => state.favorites);
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.login.token);
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: () => fetchUsersFavorites({ token }),
+    staleTime: STALE_TIME,
+  });
 
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
-  function handleSearch(query) {
-    setSearchQuery(query);
+  if (isError) {
+    return <ErrorIndicator title="Failed to fetch favorites" error={error} />;
   }
 
   return (
-    <div className="max-h-100 overflow-y-auto w-full">
-      <SearchBar onSearch={handleSearch} className="w-full mb-4" />
-
-      {filteredMovies.length === 0 ? (
-        <div className="flex items-center justify-center text-center text-primary font-bold">
-          <p className="text-center">No favorite movies found</p>
-        </div>
+    <div className="flex flex-col items-center justify-center gap-4 w-full h-full p-6 bg-base-300 rounded-lg">
+      {data?.length <= 0 ? (
+        <p className="flex items-center justify-center text-center text-primary font-bold">
+          <p>No favorites found</p>
+        </p>
       ) : (
         <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
-          {filteredMovies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
+          {data?.map((favorite) => (
+            <MovieCard key={favorite._id} movie={favorite} />
           ))}
         </div>
       )}

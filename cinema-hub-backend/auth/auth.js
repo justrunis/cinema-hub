@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+
 dotenv.config();
 
 module.exports = function (req, res, next) {
@@ -8,20 +9,22 @@ module.exports = function (req, res, next) {
     if (!authHeader) {
       return res.status(401).json({ error: "Authorization header missing" });
     }
-    const token = authHeader.split(" ")[1];
+    let token = authHeader.split(" ")[1];
     if (!token) {
       return res.status(401).json({ error: "Token missing" });
     }
 
-    console.log("Token received:", token); // Add this for debugging
+    // Remove double quotes from the token
+    token = token.replace(/"/g, "");
+
+    console.log("Token:", token);
+    console.log("Secret: ", process.env.JWT_SECRET);
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded Token:", decodedToken); // Add this for debugging
 
     req.user = decodedToken;
     next();
   } catch (error) {
-    console.log("Verification Error:", error);
     res.status(401).json({ error: "Invalid or expired token" });
   }
 };

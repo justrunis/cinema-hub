@@ -2,6 +2,8 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const auth = require("../auth/auth");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const saltRounds = 12;
 const tokenExpiryTime = "1h";
@@ -55,7 +57,7 @@ exports.loginUser = async (req, res) => {
     return res.status(400).json({ message: "Invalid username or password." });
   }
 
-  console.log(process.env.JWT_SECRET);
+  console.log("SECRET: ", process.env.JWT_SECRET);
 
   const token = jwt.sign(
     { id: user._id, username: user.username, role: user.role },
