@@ -143,12 +143,19 @@ export async function fetchShowEpisodeDetails({ id, season, episode, signal }) {
  * Get the current user
  * @returns {Promise} object containing the response data
  */
-export async function fetchUser() {
+export async function fetchUser({ token }) {
+  console.log("Token:", token);
   const response = await fetch(SERVER_URL + "/users/user", {
+    method: "GET",
     headers: {
-      accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
   return response.json();
 }
 
@@ -159,7 +166,7 @@ export async function fetchUser() {
  */
 export async function createUser({ formData }) {
   const { username, email, password, passwordRepeat } = formData;
-  const response = await fetch(SERVER_URL + "/users/register", {
+  const response = await fetch(SERVER_URL + "/auth/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -177,7 +184,7 @@ export async function createUser({ formData }) {
  */
 export async function loginUser({ formData }) {
   const { username, password } = formData;
-  const response = await fetch(SERVER_URL + "/users/login", {
+  const response = await fetch(SERVER_URL + "/auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

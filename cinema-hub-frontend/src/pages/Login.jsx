@@ -4,8 +4,15 @@ import Input from "../components/UI/Input";
 import Button from "../components/UI/Button";
 import { validateLoginForm } from "../utils/validation";
 import { Link } from "react-router-dom";
+import { loginUser, queryClient } from "../api/http";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginActions } from "../store/slices/login";
 
-export default function Login() {
+export default function Login({ onLogin }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -34,7 +41,21 @@ export default function Login() {
     if (validationResponse) {
       alert(validationResponse);
     } else {
-      alert("Form submitted successfully!");
+      loginUser({ formData })
+        .then((response) => {
+          if (response.status === 200) {
+            const token = response.data.token;
+            dispatch(loginActions.login(token));
+            queryClient.clear();
+            navigate("/profile");
+          } else {
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error logging in:", error);
+          alert("An error occurred. Please try again later.");
+        });
     }
   }
 

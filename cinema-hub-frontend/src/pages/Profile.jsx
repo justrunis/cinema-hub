@@ -8,7 +8,7 @@ import FavoriteShows from "../components/Profile/FavoriteShows";
 import Watchlist from "../components/Profile/Watchlist";
 import FriendsTabs from "../components/Profile/FriendsTabs";
 
-export default function Profile() {
+export default function Profile({ token }) {
   document.title = "Profile";
 
   return (
@@ -55,7 +55,7 @@ export default function Profile() {
           </TabList>
 
           <TabPanel>
-            <UserProfile />
+            <UserProfile token={token} />
           </TabPanel>
           <TabPanel>
             <FavoriteMovies />

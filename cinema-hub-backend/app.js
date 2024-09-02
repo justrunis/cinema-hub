@@ -1,5 +1,5 @@
 const dotenv = require("dotenv");
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "./.env" });
 
 const express = require("express");
 const cors = require("cors");
@@ -22,6 +22,7 @@ const userRoutes = require("./routes/userRoutes");
 const friendsRoutes = require("./routes/friendsRoutes");
 const favoriteRoutes = require("./routes/favoriteRoutes");
 const watchlistRoutes = require("./routes/watchlistRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 // Use the routes
 app.use("/admin", adminRoutes);
@@ -29,6 +30,7 @@ app.use("/users", userRoutes);
 app.use("/friends", friendsRoutes);
 app.use("/favorites", favoriteRoutes);
 app.use("/watchlist", watchlistRoutes);
+app.use("/auth", authRoutes);
 
 // Connect to MongoDB and start the server
 connectDB().then(async () => {

@@ -1,17 +1,18 @@
+import { useSelector } from "react-redux";
 import { fetchUser } from "../../api/http";
 import { useQuery } from "@tanstack/react-query";
 import { STALE_TIME } from "../../utils/constants";
 import LoadingIndicator from "../UI/LoadingIndicator";
 import ErrorIndicator from "../UI/ErrorIndicator";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import Button from "../UI/Button";
 import { makeFirstLetterUpperCase } from "../../utils/formatting";
 
 export default function UserProfile() {
+  const token = useSelector((state) => state.login.token);
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user"],
-    queryFn: fetchUser,
+    queryFn: () => fetchUser({ token }),
     staleTime: STALE_TIME,
   });
 
@@ -22,8 +23,6 @@ export default function UserProfile() {
   if (isError) {
     return <ErrorIndicator title="Failed to fetch user data" error={error} />;
   }
-
-  const handleEditProfile = () => {};
 
   return (
     <motion.div
@@ -42,7 +41,7 @@ export default function UserProfile() {
         <div className="absolute bottom-[-40px] left-1/2 transform -translate-x-1/2">
           <motion.img
             src={
-              data.user.avatar ||
+              data?.user?.avatar ||
               "https://static.thenounproject.com/png/363639-200.png"
             }
             alt="User Avatar"
@@ -77,7 +76,7 @@ export default function UserProfile() {
         {/* Edit Profile Button */}
         <Button
           className="p-3 btn btn-primary text-primary-content rounded-lg min-h-[40px]"
-          onClick={handleEditProfile}
+          onClick={() => {}}
         >
           Edit Profile
         </Button>
