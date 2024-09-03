@@ -8,8 +8,21 @@ import { round } from "../../utils/formatting";
 export default function MovieCard({ movie }) {
   const navigate = useNavigate();
 
+  console.log(movie);
+
+  let itemType = "movies";
+
+  if (movie?.itemType) {
+    itemType = movie.itemType;
+    if (itemType === "tv") {
+      itemType = "shows";
+    } else {
+      itemType = "movies";
+    }
+  }
+
   function handleClick() {
-    navigate(`/movies/${movie.itemId ? movie.itemId : movie.id}`);
+    navigate(`/${itemType}/${movie.itemId ? movie.itemId : movie.id}`);
   }
 
   return (

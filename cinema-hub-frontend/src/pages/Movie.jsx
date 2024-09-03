@@ -16,7 +16,6 @@ import Button from "../components/UI/Button";
 import VideoPlayer from "../components/UI/VideoPlayer";
 import MovieReviews from "../components/Movies/MovieReviews";
 import MovieCredits from "../components/Movies/MovieCredits";
-import { useState } from "react";
 
 export default function Movie() {
   const { id } = useParams();

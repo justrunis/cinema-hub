@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchShowDetails } from "../api/http";
+import { fetchShowDetails, isItemFavorite } from "../api/http";
 import { STALE_TIME, IMAGE_URL, PLACEHOLDER_IMAGE } from "../utils/constants";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
 import ErrorIndicator from "../components/UI/ErrorIndicator";
@@ -22,21 +22,48 @@ import { Link } from "react-router-dom";
 export default function Show() {
   const { id } = useParams();
 
+  const token = localStorage.getItem("cinema-hub-token");
   const dispatch = useDispatch();
-
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["show", id],
     queryFn: ({ signal }) => fetchShowDetails({ id, signal }),
     staleTime: STALE_TIME,
   });
 
-  const isFavorite = useSelector((state) =>
-    state.favorites.shows.some((show) => show.id === data?.id)
-  );
+  const { data: isFavoriteData, isLoading: isFavoriteLoading } = useQuery({
+    queryKey: ["isFavorite", id],
+    queryFn: ({ signal }) => isItemFavorite({ itemId: id, token, signal }),
+    staleTime: STALE_TIME,
+  });
+
+  const isFavorite = isFavoriteData?.isFavorite;
 
   const isInWatchlist = useSelector((state) =>
     state.watchlist.shows.some((show) => show.id === data?.id)
   );
+
+  function addFavorite() {
+    const payload = {
+      itemId: data.id,
+      itemType: "tv",
+      title: data.name || data.original_name,
+      original_name: data.original_name || data.name || "Unknown",
+      poster_path: data.poster_path,
+      vote_average: data.vote_average,
+      token: localStorage.getItem("cinema-hub-token"),
+    };
+    dispatch(favoritesActions.addFavorite(payload));
+    window.location.reload();
+  }
+
+  function removeFavorite() {
+    const payload = {
+      token: localStorage.getItem("cinema-hub-token"),
+      id: data?.id,
+    };
+    dispatch(favoritesActions.removeFavorite(payload));
+    window.location.reload();
+  }
 
   function handleFavoriteClick() {
     if (isFavorite) {
@@ -82,11 +109,13 @@ export default function Show() {
         className: `${buttonClass} bg-accent text-primary-content hover:bg-red-600`,
         icon: <FaHeart className={`text-primary ${iconClass}`} />,
         text: "Remove from favorites",
+        onClick: removeFavorite,
       }
     : {
         className: `${buttonClass} bg-primary text-primary-content hover:bg-accent`,
         icon: <FaRegHeart className={`text-primary-content ${iconClass}`} />,
         text: "Add to favorites",
+        onClick: addFavorite,
       };
 
   const watchlistButtonProps = isInWatchlist
@@ -177,14 +206,16 @@ export default function Show() {
             transition={{ delay: 2.6 }}
           >
             <Button
-              onClick={handleFavoriteClick}
+              onClick={favButtonProps.onClick}
               className={favButtonProps.className}
+              disabled={isFavoriteLoading}
             >
               {favButtonProps.icon}
               <p className={`text-primary-content ${textClass}`}>
                 {favButtonProps.text}
               </p>
             </Button>
+
             <Button
               className={watchlistButtonProps.className}
               onClick={handleWatchlistClick}

@@ -2,15 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { addToFavorites, removeFavorite } from "../../api/http";
 
 const initialState = {
-  movies: [
-    {
-      id: 533535,
-      title: "Deadpool & Wolverine",
-      original_name: "Deadpool & Wolverine",
-      poster_path: "/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
-      vote_average: 8.1,
-    },
-  ],
   shows: [
     {
       id: 615,
@@ -29,20 +20,6 @@ const favoritesSlice = createSlice({
   name: "favorites",
   initialState,
   reducers: {
-    addMovie(state, action) {
-      state.movies.push(action.payload);
-    },
-    removeMovie(state, action) {
-      state.movies = state.movies.filter(
-        (movie) => movie.id !== action.payload.id
-      );
-    },
-    setFavorites(state, action) {
-      state.favorites = action.payload;
-    },
-    getMovieById(state, action) {
-      return state.movies.find((movie) => movie.id === action.payload.id);
-    },
     addShow(state, action) {
       state.shows.push(action.payload);
     },
@@ -53,12 +30,15 @@ const favoritesSlice = createSlice({
       return state.shows.find((show) => show.id === action.payload.id);
     },
     addFavorite(state, action) {
+      console.log(action.payload);
       addToFavorites({
         token: action.payload.token,
         itemId: action.payload.itemId,
-        movieId: action.payload.id,
         itemType: action.payload.itemType,
-        title: action.payload.title || action.payload.name,
+        title:
+          action.payload.title ||
+          action.payload.name ||
+          action.payload.original_name,
         poster_path: action.payload.poster_path,
         vote_average: action.payload.vote_average,
       });

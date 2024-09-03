@@ -32,13 +32,7 @@ export default function Profile({ token }) {
               className="p-2 cursor-pointer text-primary hover:text-accent text-base sm:text-sm"
               selectedClassName="font-bold text-accent"
             >
-              Favorite Movies
-            </Tab>
-            <Tab
-              className="p-2 cursor-pointer text-primary hover:text-accent text-base sm:text-sm"
-              selectedClassName="font-bold text-accent"
-            >
-              Favorite Shows
+              Favorites
             </Tab>
             <Tab
               className="p-2 cursor-pointer text-primary hover:text-accent text-base sm:text-sm"
@@ -59,9 +53,6 @@ export default function Profile({ token }) {
           </TabPanel>
           <TabPanel>
             <FavoriteMovies />
-          </TabPanel>
-          <TabPanel>
-            <FavoriteShows />
           </TabPanel>
           <TabPanel>
             <Watchlist />

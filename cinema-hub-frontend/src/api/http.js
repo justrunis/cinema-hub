@@ -213,7 +213,6 @@ export async function fetchUsersFavorites({ token }) {
 export async function addToFavorites({
   token,
   itemId,
-  movieId,
   itemType,
   title,
   poster_path,
@@ -231,7 +230,6 @@ export async function addToFavorites({
     },
     body: JSON.stringify({
       itemId,
-      movieId,
       itemType,
       title,
       poster_path,
