@@ -2,50 +2,69 @@ import { useSelector, useDispatch } from "react-redux";
 import { friendsActions } from "../../store/slices/friends";
 import Button from "../UI/Button";
 import { ALL_USERS } from "../../utils/constants";
-import SearchBar from "../UI/SearchBar";
 import { useState } from "react";
+import {
+  fetchUserSuggestedFriends,
+  addFriend,
+  queryClient,
+} from "../../api/http";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import LoadingIndicator from "../UI/LoadingIndicator";
+import ErrorIndicator from "../UI/ErrorIndicator";
+import { STALE_TIME } from "../../utils/constants";
+import { formatDate } from "../../utils/formatting";
 
 export default function SuggestedFriends() {
-  const friends = useSelector((state) => state.friends.friends);
+  const token = localStorage.getItem("cinema-hub-token");
 
-  const dispatch = useDispatch();
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["suggestedFriends"],
+    queryFn: () => fetchUserSuggestedFriends({ token }),
+    staleTime: STALE_TIME,
+  });
 
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const suggestedFriends = ALL_USERS.filter(
-    (user) => !friends.find((friend) => friend.id === user.id)
-  ).filter((friend) =>
-    friend.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  function handleSearch(query) {
-    setSearchQuery(query);
-  }
+  const { mutate } = useMutation({
+    mutationFn: addFriend,
+    onSuccess: () => {
+      queryClient.invalidateQueries("suggestedFriends");
+    },
+  });
 
   function handleAddFriend(friend) {
-    dispatch(friendsActions.addFriend(friend));
+    mutate({ token, friendId: friend._id });
+  }
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
+
+  if (isError) {
+    return <ErrorIndicator title="An error occurred" message={error} />;
   }
 
   return (
     <div className="max-h-96 overflow-y-auto w-full mt-5">
-      <SearchBar
-        onSearch={handleSearch}
-        className="w-full"
-        placeHolder="Search suggested friends..."
-      />
       <h1 className="text-2xl font-bold my-4 text-center">Suggested friends</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {suggestedFriends.map((friend) => (
+        {data.map((friend) => (
           <div
-            key={friend.id}
+            key={friend._id}
             className="flex flex-col justify-center items-center gap-2 bg-gray-200 p-8 rounded-lg"
           >
-            <h2 className="text-lg font-semibold text-center">{friend.name}</h2>
+            <h2 className="text-lg font-semibold text-center">
+              {friend.username}
+            </h2>
             <img
               src="https://static.thenounproject.com/png/363639-200.png"
               alt={`${friend.name} Avatar`}
               className="w-10 h-10 rounded-full"
             />
+            <p>
+              Member since:{" "}
+              <span className="font-semibold">
+                {formatDate(friend.createdAt)}
+              </span>
+            </p>
             <Button
               className="btn btn-xs btn-primary text-primary-content"
               onClick={() => handleAddFriend(friend)}

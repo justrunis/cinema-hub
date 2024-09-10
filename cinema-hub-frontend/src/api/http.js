@@ -369,6 +369,100 @@ export async function isItemInWatchlist({ token, itemId }) {
   return response.json();
 }
 
+export async function fetchUserSuggestedFriends({ token }) {
+  const response = await fetch(SERVER_URL + "/friends/suggested", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function fetchUsersFriendsList({ token }) {
+  const response = await fetch(SERVER_URL + "/friends/list", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function fetchUsersFriendsRequests({ token }) {
+  const response = await fetch(SERVER_URL + "/friends/requests", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function addFriend({ token, friendId }) {
+  console.log("Adding friend with ID:", friendId);
+  const response = await fetch(SERVER_URL + "/friends", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ friendId }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function acceptFriendRequest({ token, friendId }) {
+  const response = await fetch(SERVER_URL + `/friends/${friendId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function rejectFriendRequest({ token, friendId }) {
+  const response = await fetch(SERVER_URL + `/friends/${friendId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+// ADMIN
+
 /**
  * Get all users
  * @param {*} page Page number
