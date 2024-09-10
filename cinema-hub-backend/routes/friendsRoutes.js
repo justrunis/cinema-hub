@@ -26,7 +26,7 @@ router.put("/:id", auth, friendsController.acceptFriendRequest);
 // DELETE /friends/:id
 router.delete("/:id", auth, friendsController.rejectFriendRequest);
 
-// DELETE /friends/:id
-router.delete("/:id", auth, friendsController.deleteFriend);
+// DELETE /friends/delete/:id
+router.delete("/delete/:id", auth, friendsController.deleteFriend);
 
 module.exports = router;

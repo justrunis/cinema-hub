@@ -431,6 +431,21 @@ export async function addFriend({ token, friendId }) {
   return response.json();
 }
 
+export async function removeFriend({ token, friendId }) {
+  const response = await fetch(SERVER_URL + `/friends/delete/${friendId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
 export async function acceptFriendRequest({ token, friendId }) {
   const response = await fetch(SERVER_URL + `/friends/${friendId}`, {
     method: "PUT",

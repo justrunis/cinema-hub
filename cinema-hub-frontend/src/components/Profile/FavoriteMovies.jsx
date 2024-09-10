@@ -33,7 +33,7 @@ export default function FavoriteMovies() {
           <p>No favorites found</p>
         </p>
       ) : (
-        <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
           {data?.map((favorite) => (
             <MovieCard key={favorite._id} movie={favorite} />
           ))}

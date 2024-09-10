@@ -114,15 +114,10 @@ exports.rejectFriendRequest = async (req, res) => {
   const userId = req.user.id;
   const friendId = req.params.id;
 
-  console.log("Friend ID: ", friendId);
-  console.log("User ID: ", userId);
-
   const friend = await Friend.findOneAndDelete({
     friend: friendId,
     friend: userId,
   });
-
-  console.log("Friend: ", friend);
 
   if (!friend) {
     return res.status(404).json({ message: "Friend request not found." });
@@ -135,13 +130,23 @@ exports.deleteFriend = async (req, res) => {
   const userId = req.user.id;
   const friendId = req.params.id;
 
-  const friend = await Friend.findOne({ _id: friendId, user: userId });
+  const friend = await Friend.findOneAndDelete({
+    user: userId,
+    friend: friendId,
+  });
 
   if (!friend) {
     return res.status(404).json({ message: "Friend not found." });
   }
 
-  await friend.remove();
+  const otherFriend = await Friend.findOneAndDelete({
+    user: friendId,
+    friend: userId,
+  });
 
-  res.status(200).json({ message: "Friend deleted." });
+  if (!otherFriend) {
+    return res.status(404).json({ message: "Friend not found." });
+  }
+
+  res.status(200).json({ message: "Friend deleted from both sides." });
 };

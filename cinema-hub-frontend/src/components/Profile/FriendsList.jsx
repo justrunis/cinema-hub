@@ -3,9 +3,12 @@ import { friendsActions } from "../../store/slices/friends";
 import Button from "../UI/Button";
 import ConfirmationModal from "../UI/ConfirmationModal";
 import { useState } from "react";
-import SearchBar from "../UI/SearchBar";
-import { useQuery } from "@tanstack/react-query";
-import { fetchUsersFriendsList } from "../../api/http";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import {
+  fetchUsersFriendsList,
+  removeFriend,
+  queryClient,
+} from "../../api/http";
 import LoadingIndicator from "../UI/LoadingIndicator";
 import ErrorIndicator from "../UI/ErrorIndicator";
 import { STALE_TIME } from "../../utils/constants";
@@ -19,18 +22,17 @@ export default function FriendsList() {
     staleTime: STALE_TIME,
   });
 
-  console.log(data);
+  const { mutate: remove } = useMutation({
+    mutationFn: removeFriend,
+    onSuccess: () => {
+      queryClient.invalidateQueries("friendsList");
+    },
+  });
 
   const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState(false);
   const [friend, setFriend] = useState([]);
-
-  const [searchQuery, setSearchQuery] = useState("");
-
-  function handleSearch(query) {
-    setSearchQuery(query);
-  }
 
   function handleViewProfile() {
     console.log("View Profile");
@@ -42,7 +44,7 @@ export default function FriendsList() {
   }
 
   function handleUnfriendConfirm() {
-    dispatch(friendsActions.removeFriend(friend));
+    remove({ token, friendId: friend.friend._id });
     setShowModal(false);
   }
 
@@ -67,7 +69,7 @@ export default function FriendsList() {
       {showModal && (
         <ConfirmationModal
           title="Unfriend"
-          message={`Are you sure you want to unfriend ${friend.name}?`}
+          message={`Are you sure you want to unfriend user ${friend.friend.username}?`}
           open={showModal}
           onClose={() => setShowModal(false)}
           onConfirm={handleUnfriendConfirm}
