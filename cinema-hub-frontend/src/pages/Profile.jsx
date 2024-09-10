@@ -23,25 +23,25 @@ export default function Profile({ token }) {
           <TabList className="flex flex-col md:flex-row justify-around w-full border-b-2 border-base-300 mb-4">
             <Tab
               className="p-2 cursor-pointer text-primary hover:text-accent text-base sm:text-sm"
-              selectedClassName="font-bold text-accent"
+              selectedClassName="font-bold !text-accent"
             >
               Profile
             </Tab>
             <Tab
               className="p-2 cursor-pointer text-primary hover:text-accent text-base sm:text-sm"
-              selectedClassName="font-bold text-accent"
+              selectedClassName="font-bold !text-accent"
             >
               Favorites
             </Tab>
             <Tab
               className="p-2 cursor-pointer text-primary hover:text-accent text-base sm:text-sm"
-              selectedClassName="font-bold text-accent"
+              selectedClassName="font-bold !text-accent"
             >
               Watchlist
             </Tab>
             <Tab
               className="p-2 cursor-pointer text-primary hover:text-accent text-base sm:text-sm"
-              selectedClassName="font-bold text-accent"
+              selectedClassName="font-bold !text-accent"
             >
               Friends
             </Tab>

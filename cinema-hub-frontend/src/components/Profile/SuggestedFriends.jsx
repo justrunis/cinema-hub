@@ -1,8 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
-import { friendsActions } from "../../store/slices/friends";
 import Button from "../UI/Button";
-import { ALL_USERS } from "../../utils/constants";
-import { useState } from "react";
 import {
   fetchUserSuggestedFriends,
   addFriend,
@@ -44,9 +40,9 @@ export default function SuggestedFriends() {
 
   if (data.length === 0) {
     return (
-      <p className="text-center text-lg font-semibold">
-        No suggested friends found.
-      </p>
+      <div className="flex flex-col items-center justify-center gap-4 w-full h-full p-6 bg-base-300 rounded-lg">
+        <p>You have no suggested friends.</p>
+      </div>
     );
   }
 

@@ -1,5 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
-import { friendsActions } from "../../store/slices/friends";
+import { useDispatch } from "react-redux";
 import Button from "../UI/Button";
 import ConfirmationModal from "../UI/ConfirmationModal";
 import { useState } from "react";
@@ -58,9 +57,9 @@ export default function FriendsList() {
 
   if (data.length === 0) {
     return (
-      <p className="text-center text-lg font-semibold">
-        You have no friends yet.
-      </p>
+      <div className="flex flex-col items-center justify-center gap-4 w-full h-full p-6 bg-base-300 rounded-lg">
+        <p>You have no friends. Add some friends to see them here.</p>
+      </div>
     );
   }
 

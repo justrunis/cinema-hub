@@ -52,9 +52,9 @@ export default function FriendRequests() {
 
   if (data.length === 0) {
     return (
-      <p className="text-center text-lg font-semibold">
-        You have no friend requests.
-      </p>
+      <div className="flex flex-col items-center justify-center gap-4 w-full h-full p-6 bg-base-300 rounded-lg">
+        <p>You have no friend requests.</p>
+      </div>
     );
   }
 
