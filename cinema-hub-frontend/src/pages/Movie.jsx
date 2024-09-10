@@ -214,34 +214,37 @@ export default function Movie() {
         </div>
         <div className="self-center flex flex-col items-center justify-center gap-4 px-8 pb-6 max-w-7xl w-full">
           <VideoPlayer id={data?.id} type="movie" />
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex flex-col lg:flex-row items-center gap-4"
-            transition={{ delay: 1.4 }}
-          >
-            <Button
-              onClick={favButtonProps.onClick}
-              className={favButtonProps.className}
-              disabled={isFavoriteLoading}
+          {/* Favorite and Watchlist Buttons */}
+          {token && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col lg:flex-row items-center gap-4"
+              transition={{ delay: 1.4 }}
             >
-              {favButtonProps.icon}
-              <p className={`text-primary-content ${textClass}`}>
-                {favButtonProps.text}
-              </p>
-            </Button>
+              <Button
+                onClick={favButtonProps.onClick}
+                className={favButtonProps.className}
+                disabled={isFavoriteLoading}
+              >
+                {favButtonProps.icon}
+                <p className={`text-primary-content ${textClass}`}>
+                  {favButtonProps.text}
+                </p>
+              </Button>
 
-            <Button
-              onClick={watchlistButtonProps.onClick}
-              className={watchlistButtonProps.className}
-              disabled={isWatchlistLoading}
-            >
-              {watchlistButtonProps.icon}
-              <p className={`text-primary-content ${textClass}`}>
-                {watchlistButtonProps.text}
-              </p>
-            </Button>
-          </motion.div>
+              <Button
+                onClick={watchlistButtonProps.onClick}
+                className={watchlistButtonProps.className}
+                disabled={isWatchlistLoading}
+              >
+                {watchlistButtonProps.icon}
+                <p className={`text-primary-content ${textClass}`}>
+                  {watchlistButtonProps.text}
+                </p>
+              </Button>
+            </motion.div>
+          )}
           <div className="flex flex-col items-center justify-center gap-4 px-8">
             <MovieCredits id={data?.id} />
           </div>

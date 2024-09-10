@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginActions } from "../store/slices/login";
 
-export default function Login({ onLogin }) {
+export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

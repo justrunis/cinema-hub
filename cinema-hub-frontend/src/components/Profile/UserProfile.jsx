@@ -29,7 +29,7 @@ export default function UserProfile() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col items-center justify-center gap-4 w-full h-full p-6 bg-base-200"
+      className="flex flex-col items-center justify-center gap-4 w-full h-full p-6 bg-base-200 rounded-lg"
     >
       {/* Cover Photo */}
       <motion.div

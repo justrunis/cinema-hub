@@ -216,34 +216,36 @@ export default function Show() {
         </div>
         <div className="self-center flex flex-col items-center justify-center gap-4 px-8 pb-6 max-w-7xl w-full">
           <VideoPlayer id={data.id} type="tv" delay={2.4} />
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex flex-col lg:flex-row items-center gap-2 mt-2"
-            transition={{ delay: 2.6 }}
-          >
-            <Button
-              onClick={favButtonProps.onClick}
-              className={favButtonProps.className}
-              disabled={isFavoriteLoading}
+          {token && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col lg:flex-row items-center gap-2 mt-2"
+              transition={{ delay: 2.6 }}
             >
-              {favButtonProps.icon}
-              <p className={`text-primary-content ${textClass}`}>
-                {favButtonProps.text}
-              </p>
-            </Button>
+              <Button
+                onClick={favButtonProps.onClick}
+                className={favButtonProps.className}
+                disabled={isFavoriteLoading}
+              >
+                {favButtonProps.icon}
+                <p className={`text-primary-content ${textClass}`}>
+                  {favButtonProps.text}
+                </p>
+              </Button>
 
-            <Button
-              className={watchlistButtonProps.className}
-              onClick={watchlistButtonProps.onClick}
-              disabled={isWatchlistLoading}
-            >
-              {watchlistButtonProps.icon}
-              <p className={`text-primary-content ${textClass}`}>
-                {watchlistButtonProps.text}
-              </p>
-            </Button>
-          </motion.div>
+              <Button
+                className={watchlistButtonProps.className}
+                onClick={watchlistButtonProps.onClick}
+                disabled={isWatchlistLoading}
+              >
+                {watchlistButtonProps.icon}
+                <p className={`text-primary-content ${textClass}`}>
+                  {watchlistButtonProps.text}
+                </p>
+              </Button>
+            </motion.div>
+          )}
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-4 bg-base-300 px-8 rounded-lg shadow-md py-6 w-full">

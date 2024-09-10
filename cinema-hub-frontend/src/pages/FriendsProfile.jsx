@@ -48,7 +48,7 @@ export default function FriendsProfile() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col items-center gap-4 w-full h-full p-6 mx-8 bg-base-200"
+      className="container flex flex-col items-center gap-4 w-full p-6 bg-base-200 rounded-lg"
     >
       {/* Cover Photo */}
       <motion.div
@@ -85,35 +85,68 @@ export default function FriendsProfile() {
         </p>
       </motion.div>
 
-      {/* Favorites */}
+      {/* Bio */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-6xl p-6 bg-base-100 rounded-lg shadow-lg"
+        className="bg-base-100 rounded-lg shadow-lg p-6 w-full max-w-xl mt-4"
       >
-        <h1 className="text-2xl font-bold mb-4">Favorite Movies & Shows</h1>
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-          {friendFavorites?.map((favorite) => (
-            <MovieCard key={favorite.itemId} movie={favorite} />
-          ))}
-        </div>
+        <p className="text-xl font-bold mb-2">Bio</p>
+        <p className="text-base font-light text-accent">
+          {friendInfo?.bio || "No bio available."}
+        </p>
       </motion.div>
 
-      {/* Watchlist */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-6xl p-6 bg-base-100 rounded-lg shadow-lg"
-      >
-        <h1 className="text-2xl font-bold mb-4">Watchlist</h1>
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-          {friendWatchlist?.map((watchlistItem) => (
-            <MovieCard key={watchlistItem.itemId} movie={watchlistItem} />
-          ))}
+      <div className="w-full lg:w-1/2 grid grid-cols-1 gap-4 mt-4 grid-auto-rows-min">
+        {/* Favorites */}
+        <div className="collapse collapse-arrow bg-base-100 rounded-lg shadow-md mb-4">
+          <input type="checkbox" />
+          <div className="collapse-title text-xl font-medium bg-primary text-white rounded-t-lg">
+            Favorites
+          </div>
+          <div className="collapse-content bg-base-300 rounded-b-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="p-4"
+            >
+              <h1 className="text-2xl font-bold mb-4">
+                Favorite Movies & Shows
+              </h1>
+              <div className="grid grid-cols-3 gap-4">
+                {friendFavorites?.map((favorite) => (
+                  <MovieCard key={favorite.itemId} movie={favorite} />
+                ))}
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </motion.div>
+
+        {/* Watchlist */}
+        <div className="collapse collapse-arrow bg-base-100 rounded-lg shadow-md">
+          <input type="checkbox" />
+          <div className="collapse-title text-xl font-medium bg-accent text-white rounded-t-lg">
+            Watchlist
+          </div>
+          <div className="collapse-content bg-base-300 rounded-b-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="p-4"
+            >
+              <h1 className="text-2xl font-bold mb-4">Watchlist</h1>
+              <div className="grid grid-cols-3 gap-4">
+                {friendWatchlist?.map((watchlistItem) => (
+                  <MovieCard key={watchlistItem.itemId} movie={watchlistItem} />
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 }
