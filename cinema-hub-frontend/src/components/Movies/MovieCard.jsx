@@ -5,10 +5,8 @@ import { IMAGE_URL, PLACEHOLDER_IMAGE } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { round } from "../../utils/formatting";
 
-export default function MovieCard({ movie }) {
+export default function MovieCard({ movie, itemType = "movies" }) {
   const navigate = useNavigate();
-
-  let itemType = "movies";
 
   if (movie?.itemType) {
     itemType = movie.itemType;
@@ -41,7 +39,7 @@ export default function MovieCard({ movie }) {
         className="rounded-lg w-full h-auto"
       />
       <h2 className="text-xs lg:text-lg font-bold mt-2">
-        {movie.original_name || movie.title}
+        {movie.title || movie.original_name}
       </h2>
       <div className="flex items-center gap-2">
         <StarRating rating={round(movie?.vote_average, 1)} />

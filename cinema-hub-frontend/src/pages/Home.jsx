@@ -1,43 +1,124 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Button from "../components/UI/Button";
+import { useQuery } from "@tanstack/react-query";
+import { fetchTrendingMovies, fetchTrendingShows } from "../api/http";
+import LoadingIndicator from "../components/UI/LoadingIndicator";
+import ErrorIndicator from "../components/UI/ErrorIndicator";
+import { STALE_TIME } from "../utils/constants";
+import MovieCard from "../components/Movies/MovieCard";
+import ShowCard from "../components/Shows/ShowCard";
 
 export default function Home() {
   document.title = "Home";
 
+  const {
+    data: trendingMovies,
+    isLoading: isMoviesLoading,
+    isError: isMoviesError,
+    error: moviesError,
+  } = useQuery({
+    queryKey: ["trendingMovies"],
+    queryFn: ({ signal }) =>
+      fetchTrendingMovies({ currentPage: 1, signal, query: "" }),
+    staleTime: STALE_TIME,
+  });
+
+  const {
+    data: trendingShows,
+    isLoading: isShowsLoading,
+    isError: isShowsError,
+    error: showsError,
+  } = useQuery({
+    queryKey: ["trendingShows"],
+    queryFn: ({ signal }) =>
+      fetchTrendingShows({ currentPage: 1, signal, query: "" }),
+    staleTime: STALE_TIME,
+  });
+
+  if (isMoviesLoading || isShowsLoading) {
+    return <LoadingIndicator />;
+  }
+
+  if (isMoviesError || isShowsError) {
+    return <ErrorIndicator title="An error occurred" />;
+  }
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 50 }}
-      transition={{ duration: 0.2 }}
-      className="flex flex-col items-center justify-center max-h-screen text-base-content px-8 py-10"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.4 }}
+      className="flex flex-col items-center p-8 w-full max-w-screen-xl mx-auto"
     >
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-        className="flex flex-col items-center bg-base-100 p-8 rounded-lg shadow-lg max-w-3xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="text-center bg-gradient-to-r from-primary to-accent text-white rounded-lg p-6 mb-12 w-full"
       >
-        <h1 className="text-5xl font-extrabold mb-4 text-accent text-center">
-          Welcome to Cinema Hub
-        </h1>
-        <p className="text-xl mb-8 text-black text-center">
-          Your go-to destination for the latest movies and TV shows.
+        <h1 className="text-5xl font-extrabold mb-4">Welcome to Cinema Hub</h1>
+        <p className="text-xl mb-6">
+          Discover the latest and greatest in movies and TV shows. Dive into
+          your next favorite flick with ease.
         </p>
-        <div className="flex gap-4">
+        <div className="flex justify-center gap-4">
           <Link to="/movies">
-            <Button className="p-3 btn bg-primary text-primary-content rounded-lg min-h-[40px] hover:bg-accent">
+            <Button className="p-3 btn bg-primary text-primary-content rounded-lg min-h-[40px] hover:bg-accent hover:scale-105 transition-transform">
               Browse Movies
             </Button>
           </Link>
           <Link to="/shows">
-            <Button className="p-3 btn bg-primary text-primary-content rounded-lg min-h-[40px] hover:bg-accent">
+            <Button className="p-3 btn bg-primary text-primary-content rounded-lg min-h-[40px] hover:bg-accent hover:scale-105 transition-transform">
               Browse TV Shows
             </Button>
           </Link>
         </div>
       </motion.div>
+
+      <div className="flex flex-col gap-8 w-full">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="bg-base-200 shadow-lg p-6 rounded-lg"
+        >
+          <h2 className="text-3xl font-bold text-gray-800 mb-6">
+            Trending Movies
+          </h2>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0 }}
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+          >
+            {trendingMovies?.results.slice(0, 5).map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+          className="bg-base-200 shadow-lg p-6 rounded-lg"
+        >
+          <h2 className="text-3xl font-bold text-gray-800 mb-6">
+            Trending TV Shows
+          </h2>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.4 }}
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+          >
+            {trendingShows?.results.slice(0, 5).map((show) => (
+              <ShowCard key={show.id} show={show} />
+            ))}
+          </motion.div>
+        </motion.div>
+      </div>
     </motion.div>
   );
 }
