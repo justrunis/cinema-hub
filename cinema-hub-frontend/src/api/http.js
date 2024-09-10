@@ -476,6 +476,7 @@ export async function fetchUsers({ page = 1, limit = 10 }) {
       {
         headers: {
           accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("cinema-hub-token")}`,
         },
       }
     );
@@ -517,6 +518,7 @@ export async function updateUser({ userId, username, email, role }) {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("cinema-hub-token")}`,
     },
     body: JSON.stringify({ username, email, role }),
   });
@@ -534,6 +536,7 @@ export async function deleteUser({ userId }) {
     method: "DELETE",
     headers: {
       accept: "application/json",
+      Authorization: `Bearer ${localStorage.getItem("cinema-hub-token")}`,
     },
   });
   const data = await response.json();

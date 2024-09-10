@@ -2,6 +2,9 @@ const User = require("../models/user");
 
 exports.getUsers = async (req, res) => {
   try {
+    if (req.user.role !== "admin") {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     // Extract and parse page and limit from query parameters
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
@@ -49,6 +52,9 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
@@ -61,6 +67,9 @@ exports.getUser = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
   const { userId } = req.params;
   const { username, email, role } = req.body;
   const currentDateTime = new Date();
@@ -76,6 +85,9 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
   const { userId } = req.params;
   User.findByIdAndDelete(userId)
     .then(res.status(200).json({ message: "User deleted successfully" }))

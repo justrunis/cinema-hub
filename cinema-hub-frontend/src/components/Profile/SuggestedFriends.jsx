@@ -42,6 +42,14 @@ export default function SuggestedFriends() {
     return <ErrorIndicator title="An error occurred" message={error} />;
   }
 
+  if (data.length === 0) {
+    return (
+      <p className="text-center text-lg font-semibold">
+        No suggested friends found.
+      </p>
+    );
+  }
+
   return (
     <div className="max-h-96 overflow-y-auto w-full mt-5">
       <h1 className="text-2xl font-bold my-4 text-center">Suggested friends</h1>
