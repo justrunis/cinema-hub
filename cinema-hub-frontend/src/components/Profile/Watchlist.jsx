@@ -2,50 +2,42 @@ import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import MovieCard from "../Movies/MovieCard";
-import ShowCard from "../Shows/ShowCard";
-import SearchBar from "../UI/SearchBar";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUsersWatchlist } from "../../api/http";
+import { STALE_TIME } from "../../utils/constants";
+import LoadingIndicator from "../UI/LoadingIndicator";
+import ErrorIndicator from "../UI/ErrorIndicator";
 
 export default function Watchlist() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const token = useSelector((state) => state.login.token);
 
-  const movies = useSelector((state) => state.watchlist.movies);
-  const shows = useSelector((state) => state.watchlist.shows);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["watchlist"],
+    queryFn: () => fetchUsersWatchlist({ token }),
+    staleTime: STALE_TIME,
+  });
 
-  const allItems = [...movies, ...shows];
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
-  const filteredItems = allItems.filter((item) =>
-    (item.title || item.name).toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const uniqueItemsMap = new Map();
-  filteredItems.forEach((item) => uniqueItemsMap.set(item.id, item));
-
-  const uniqueFilteredItems = Array.from(uniqueItemsMap.values());
-
-  function handleSearch(query) {
-    setSearchQuery(query);
+  if (isError) {
+    return <ErrorIndicator title="Failed to fetch watchlist" error={error} />;
   }
 
   return (
-    <div className="max-h-100 overflow-y-auto w-full mt-5">
-      <SearchBar onSearch={handleSearch} className="w-full mb-4" />
-      <div className="flex items-center justify-center lg:flex-col items-center gap-2">
-        {uniqueFilteredItems.length === 0 ? (
-          <div className="flex items-center justify-center text-center text-primary font-bold">
-            <p className="text-center">No movies/shows found</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
-            {uniqueFilteredItems.map((item) =>
-              item.title ? (
-                <MovieCard key={item.id} movie={item} />
-              ) : (
-                <ShowCard key={item.id} show={item} />
-              )
-            )}
-          </div>
-        )}
-      </div>
+    <div className="flex flex-col items-center justify-center gap-4 w-full h-full p-6 bg-base-300 rounded-lg">
+      {data?.length <= 0 ? (
+        <p className="flex items-center justify-center text-center text-primary font-bold">
+          <p>No watchlist found</p>
+        </p>
+      ) : (
+        <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
+          {data?.map((favorite) => (
+            <MovieCard key={favorite._id} movie={favorite} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

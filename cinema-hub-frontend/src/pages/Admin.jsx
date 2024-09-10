@@ -27,8 +27,6 @@ export default function Admin() {
     staleTime: STALE_TIME,
   });
 
-  console.log(data);
-
   document.title = "Admin";
 
   if (isLoading) return <LoadingIndicator />;
@@ -42,7 +40,6 @@ export default function Admin() {
   };
 
   const handleDeleteUser = (user) => {
-    console.log("Delete user with ID:", user._id);
     setEditUser(user);
     setIsDeleting(true);
   };

@@ -8,8 +8,6 @@ import { round } from "../../utils/formatting";
 export default function MovieCard({ movie }) {
   const navigate = useNavigate();
 
-  console.log(movie);
-
   let itemType = "movies";
 
   if (movie?.itemType) {

@@ -4,7 +4,6 @@ import "react-tabs/style/react-tabs.css";
 
 import UserProfile from "../components/Profile/UserProfile";
 import FavoriteMovies from "../components/Profile/FavoriteMovies";
-import FavoriteShows from "../components/Profile/FavoriteShows";
 import Watchlist from "../components/Profile/Watchlist";
 import FriendsTabs from "../components/Profile/FriendsTabs";
 

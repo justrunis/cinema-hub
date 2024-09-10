@@ -144,7 +144,6 @@ export async function fetchShowEpisodeDetails({ id, season, episode, signal }) {
  * @returns {Promise} object containing the response data
  */
 export async function fetchUser({ token }) {
-  console.log("Token:", token);
   const response = await fetch(SERVER_URL + "/users/user", {
     method: "GET",
     headers: {
@@ -244,12 +243,78 @@ export async function addToFavorites({
 }
 
 export async function removeFavorite({ token, itemId }) {
-  console.log(token, itemId);
   if (!token) {
     throw new Error("Authorization token is missing!");
   }
 
   const response = await fetch(SERVER_URL + `/favorites/${itemId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function fetchUsersWatchlist({ token }) {
+  const response = await fetch(SERVER_URL + "/watchlist", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function addToWatchlist({
+  token,
+  itemId,
+  itemType,
+  title,
+  poster_path,
+  vote_average,
+}) {
+  if (!token) {
+    throw new Error("Authorization token is missing!");
+  }
+
+  const response = await fetch(SERVER_URL + "/watchlist", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      itemId,
+      itemType,
+      title,
+      poster_path,
+      vote_average,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function removeFromWatchlist({ token, itemId }) {
+  if (!token) {
+    throw new Error("Authorization token is missing!");
+  }
+
+  const response = await fetch(SERVER_URL + `/watchlist/${itemId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -275,6 +340,28 @@ export async function isItemFavorite({ token, itemId }) {
       Authorization: `Bearer ${token}`,
     },
   });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function isItemInWatchlist({ token, itemId }) {
+  if (!token) {
+    throw new Error("Authorization token is missing!");
+  }
+
+  const response = await fetch(
+    SERVER_URL + `/watchlist/isInWatchlist/${itemId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);

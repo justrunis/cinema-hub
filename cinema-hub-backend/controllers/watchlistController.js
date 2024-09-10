@@ -2,7 +2,7 @@ const User = require("../models/user");
 const Watchlist = require("../models/watchlist");
 
 exports.getWatchlist = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user.id;
 
   const watchlist = await Watchlist.find({ user: userId });
 
@@ -10,16 +10,23 @@ exports.getWatchlist = async (req, res) => {
 };
 
 exports.addWatchlist = async (req, res) => {
-  const userId = req.user._id;
-  const { itemId, itemType, name, original_name, poster_path, vote_average } =
-    req.body;
+  const userId = req.user.id;
+  const {
+    itemId,
+    itemType,
+    name,
+    title,
+    original_name,
+    poster_path,
+    vote_average,
+  } = req.body;
 
   const newWatchlist = new Watchlist({
     user: userId,
     itemId,
     itemType,
-    name,
-    original_name,
+    name: name || title || "Unknown",
+    original_name: original_name || title || "Unknown",
     poster_path,
     vote_average,
   });
@@ -29,17 +36,31 @@ exports.addWatchlist = async (req, res) => {
   res.status(201).json({ message: "Item added to watchlist." });
 };
 
+exports.isInWatchlist = async (req, res) => {
+  const userId = req.user.id;
+  const itemId = req.params.id;
+
+  const watchlist = await Watchlist.findOne({ user: userId, itemId: itemId });
+
+  if (watchlist) {
+    return res.status(200).json({ isInWatchlist: true });
+  }
+
+  res.status(200).json({ isInWatchlist: false });
+};
+
 exports.deleteWatchlist = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user.id;
   const watchlistId = req.params.id;
 
-  const watchlist = await Watchlist.findOne({ _id: watchlistId, user: userId });
+  const watchlist = await Watchlist.findOneAndDelete({
+    user: userId,
+    itemId: watchlistId,
+  });
 
   if (!watchlist) {
     return res.status(404).json({ message: "Item not found in watchlist." });
   }
-
-  await watchlist.remove();
 
   res.status(200).json({ message: "Item removed from watchlist." });
 };

@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchShowDetails, isItemFavorite } from "../api/http";
+import {
+  fetchShowDetails,
+  isItemFavorite,
+  isItemInWatchlist,
+} from "../api/http";
 import { STALE_TIME, IMAGE_URL, PLACEHOLDER_IMAGE } from "../utils/constants";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
 import ErrorIndicator from "../components/UI/ErrorIndicator";
@@ -38,9 +42,13 @@ export default function Show() {
 
   const isFavorite = isFavoriteData?.isFavorite;
 
-  const isInWatchlist = useSelector((state) =>
-    state.watchlist.shows.some((show) => show.id === data?.id)
-  );
+  const { data: isInWatchlist, isLoading: isWatchlistLoading } = useQuery({
+    queryKey: ["isWatchlist", id],
+    queryFn: ({ signal }) => isItemInWatchlist({ itemId: id, token, signal }),
+    staleTime: STALE_TIME,
+  });
+
+  const isWatchlist = isInWatchlist?.isInWatchlist;
 
   function addFavorite() {
     const payload = {
@@ -65,20 +73,27 @@ export default function Show() {
     window.location.reload();
   }
 
-  function handleFavoriteClick() {
-    if (isFavorite) {
-      dispatch(favoritesActions.removeShow(data));
-    } else {
-      dispatch(favoritesActions.addShow(data));
-    }
+  function addWatchlist() {
+    const payload = {
+      itemId: data.id,
+      itemType: "tv",
+      title: data.name || data.original_name,
+      original_name: data.original_name || data.name || "Unknown",
+      poster_path: data.poster_path,
+      vote_average: data.vote_average,
+      token: localStorage.getItem("cinema-hub-token"),
+    };
+    dispatch(watchlistActions.addWatchlist(payload));
+    window.location.reload();
   }
 
-  function handleWatchlistClick() {
-    if (isInWatchlist) {
-      dispatch(watchlistActions.removeShow(data));
-    } else {
-      dispatch(watchlistActions.addShow(data));
-    }
+  function removeWatchlist() {
+    const payload = {
+      token: localStorage.getItem("cinema-hub-token"),
+      id: data?.id,
+    };
+    dispatch(watchlistActions.removeWatchlist(payload));
+    window.location.reload();
   }
 
   if (isLoading) {
@@ -118,16 +133,18 @@ export default function Show() {
         onClick: addFavorite,
       };
 
-  const watchlistButtonProps = isInWatchlist
+  const watchlistButtonProps = isWatchlist
     ? {
         className: `${buttonClass} bg-accent text-primary-content hover:bg-red-600`,
         text: "Remove from watchlist",
         icon: <FaListAlt className={`text-primary ${iconClass}`} />,
+        onClick: removeWatchlist,
       }
     : {
         className: `${buttonClass} bg-primary text-primary-content hover:bg-accent`,
         text: "Add to watchlist",
         icon: <FaListAlt className={`text-primary-content ${iconClass}`} />,
+        onClick: addWatchlist,
       };
 
   return (
@@ -218,7 +235,8 @@ export default function Show() {
 
             <Button
               className={watchlistButtonProps.className}
-              onClick={handleWatchlistClick}
+              onClick={watchlistButtonProps.onClick}
+              disabled={isWatchlistLoading}
             >
               {watchlistButtonProps.icon}
               <p className={`text-primary-content ${textClass}`}>

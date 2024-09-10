@@ -12,7 +12,6 @@ export default function UserDeleteModal({ user, onClose, onSubmit, open }) {
   async function handleSubmit(e) {
     e.preventDefault();
     setIsDeleting(true);
-    console.log("Delete user with ID:", user._id);
     const userId = user._id;
     const response = await deleteUser({ userId });
     if (response.status === 200) {

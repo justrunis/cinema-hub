@@ -32,7 +32,6 @@ export default function MovieCredits({ id }) {
   }
 
   if (!isError && !isLoading) {
-    console.log(data);
     return (
       <motion.div
         initial={{ opacity: 0 }}

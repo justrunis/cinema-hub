@@ -2,7 +2,6 @@ const Favorite = require("../models/favorite");
 const User = require("../models/user");
 
 exports.getFavorites = async (req, res) => {
-  console.log(req.user);
   const userId = req.user.id;
 
   const favorites = await Favorite.find({ user: userId });

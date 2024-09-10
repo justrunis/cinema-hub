@@ -40,8 +40,6 @@ exports.getUsers = async (req, res) => {
     // Add total pages to the results
     results.totalPages = totalPages;
 
-    console.log(results);
-
     // Send the paginated results as JSON response
     res.status(200).json(results);
   } catch (error) {
@@ -78,7 +76,6 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-  console.log(req.params);
   const { userId } = req.params;
   User.findByIdAndDelete(userId)
     .then(res.status(200).json({ message: "User deleted successfully" }))

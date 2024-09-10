@@ -17,9 +17,6 @@ module.exports = function (req, res, next) {
     // Remove double quotes from the token
     token = token.replace(/"/g, "");
 
-    console.log("Token:", token);
-    console.log("Secret: ", process.env.JWT_SECRET);
-
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     req.user = decodedToken;
