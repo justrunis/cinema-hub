@@ -29,4 +29,7 @@ router.delete("/:id", auth, friendsController.rejectFriendRequest);
 // DELETE /friends/delete/:id
 router.delete("/delete/:id", auth, friendsController.deleteFriend);
 
+// GET /friends/profile/:id
+router.get("/profile/:id", auth, friendsController.getFriendInfo);
+
 module.exports = router;

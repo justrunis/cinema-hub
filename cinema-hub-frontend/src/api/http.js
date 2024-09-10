@@ -369,6 +369,8 @@ export async function isItemInWatchlist({ token, itemId }) {
   return response.json();
 }
 
+// FRIENDS
+
 export async function fetchUserSuggestedFriends({ token }) {
   const response = await fetch(SERVER_URL + "/friends/suggested", {
     method: "GET",
@@ -464,6 +466,21 @@ export async function acceptFriendRequest({ token, friendId }) {
 export async function rejectFriendRequest({ token, friendId }) {
   const response = await fetch(SERVER_URL + `/friends/${friendId}`, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function fetchUserFriendsProfileInfo({ token, friendId }) {
+  const response = await fetch(SERVER_URL + `/friends/profile/${friendId}`, {
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,

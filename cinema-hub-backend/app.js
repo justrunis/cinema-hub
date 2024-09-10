@@ -34,20 +34,6 @@ app.use("/auth", authRoutes);
 
 // Connect to MongoDB and start the server
 connectDB().then(async () => {
-  // Check if the default user exists, and if not, create it
-  const user = await User.findOne({ email: "justrunis@gmail.com" });
-  if (!user) {
-    const newUser = new User({
-      username: "Justinas",
-      email: "justrunis@gmail.com",
-      password: "123456",
-      role: "admin",
-      watchlist: [],
-      favorites: [],
-    });
-    await newUser.save();
-  }
-
   app.listen(3000, () => {
     console.log("Server is running on port 3000");
   });

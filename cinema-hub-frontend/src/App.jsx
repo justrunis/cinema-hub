@@ -27,6 +27,7 @@ import ShowSeason from "./pages/ShowSeason";
 import ShowEpisode from "./pages/ShowEpisode";
 import Profile from "./pages/Profile";
 import PageNotFound from "./pages/PageNotFound";
+import FriendsProfile from "./pages/FriendsProfile";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("cinema-hub-token"));
@@ -67,6 +68,7 @@ function App() {
                 />
                 <Route element={<ProtectedRoute token={token} />}>
                   <Route path="/profile" element={<Profile token={token} />} />
+                  <Route path="/friend/:id" element={<FriendsProfile />} />
                 </Route>
                 <Route element={<AdminRoute token={token} />}>
                   <Route path="/admin" element={<Admin />} />

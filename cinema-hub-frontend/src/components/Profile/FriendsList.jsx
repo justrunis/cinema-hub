@@ -11,9 +11,11 @@ import {
 import LoadingIndicator from "../UI/LoadingIndicator";
 import ErrorIndicator from "../UI/ErrorIndicator";
 import { STALE_TIME } from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 export default function FriendsList() {
   const token = localStorage.getItem("cinema-hub-token");
+  const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["friendsList"],
@@ -33,8 +35,11 @@ export default function FriendsList() {
   const [showModal, setShowModal] = useState(false);
   const [friend, setFriend] = useState([]);
 
-  function handleViewProfile() {
-    console.log("View Profile");
+  function handleViewProfile(friend) {
+    console.log("View Profile: ", friend);
+    const id = friend.friend._id;
+    navigate(`/friend/${id}`);
+    console.log("ID: ", id);
   }
 
   function handleUnfriend(friend) {
@@ -78,7 +83,10 @@ export default function FriendsList() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {data &&
           data.map((friend) => (
-            <div className="flex flex-col justify-center items-center gap-2 bg-gray-200 p-8 rounded-lg mr-4">
+            <div
+              key={friend.friend._id}
+              className="flex flex-col justify-center items-center gap-2 bg-gray-200 p-8 rounded-lg mr-4"
+            >
               <h2 className="text-lg text-center font-semibold">
                 {friend.friend.username}
               </h2>
@@ -89,7 +97,7 @@ export default function FriendsList() {
               />
               <div className="flex flex-col items-center justify-center gap-2">
                 <Button
-                  onClick={handleViewProfile}
+                  onClick={() => handleViewProfile(friend)}
                   className="btn btn-xs btn-accent text-accent-content"
                 >
                   View Profile

@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const Friend = require("../models/friend");
+const Favorite = require("../models/favorite");
+const Watchlist = require("../models/watchlist");
 
 exports.getFriends = async (req, res) => {
   const userId = req.user._id;
@@ -149,4 +151,57 @@ exports.deleteFriend = async (req, res) => {
   }
 
   res.status(200).json({ message: "Friend deleted from both sides." });
+};
+
+exports.getFriendInfo = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const friendId = req.params.id;
+
+    // Verify if the current user and the friendId are friends
+    const friendship = await Friend.findOne({
+      user: userId,
+      friend: friendId,
+      status: "accepted",
+    });
+
+    if (!friendship) {
+      return res
+        .status(403)
+        .json({ message: "You are not friends with this user." });
+    }
+
+    // Get friend's basic information
+    const friendInfo = await User.findById(friendId).select(
+      "username createdAt"
+    );
+
+    if (!friendInfo) {
+      return res.status(404).json({ message: "Friend not found." });
+    }
+
+    // Get friend's favorites
+    const friendFavorites = await Favorite.find({ user: friendId }).select(
+      "itemId itemType title original_name poster_path vote_average addedAt"
+    );
+
+    // Get friend's watchlist
+    const friendWatchlist = await Watchlist.find({ user: friendId }).select(
+      "itemId itemType name original_name poster_path vote_average addedAt"
+    );
+
+    // Combine all the data
+    const friendDetails = {
+      friendInfo,
+      favorites: friendFavorites,
+      watchlist: friendWatchlist,
+    };
+
+    res.status(200).json(friendDetails);
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occurred while fetching friend details.",
+      error,
+    });
+  }
 };
