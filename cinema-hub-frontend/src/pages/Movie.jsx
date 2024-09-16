@@ -5,6 +5,7 @@ import {
   fetchMovieDetails,
   isItemFavorite,
   isItemInWatchlist,
+  fetchSimilarMovies,
 } from "../api/http";
 import { STALE_TIME, IMAGE_URL, PLACEHOLDER_IMAGE } from "../utils/constants";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
@@ -20,6 +21,7 @@ import Button from "../components/UI/Button";
 import VideoPlayer from "../components/UI/VideoPlayer";
 import MovieReviews from "../components/Movies/MovieReviews";
 import MovieCredits from "../components/Movies/MovieCredits";
+import MovieCard from "../components/Movies/MovieCard";
 
 export default function Movie() {
   const { id } = useParams();
@@ -47,6 +49,14 @@ export default function Movie() {
   });
 
   const isWatchlist = isInWatchlist?.isInWatchlist;
+
+  const { data: similarMovies, isLoading: isSimilarMoviesLoading } = useQuery({
+    queryKey: ["similarMovies", id],
+    queryFn: ({ signal }) => fetchSimilarMovies({ id, signal }),
+    staleTime: STALE_TIME,
+  });
+
+  console.log(similarMovies);
 
   function addFavorite() {
     const payload = {
@@ -153,7 +163,7 @@ export default function Movie() {
       exit={{ opacity: 0 }}
     >
       <div className="flex flex-col justify-center bg-base-300 rounded-lg shadow-md pt-6 w-full">
-        <div className="flex flex-col lg:flex-row items-center justify-around">
+        <div className="flex flex-col lg:flex-row items-center justify-around p-8">
           <div className="flex flex-col gap-4 p-8">
             <h1 className="text-3xl font-bold text-center">
               {data?.title || data?.original_title}
@@ -245,6 +255,20 @@ export default function Movie() {
               </Button>
             </motion.div>
           )}
+          <div className="flex flex-col items-center justify-center gap-4 px-8">
+            <h2 className="text-2xl font-bold">Similar Movies</h2>
+            <div className="grid gap-4 grid-cols-3 lg:grid-cols-6">
+              {isSimilarMoviesLoading ? (
+                <LoadingIndicator />
+              ) : (
+                similarMovies?.results
+                  .slice(0, 6)
+                  .map((movie) => (
+                    <MovieCard key={movie.id} movie={movie} showStars={false} />
+                  ))
+              )}
+            </div>
+          </div>
           <div className="flex flex-col items-center justify-center gap-4 px-8">
             <MovieCredits id={data?.id} />
           </div>

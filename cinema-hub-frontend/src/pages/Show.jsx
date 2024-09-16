@@ -5,6 +5,7 @@ import {
   fetchShowDetails,
   isItemFavorite,
   isItemInWatchlist,
+  fetchSimilarShows,
 } from "../api/http";
 import { STALE_TIME, IMAGE_URL, PLACEHOLDER_IMAGE } from "../utils/constants";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
@@ -22,6 +23,7 @@ import Button from "../components/UI/Button";
 import ShowReviews from "../components/Shows/ShowReviews";
 import VideoPlayer from "../components/UI/VideoPlayer";
 import { Link } from "react-router-dom";
+import ShowCard from "../components/Shows/ShowCard";
 
 export default function Show() {
   const { id } = useParams();
@@ -49,6 +51,12 @@ export default function Show() {
   });
 
   const isWatchlist = isInWatchlist?.isInWatchlist;
+
+  const { data: similarShows, isLoading: isSimilarShowsLoading } = useQuery({
+    queryKey: ["similarShows", id],
+    queryFn: ({ signal }) => fetchSimilarShows({ id, signal }),
+    staleTime: STALE_TIME,
+  });
 
   function addFavorite() {
     const payload = {
@@ -246,6 +254,20 @@ export default function Show() {
               </Button>
             </motion.div>
           )}
+        </div>
+        <div className="flex flex-col items-center justify-center gap-4 px-8">
+          <h2 className="text-2xl font-bold">Similar Shows</h2>
+          <div className="grid gap-4 grid-cols-3 lg:grid-cols-6">
+            {isSimilarShowsLoading ? (
+              <LoadingIndicator />
+            ) : (
+              similarShows?.results
+                .slice(0, 6)
+                .map((show) => (
+                  <ShowCard key={show.id} show={show} showStars={false} />
+                ))
+            )}
+          </div>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-4 bg-base-300 px-8 rounded-lg shadow-md py-6 w-full">

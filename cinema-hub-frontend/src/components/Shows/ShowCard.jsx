@@ -5,7 +5,7 @@ import { IMAGE_URL, PLACEHOLDER_IMAGE } from "../../utils/constants";
 import { round } from "../../utils/formatting";
 import { useNavigate } from "react-router-dom";
 
-export default function ShowCard({ show }) {
+export default function ShowCard({ show, showStars }) {
   const navigate = useNavigate();
 
   function handleClick() {
@@ -33,7 +33,7 @@ export default function ShowCard({ show }) {
         {show.name || show.original_name}
       </h2>
       <div className="flex items-center gap-2">
-        <StarRating rating={show.vote_average} />
+        <StarRating rating={show.vote_average} showStars={showStars} />
       </div>
     </Card>
   );

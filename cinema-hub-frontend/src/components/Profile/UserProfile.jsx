@@ -11,7 +11,7 @@ import { useState } from "react";
 import ProfileModal from "./ProfileModal";
 
 export default function UserProfile() {
-  const token = useSelector((state) => state.login.token);
+  const token = localStorage.getItem("cinema-hub-token");
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user"],
     queryFn: () => fetchUser({ token }),

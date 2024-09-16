@@ -7,6 +7,7 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 export default function StarRating({
   rating,
   className = "flex items-center justify-center gap-5",
+  showStars = true,
 }) {
   const { height, width } = useWindowDimensions();
 
@@ -16,7 +17,7 @@ export default function StarRating({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      {width > 1024 && (
+      {width > 1024 && showStars && (
         <Rating
           start={0}
           stop={10}

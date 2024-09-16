@@ -21,10 +21,21 @@ export default function Movies() {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const currentQuery = searchParams.get("query") || "";
+  const currentFunction = searchParams.get("function") || "trending";
 
   const [queryFunction, setQueryFunction] = useState("trending");
 
   document.title = "Movies";
+
+  useEffect(() => {
+    if (queryFunction !== currentFunction) {
+      setSearchParams({
+        page: "1",
+        query: currentQuery,
+        function: queryFunction,
+      });
+    }
+  }, [queryFunction, currentFunction]);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["movies", currentPage, currentQuery, queryFunction],

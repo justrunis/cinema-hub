@@ -12,7 +12,7 @@ import {
   fetchAiringTodayShows,
 } from "../api/http";
 import ShowCard from "../components/Shows/ShowCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../components/UI/Button";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { FaPlay, FaRegStar, FaRegCalendarAlt } from "react-icons/fa";
@@ -21,10 +21,21 @@ export default function Shows() {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const currentQuery = searchParams.get("query") || "";
+  const currentFunction = searchParams.get("function") || "trending";
 
-  const [queryFunction, setQueryFunction] = useState("trending");
+  const [queryFunction, setQueryFunction] = useState(currentFunction);
 
   document.title = "TV Shows";
+
+  useEffect(() => {
+    if (queryFunction !== currentFunction) {
+      setSearchParams({
+        page: "1",
+        query: currentQuery,
+        function: queryFunction,
+      });
+    }
+  }, [queryFunction, currentFunction]);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["shows", currentPage, currentQuery, queryFunction],

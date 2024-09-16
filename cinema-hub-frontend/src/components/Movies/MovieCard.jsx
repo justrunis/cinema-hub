@@ -5,7 +5,7 @@ import { IMAGE_URL, PLACEHOLDER_IMAGE } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { round } from "../../utils/formatting";
 
-export default function MovieCard({ movie, itemType = "movies" }) {
+export default function MovieCard({ movie, itemType = "movies", showStars }) {
   const navigate = useNavigate();
 
   if (movie?.itemType) {
@@ -42,7 +42,10 @@ export default function MovieCard({ movie, itemType = "movies" }) {
         {movie.title || movie.original_name}
       </h2>
       <div className="flex items-start gap-2">
-        <StarRating rating={round(movie?.vote_average, 1)} />
+        <StarRating
+          rating={round(movie?.vote_average, 1)}
+          showStars={showStars}
+        />
       </div>
     </Card>
   );

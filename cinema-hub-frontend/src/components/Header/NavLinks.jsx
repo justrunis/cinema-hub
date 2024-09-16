@@ -11,7 +11,7 @@ import { queryClient } from "../../api/http";
 import { useEffect } from "react";
 
 export default function NavLinks() {
-  const token = useSelector((state) => state.login.token);
+  const token = localStorage.getItem("cinema-hub-token");
   const userRole = getUserRole(token);
   const dispatch = useDispatch();
   const navigate = useNavigate();

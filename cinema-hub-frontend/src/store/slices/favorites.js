@@ -5,7 +5,7 @@ const initialState = {
   favorites: [],
 };
 
-const token = localStorage.getItem("token");
+const token = localStorage.getItem("cinema-hub-token");
 
 const favoritesSlice = createSlice({
   name: "favorites",

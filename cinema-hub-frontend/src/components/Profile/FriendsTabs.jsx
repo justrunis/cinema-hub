@@ -10,7 +10,7 @@ import ErrorIndicator from "../UI/ErrorIndicator";
 import { useSelector } from "react-redux";
 
 export default function FriendsTabs() {
-  const token = useSelector((state) => state.login.token);
+  const token = localStorage.getItem("cinema-hub-token");
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["friendRequests"],

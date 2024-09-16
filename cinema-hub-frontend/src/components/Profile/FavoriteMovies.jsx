@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 
 export default function FavoriteMovies() {
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.login.token);
+  const token = localStorage.getItem("cinema-hub-token");
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["favorites"],

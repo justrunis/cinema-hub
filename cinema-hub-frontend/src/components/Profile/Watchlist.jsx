@@ -10,7 +10,7 @@ import ErrorIndicator from "../UI/ErrorIndicator";
 import { Link } from "react-router-dom";
 
 export default function Watchlist() {
-  const token = useSelector((state) => state.login.token);
+  const token = localStorage.getItem("cinema-hub-token");
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["watchlist"],

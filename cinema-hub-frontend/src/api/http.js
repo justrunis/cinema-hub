@@ -89,6 +89,10 @@ export async function fetchMovieCredits({ id, signal }) {
   return makeTMDBApiRequest(`/movie/${id}/credits`, { signal });
 }
 
+export async function fetchSimilarMovies({ id, signal }) {
+  return makeTMDBApiRequest(`/movie/${id}/similar`, { signal });
+}
+
 // Fetch Shows
 export async function fetchTrendingShows({ currentPage, signal, query }) {
   const endpoint = query ? "/search/tv" : "/trending/tv/day";
@@ -135,6 +139,10 @@ export async function fetchShowEpisodeDetails({ id, season, episode, signal }) {
   return makeTMDBApiRequest(`/tv/${id}/season/${season}/episode/${episode}`, {
     signal,
   });
+}
+
+export async function fetchSimilarShows({ id, signal }) {
+  return makeTMDBApiRequest(`/tv/${id}/similar`, { signal });
 }
 
 // Users
