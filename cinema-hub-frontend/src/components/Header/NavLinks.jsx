@@ -1,5 +1,11 @@
 import { NavLink } from "react-router-dom";
-import { FaHome, FaFilm, FaTv, FaQuestionCircle } from "react-icons/fa";
+import {
+  FaHome,
+  FaFilm,
+  FaTv,
+  FaQuestionCircle,
+  FaRegQuestionCircle,
+} from "react-icons/fa";
 import { CgProfile, CgLogIn } from "react-icons/cg";
 import { CiLogin, CiLogout } from "react-icons/ci";
 import { RiAdminFill } from "react-icons/ri";
@@ -70,6 +76,21 @@ export default function NavLinks() {
           <FaTv className="inline mr-2" />
           TV Shows
         </NavLink>
+        {token && (
+          <NavLink
+            to="/trivia"
+            className={({ isActive }) =>
+              `flex items-center text-sm lg:text-lg font-bold ${
+                isActive
+                  ? "text-accent"
+                  : "text-primary-content hover:text-accent"
+              }`
+            }
+          >
+            <FaRegQuestionCircle className="inline mr-2" />
+            Trivia
+          </NavLink>
+        )}
         <NavLink
           to="/about"
           className={({ isActive }) =>

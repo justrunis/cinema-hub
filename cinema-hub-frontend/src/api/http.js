@@ -597,3 +597,17 @@ export async function deleteUser({ userId }) {
   const data = await response.json();
   return { data, status: response.status };
 }
+
+// TRIVIA
+
+export async function fetchTriviaQuestions({ category, difficulty }) {
+  const TRIVIA_URL = "https://opentdb.com/api.php?amount=10";
+  const response = await fetch(
+    `${TRIVIA_URL}&category=${category}&difficulty=${difficulty}&type=multiple`
+  );
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  return response.json();
+}

@@ -22,3 +22,9 @@ export const formatDate = (dateString) => {
   const date = new Date(dateString);
   return dateFormating.format(date);
 };
+
+export function decodeHtml(html) {
+  const txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  return txt.value;
+}
