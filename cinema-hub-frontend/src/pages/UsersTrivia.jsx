@@ -26,12 +26,13 @@ export default function UsersTrivia() {
     visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
   };
 
-  const overallAverage = Math.round(
-    (data.reduce((acc, user) => acc + user.correctAnswers, 0) /
-      data.length /
-      10) *
-      100
-  );
+  const overallAverage =
+    Math.round(
+      (data.reduce((acc, user) => acc + user.correctAnswers, 0) /
+        data.length /
+        10) *
+        100
+    ) || 0;
 
   return (
     <motion.div

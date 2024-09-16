@@ -5,9 +5,7 @@ import { motion } from "framer-motion";
 export default function UsersTriviaHistory() {
   const location = useLocation();
 
-  console.log(location.state.questions);
-
-  const questions = location.state.questions;
+  const questions = location?.state?.questions;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -22,12 +20,13 @@ export default function UsersTriviaHistory() {
       className="flex flex-col items-center justify-center gap-8 p-6 bg-base-200 rounded-lg w-full max-w-4xl mx-auto my-5"
     >
       <h1 className="text-3xl font-bold text-center">Questions</h1>
-      {questions.length === 0 && (
+      {!questions ? (
         <p className="text-lg text-center col-span-full text-error">
           Cannot find any questions.
         </p>
+      ) : (
+        <QuestionList userAnswers={questions} />
       )}
-      <QuestionList userAnswers={questions} />
     </motion.div>
   );
 }
