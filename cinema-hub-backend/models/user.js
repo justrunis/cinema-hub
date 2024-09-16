@@ -34,13 +34,9 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  watchlist: {
-    type: Array,
-    default: [],
-  },
-  favorites: {
-    type: Array,
-    default: [],
+  bio: {
+    type: String,
+    trim: true,
   },
 });
 

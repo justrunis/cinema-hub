@@ -27,13 +27,13 @@ export default function FriendsTabs() {
           className="p-2 cursor-pointer text-primary hover:text-accent"
           selectedClassName="font-bold !text-accent"
         >
-          Suggested Friends
+          Friends list
         </Tab>
         <Tab
           className="p-2 cursor-pointer text-primary hover:text-accent"
           selectedClassName="font-bold !text-accent"
         >
-          Friends list
+          Suggested friends
         </Tab>
         <Tab
           className="p-2 cursor-pointer text-primary hover:text-accent"
@@ -46,10 +46,10 @@ export default function FriendsTabs() {
         </Tab>
       </TabList>
       <TabPanel>
-        <SuggestedFriends />
+        <FriendsList />
       </TabPanel>
       <TabPanel>
-        <FriendsList />
+        <SuggestedFriends />
       </TabPanel>
       <TabPanel>
         <FriendRequests />

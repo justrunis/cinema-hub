@@ -173,7 +173,7 @@ exports.getFriendInfo = async (req, res) => {
 
     // Get friend's basic information
     const friendInfo = await User.findById(friendId).select(
-      "username createdAt"
+      "username createdAt bio"
     );
 
     if (!friendInfo) {

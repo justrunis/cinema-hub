@@ -369,6 +369,22 @@ export async function isItemInWatchlist({ token, itemId }) {
   return response.json();
 }
 
+export async function changeBio({ token, bio }) {
+  const response = await fetch(SERVER_URL + "/users/bio", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ bio }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
 // FRIENDS
 
 export async function fetchUserSuggestedFriends({ token }) {

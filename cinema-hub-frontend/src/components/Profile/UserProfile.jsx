@@ -7,6 +7,8 @@ import ErrorIndicator from "../UI/ErrorIndicator";
 import { motion } from "framer-motion";
 import Button from "../UI/Button";
 import { makeFirstLetterUpperCase } from "../../utils/formatting";
+import { useState } from "react";
+import ProfileModal from "./ProfileModal";
 
 export default function UserProfile() {
   const token = useSelector((state) => state.login.token);
@@ -15,6 +17,8 @@ export default function UserProfile() {
     queryFn: () => fetchUser({ token }),
     staleTime: STALE_TIME,
   });
+
+  const [isOpen, setIsOpen] = useState(false);
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -31,6 +35,11 @@ export default function UserProfile() {
       transition={{ duration: 0.5 }}
       className="flex flex-col items-center justify-center gap-4 w-full h-full p-6 bg-base-200 rounded-lg"
     >
+      <ProfileModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        currentBio={data?.user.bio}
+      />
       {/* Cover Photo */}
       <motion.div
         initial={{ scale: 1.05 }}
@@ -76,9 +85,11 @@ export default function UserProfile() {
         {/* Edit Profile Button */}
         <Button
           className="p-3 btn btn-primary text-primary-content rounded-lg min-h-[40px]"
-          onClick={() => {}}
+          onClick={() => {
+            setIsOpen(true);
+          }}
         >
-          Edit Profile
+          Edit Bio
         </Button>
       </motion.div>
 
@@ -91,7 +102,7 @@ export default function UserProfile() {
       >
         <p className="text-xl font-bold mb-2">Bio</p>
         <p className="text-base font-light text-accent">
-          {data.user.bio || "This user hasn't added a bio yet."}
+          {data.user.bio || "You haven't set a bio yet."}
         </p>
       </motion.div>
     </motion.div>

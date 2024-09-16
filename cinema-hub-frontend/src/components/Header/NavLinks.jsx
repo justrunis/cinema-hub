@@ -3,11 +3,12 @@ import { FaHome, FaFilm, FaTv, FaQuestionCircle } from "react-icons/fa";
 import { CgProfile, CgLogIn } from "react-icons/cg";
 import { CiLogin, CiLogout } from "react-icons/ci";
 import { RiAdminFill } from "react-icons/ri";
-import { getUserRole } from "../../auth/auth";
+import { AuthVerify, getUserRole } from "../../auth/auth";
 import { useSelector, useDispatch } from "react-redux";
 import { loginActions } from "../../store/slices/login";
 import { useNavigate } from "react-router-dom";
 import { queryClient } from "../../api/http";
+import { useEffect } from "react";
 
 export default function NavLinks() {
   const token = useSelector((state) => state.login.token);
@@ -21,6 +22,10 @@ export default function NavLinks() {
     queryClient.clear();
     navigate("/login");
   };
+
+  useEffect(() => {
+    AuthVerify(token);
+  }, [token]);
 
   return (
     <div className="flex flex-col lg:flex-row w-full justify-between items-center">

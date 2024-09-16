@@ -17,6 +17,8 @@ export default function FriendsProfile() {
     staleTime: STALE_TIME,
   });
 
+  console.log(data);
+
   const friendInfo = data?.friendInfo;
 
   const friendFavorites = data?.favorites;

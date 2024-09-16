@@ -84,7 +84,7 @@ export default function ShowSeason() {
               </ShowDetail>
               <ShowDetail title="Episodes" delay={0.6}>
                 {data.episodes.length > 0 ? (
-                  <ul className="flex flex-row gap-2 flex-wrap">
+                  <ul className="grid grid-cols-10 gap-2">
                     {data.episodes.map((episode) => (
                       <li key={episode.id}>
                         <Link

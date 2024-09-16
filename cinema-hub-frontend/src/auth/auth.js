@@ -17,7 +17,7 @@ export function AuthVerify(token) {
       decodedToken.exp &&
       decodedToken.exp * 1000 < new Date().getTime()
     ) {
-      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("cinema-hub-token");
       redirect("/login");
     }
   }
