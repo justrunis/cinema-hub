@@ -29,11 +29,6 @@ export default function ShowEpisode() {
 
   const [isCrewOpen, setIsCrewOpen] = useState(false);
 
-  // Function to toggle the dropdown
-  const toggleCrewDropdown = () => {
-    setIsCrewOpen(!isCrewOpen);
-  };
-
   if (isLoading) {
     return <LoadingIndicator />;
   }

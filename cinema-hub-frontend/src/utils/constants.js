@@ -18,105 +18,18 @@ export const ALL_ROLES = [
   },
 ];
 
-export const ALL_USERS = [
+export const ALL_CATEGORIES = [
+  { value: 11, label: "Movies" },
+  { value: 14, label: "Television" },
+  { value: 31, label: "Anime & Manga" },
   {
-    id: 1,
-    name: "John Doe",
-    email: "johnny@mail.com",
+    value: 32,
+    label: "Cartoon & Animations",
   },
-  {
-    id: 2,
-    name: "Jane Smith",
-    email: "jane@mail.com",
-  },
-  {
-    id: 3,
-    name: "Bob Johnson",
-    email: "bob@mail.com",
-  },
-  {
-    id: 4,
-    name: "Alice",
-    email: "alice@mail.com",
-  },
-  {
-    id: 5,
-    name: "Charlie",
-    email: "charlie@gmail.com",
-  },
-  {
-    id: 6,
-    name: "David Williams",
-    email: "david@mail.com",
-  },
-  {
-    id: 7,
-    name: "Eve Brown",
-    email: "eve@mail.com",
-  },
-  {
-    id: 8,
-    name: "Frank Miller",
-    email: "frank@mail.com",
-  },
-  {
-    id: 9,
-    name: "Grace Lee",
-    email: "grace@mail.com",
-  },
-  {
-    id: 10,
-    name: "Henry Taylor",
-    email: "henry@mail.com",
-  },
-  {
-    id: 11,
-    name: "Isabella Anderson",
-    email: "isabella@mail.com",
-  },
-  {
-    id: 12,
-    name: "Jack Thomas",
-    email: "jack@mail.com",
-  },
-  {
-    id: 13,
-    name: "Katherine Harris",
-    email: "katherine@mail.com",
-  },
-  {
-    id: 14,
-    name: "Liam Martinez",
-    email: "liam@mail.com",
-  },
-  {
-    id: 15,
-    name: "Mia Clark",
-    email: "mia@mail.com",
-  },
-  {
-    id: 16,
-    name: "Noah Lewis",
-    email: "noah@mail.com",
-  },
-  {
-    id: 17,
-    name: "Olivia Walker",
-    email: "olivia@mail.com",
-  },
-  {
-    id: 18,
-    name: "Paul Hall",
-    email: "paul@mail.com",
-  },
-  {
-    id: 19,
-    name: "Quinn Allen",
-    email: "quinn@mail.com",
-  },
-  {
-    id: 20,
-    name: "Ruby Young",
-    email: "ruby@mail.com",
-  },
+];
+
+export const ALL_DIFFICULTIES = [
+  { value: "easy", label: "Easy" },
+  { value: "medium", label: "Medium" },
+  { value: "hard", label: "Hard" },
 ];

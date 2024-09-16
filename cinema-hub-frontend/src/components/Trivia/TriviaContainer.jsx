@@ -4,14 +4,23 @@ import { motion } from "framer-motion";
 import Question from "./Question";
 import QuestionList from "./QuestionList";
 import { decodeHtml } from "../../utils/formatting";
+import { useMutation } from "@tanstack/react-query";
+import { addUserTriviaAnswers } from "../../api/http";
 
-export default function TriviaContainer() {
+export default function TriviaContainer({ category, difficulty }) {
   const questions = useSelector((state) => state.trivia.questions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [showScore, setShowScore] = useState(false);
 
   const currentQuestion = questions[currentQuestionIndex];
+
+  const { mutate } = useMutation({
+    mutationFn: addUserTriviaAnswers,
+    onSuccess: () => {
+      console.log("Trivia answers added successfully");
+    },
+  });
 
   const handleAnswer = (answer) => {
     const isCorrect = answer === decodeHtml(currentQuestion.correct_answer);
@@ -29,6 +38,11 @@ export default function TriviaContainer() {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
     } else {
+      mutate({
+        category,
+        difficulty,
+        correctAnswers: userAnswers.filter((answer) => answer.isCorrect).length,
+      });
       setShowScore(true);
     }
   };

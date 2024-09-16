@@ -611,3 +611,38 @@ export async function fetchTriviaQuestions({ category, difficulty }) {
 
   return response.json();
 }
+
+export async function addUserTriviaAnswers({
+  category,
+  difficulty,
+  correctAnswers,
+}) {
+  const response = await fetch(SERVER_URL + "/trivia", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("cinema-hub-token")}`,
+    },
+    body: JSON.stringify({ category, difficulty, correctAnswers }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function getUsersTriviaAnswers() {
+  const response = await fetch(SERVER_URL + "/trivia", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("cinema-hub-token")}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}

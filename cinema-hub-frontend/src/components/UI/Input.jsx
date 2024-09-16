@@ -10,9 +10,9 @@ export default function Input({
   labelClassName,
   inputClassName,
   delay = 0,
-  isTextarea = false, // Add the isTextarea prop with a default value of false
+  isTextarea = false,
 }) {
-  const InputComponent = isTextarea ? "textarea" : "input"; // Determine the input component based on the isTextarea prop
+  const InputComponent = isTextarea ? "textarea" : "input";
 
   return (
     <div className="flex flex-col mb-4">
@@ -25,7 +25,7 @@ export default function Input({
       >
         {label}
       </motion.label>
-      <InputComponent // Use the determined input component
+      <InputComponent
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay }}

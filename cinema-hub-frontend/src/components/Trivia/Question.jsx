@@ -12,10 +12,9 @@ export default function Question({ question, answers, onAnswer, feedback }) {
     setAnimating(true);
     onAnswer(answer);
 
-    // Reset animation state after a delay
     setTimeout(() => {
       setAnimating(false);
-    }, 1000); // Match the duration of your animation
+    }, 1000);
   };
 
   return (

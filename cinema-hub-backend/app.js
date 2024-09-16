@@ -25,6 +25,7 @@ const friendsRoutes = require("./routes/friendsRoutes");
 const favoriteRoutes = require("./routes/favoriteRoutes");
 const watchlistRoutes = require("./routes/watchlistRoutes");
 const authRoutes = require("./routes/authRoutes");
+const triviaRoutes = require("./routes/triviaRoutes");
 
 // Use the routes
 app.use("/admin", adminRoutes);
@@ -33,6 +34,7 @@ app.use("/friends", friendsRoutes);
 app.use("/favorites", favoriteRoutes);
 app.use("/watchlist", watchlistRoutes);
 app.use("/auth", authRoutes);
+app.use("/trivia", triviaRoutes);
 
 // Error handling middleware
 app.use((error, req, res, next) => {
