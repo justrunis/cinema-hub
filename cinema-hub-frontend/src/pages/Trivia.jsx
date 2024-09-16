@@ -49,7 +49,7 @@ export default function Trivia() {
   };
 
   useEffect(() => {
-    const handleNavigation = () => navigate("/trivia-history");
+    const handleNavigation = () => navigate("/trivia/trivia-history");
 
     const historyButton = document.getElementById("history-button");
     if (historyButton) {

@@ -616,6 +616,7 @@ export async function addUserTriviaAnswers({
   category,
   difficulty,
   correctAnswers,
+  questions,
 }) {
   const response = await fetch(SERVER_URL + "/trivia", {
     method: "POST",
@@ -623,7 +624,7 @@ export async function addUserTriviaAnswers({
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("cinema-hub-token")}`,
     },
-    body: JSON.stringify({ category, difficulty, correctAnswers }),
+    body: JSON.stringify({ category, difficulty, correctAnswers, questions }),
   });
 
   if (!response.ok) {

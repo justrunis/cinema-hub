@@ -21,10 +21,10 @@ export const ALL_ROLES = [
 export const ALL_CATEGORIES = [
   { value: 11, label: "Movies" },
   { value: 14, label: "Television" },
-  { value: 31, label: "Anime & Manga" },
+  { value: 31, label: "Anime/Manga" },
   {
     value: 32,
-    label: "Cartoon & Animations",
+    label: "Cartoon/Animations",
   },
 ];
 

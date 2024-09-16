@@ -6,6 +6,7 @@ import QuestionList from "./QuestionList";
 import { decodeHtml } from "../../utils/formatting";
 import { useMutation } from "@tanstack/react-query";
 import { addUserTriviaAnswers } from "../../api/http";
+import { queryClient } from "../../api/http";
 
 export default function TriviaContainer({ category, difficulty }) {
   const questions = useSelector((state) => state.trivia.questions);
@@ -19,6 +20,7 @@ export default function TriviaContainer({ category, difficulty }) {
     mutationFn: addUserTriviaAnswers,
     onSuccess: () => {
       console.log("Trivia answers added successfully");
+      queryClient.invalidateQueries("usersTrivia");
     },
   });
 
@@ -42,6 +44,7 @@ export default function TriviaContainer({ category, difficulty }) {
         category,
         difficulty,
         correctAnswers: userAnswers.filter((answer) => answer.isCorrect).length,
+        questions: userAnswers,
       });
       setShowScore(true);
     }

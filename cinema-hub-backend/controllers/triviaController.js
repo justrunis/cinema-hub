@@ -14,7 +14,7 @@ exports.getTriviaAnswers = async (req, res) => {
 
 exports.postUserTriviaAnswers = async (req, res) => {
   const userId = req.user.id;
-  const { category, difficulty, correctAnswers } = req.body;
+  const { category, difficulty, correctAnswers, questions } = req.body;
 
   try {
     const triviaAnswers = new TriviaAnswers({
@@ -22,6 +22,7 @@ exports.postUserTriviaAnswers = async (req, res) => {
       category,
       difficulty,
       correctAnswers,
+      questions,
     });
 
     await triviaAnswers.save();

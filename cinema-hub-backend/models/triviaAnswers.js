@@ -20,6 +20,11 @@ const triviaAnswersSchema = new Schema({
     type: Number,
     required: true,
   },
+  questions: {
+    type: Array,
+    required: true,
+    default: [],
+  },
 });
 
 module.exports = mongoose.model("TriviaAnswers", triviaAnswersSchema);
