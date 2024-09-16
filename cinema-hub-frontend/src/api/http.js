@@ -433,7 +433,6 @@ export async function fetchUsersFriendsRequests({ token }) {
 }
 
 export async function addFriend({ token, friendId }) {
-  console.log("Adding friend with ID:", friendId);
   const response = await fetch(SERVER_URL + "/friends", {
     method: "POST",
     headers: {

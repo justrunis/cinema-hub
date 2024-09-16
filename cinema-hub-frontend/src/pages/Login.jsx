@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginActions } from "../store/slices/login";
 
-export default function Login() {
+export default function Login({ onLogin }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -47,6 +47,7 @@ export default function Login() {
             const token = response.data.token;
             dispatch(loginActions.login(token));
             queryClient.clear();
+            onLogin(token);
             navigate("/profile");
           } else {
             alert(response.data.message);

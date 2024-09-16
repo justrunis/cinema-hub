@@ -36,10 +36,8 @@ export default function FriendsList() {
   const [friend, setFriend] = useState([]);
 
   function handleViewProfile(friend) {
-    console.log("View Profile: ", friend);
     const id = friend.friend._id;
     navigate(`/friend/${id}`);
-    console.log("ID: ", id);
   }
 
   function handleUnfriend(friend) {
