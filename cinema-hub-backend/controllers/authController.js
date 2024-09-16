@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const saltRounds = 12;
-const tokenExpiryTime = "1h";
+const tokenExpiryTime = "7d";
 
 exports.createUser = async (req, res) => {
   const { username, email, password, passwordRepeat } = req.body;

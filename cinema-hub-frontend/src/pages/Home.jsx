@@ -55,7 +55,7 @@ export default function Home() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
-        className="text-center bg-gradient-to-r from-primary to-accent text-white rounded-lg p-6 mb-12 w-full"
+        className="text-center animated-gradient from-primary to-accent bg-gradient-to-r text-white rounded-lg p-6 mb-12 w-full"
       >
         <h1 className="text-5xl font-extrabold mb-4">Welcome to Cinema Hub</h1>
         <p className="text-xl mb-6">
@@ -64,12 +64,12 @@ export default function Home() {
         </p>
         <div className="flex justify-center gap-4">
           <Link to="/movies">
-            <Button className="p-3 btn bg-primary text-primary-content rounded-lg min-h-[40px] hover:bg-accent hover:scale-105 transition-transform">
+            <Button className="btn btn-primary text-primary-content">
               Browse Movies
             </Button>
           </Link>
           <Link to="/shows">
-            <Button className="p-3 btn bg-primary text-primary-content rounded-lg min-h-[40px] hover:bg-accent hover:scale-105 transition-transform">
+            <Button className="btn btn-primary text-primary-content">
               Browse TV Shows
             </Button>
           </Link>

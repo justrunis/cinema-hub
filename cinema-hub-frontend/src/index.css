@@ -10,6 +10,23 @@ body {
   background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
 }
 
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 8s linear infinite;
+}
+
 .modal-class {
   position: fixed;
   top: 25%;

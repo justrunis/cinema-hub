@@ -11,6 +11,8 @@ const User = require("./models/user");
 
 const app = express();
 
+const port = 3000;
+
 // Middleware
 app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(express.json()); // Parse JSON bodies
@@ -32,6 +34,7 @@ app.use("/favorites", favoriteRoutes);
 app.use("/watchlist", watchlistRoutes);
 app.use("/auth", authRoutes);
 
+// Error handling middleware
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;
@@ -41,7 +44,7 @@ app.use((error, req, res, next) => {
 
 // Connect to MongoDB and start the server
 connectDB().then(async () => {
-  app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+  app.listen(port, () => {
+    console.log("Server is running on port " + port);
   });
 });
