@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   fetchUserFriendsProfileInfo,
@@ -181,35 +181,39 @@ export default function FriendsProfile() {
           </div>
         </div>
 
-        <div className="bg-base-100 rounded-lg shadow-lg p-8 w-full max-w-xl mx-auto">
+        <div className="bg-base-300 rounded-lg shadow-lg p-8 w-full max-w-xl mx-auto">
           <h1 className="text-3xl font-bold text-primary mb-6 text-center">
-            Trivia Points
+            Trivia Score
           </h1>
 
           <table className="table-auto w-full text-left">
-            <thead>
-              <tr className="bg-primary text-accent-content">
-                <th className="px-4 py-2 text-lg font-semibold">Category</th>
-                <th className="px-4 py-2 text-lg font-semibold">Details</th>
-              </tr>
-            </thead>
             <tbody>
               <tr className="bg-primary-content text-primary">
                 <td className="border px-4 py-4 text-lg font-semibold">
-                  Total Points
+                  Total Trivia Points
                 </td>
                 <td className="border px-4 py-4 text-2xl font-extrabold text-center text-accent">
                   {triviaData?.totalScore || 0}
                 </td>
               </tr>
               <tr className="bg-primary-content text-primary">
-                <td className="border px-4 py-4 text-lg font-semibold">Rank</td>
+                <td className="border px-4 py-4 text-lg font-semibold">
+                  Ranking
+                </td>
                 <td className="border px-4 py-4 text-2xl font-extrabold text-center text-accent">
                   {triviaData?.rank || 0}
                 </td>
               </tr>
             </tbody>
           </table>
+          <div className="flex flex-row items-center justify-start gap-4 mt-4">
+            <Link to="/trivia/leaderboard" className="btn btn-primary">
+              View Leaderboard
+            </Link>
+            <Link to="/trivia" className="btn btn-primary">
+              Play Trivia
+            </Link>
+          </div>
         </div>
       </div>
     </motion.div>
