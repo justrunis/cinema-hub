@@ -202,6 +202,37 @@ export async function loginUser({ formData }) {
   return { data, status: response.status };
 }
 
+/**
+ * Forgot password
+ * @param {*} param0 email object
+ * @returns { Object } object containing the response data and status
+ */
+export async function forgotPassword({ email }) {
+  const response = await fetch(SERVER_URL + "/auth/forgot-password", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+  const data = await response.json();
+  return { data, status: response.status };
+}
+
+export async function resetPassword({ password, passwordRepeat, token }) {
+  const response = await fetch(SERVER_URL + "/auth/reset-password", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ password, passwordRepeat, token }),
+  });
+  const data = await response.json();
+  return { data, status: response.status };
+}
+
+// FAVORITES
+
 export async function fetchUsersFavorites({ token }) {
   const response = await fetch(SERVER_URL + "/favorites", {
     method: "GET",

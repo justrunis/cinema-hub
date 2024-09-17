@@ -131,6 +131,12 @@ export default function Login({ onLogin }) {
             >
               Don't have an account? Register here.
             </Link>
+            <Link
+              to="/forgot-password"
+              className="text-accent underline my-2 hover:text-primary"
+            >
+              Forgot password? Click here.
+            </Link>
           </motion.div>
         </form>
       </motion.div>

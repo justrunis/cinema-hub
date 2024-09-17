@@ -14,6 +14,8 @@ import AdminRoute from "./components/Auth/AdminRoute";
 
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 import Admin from "./pages/Admin";
 
@@ -56,6 +58,11 @@ function App() {
                 <Route
                   path="/login"
                   element={<Login onLogin={handleLogin} />}
+                />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route
+                  path="/reset-password/:token"
+                  element={<ResetPassword />}
                 />
                 <Route path="/movies" element={<Movies />} />
                 <Route path="/movies/:id" element={<Movie />} />

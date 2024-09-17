@@ -66,6 +66,64 @@ exports.loginUser = async (req, res) => {
   res.status(200).json({ message: "Login successful.", token });
 };
 
+exports.forgotPassword = async (req, res) => {
+  console.log(req.body);
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(400).json({ message: "User not found." });
+  }
+
+  const passwordResetToken = jwt.sign(
+    { id: user._id },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" }
+  );
+
+  user.resetToken = passwordResetToken;
+  user.resetTokenExpiration = Date.now() + 3600000; // 1 hour
+
+  await user.save();
+
+  // Send the password reset token to the user's email address later
+  console.log("Password reset token:", passwordResetToken);
+
+  res.status(200).json({ message: "Password reset token sent." });
+};
+
+exports.resetPassword = async (req, res) => {
+  const { token, password, passwordRepeat } = req.body;
+  console.log(req.body);
+
+  if (!token || !password || !passwordRepeat) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
+  if (password !== passwordRepeat) {
+    return res.status(400).json({ message: "Passwords do not match." });
+  }
+
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+  const user = await User.findById(decodedToken.id);
+
+  if (!user) {
+    return res.status(400).json({ message: "User not found." });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+  user.password = hashedPassword;
+  user.resetToken = null;
+  user.resetTokenExpiration = null;
+
+  await user.save();
+
+  res.status(200).json({ message: "Password reset successful." });
+};
+
 exports.logoutUser = async (req, res) => {
   res.status(200).json({ message: "Logout successful." });
 };

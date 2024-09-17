@@ -46,3 +46,25 @@ export const validateLoginForm = (formData) => {
 
   return null; // Return null if the form data is valid
 };
+
+export const validateForgotPasswordForm = (formData) => {
+  if (!validateEmail(formData.email)) {
+    return "Invalid email address.";
+  }
+
+  return null; // Return null if the form data is valid
+};
+
+export const validateResetPasswordForm = (formData) => {
+  if (!validatePassword(formData.password)) {
+    return "Invalid password. Password must be at least 6 characters long.";
+  }
+
+  console.log(formData);
+
+  if (!validatePasswordRepeat(formData.password, formData.confirmPassword)) {
+    return "Passwords do not match.";
+  }
+
+  return null; // Return null if the form data is valid
+};
