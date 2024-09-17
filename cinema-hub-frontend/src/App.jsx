@@ -31,6 +31,7 @@ import FriendsProfile from "./pages/FriendsProfile";
 import Trivia from "./pages/Trivia";
 import UsersTrivia from "./pages/UsersTrivia";
 import UsersTriviaHistory from "./pages/UsersTriviaHistory";
+import TriviaLeaderboard from "./pages/TriviaLeaderboard";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("cinema-hub-token"));
@@ -80,6 +81,10 @@ function App() {
                   <Route
                     path="/trivia/trivia-history/:id"
                     element={<UsersTriviaHistory />}
+                  />
+                  <Route
+                    path="/trivia/leaderboard"
+                    element={<TriviaLeaderboard />}
                   />
                 </Route>
                 <Route element={<AdminRoute token={token} />}>

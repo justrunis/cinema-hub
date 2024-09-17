@@ -37,3 +37,49 @@ exports.postUserTriviaAnswers = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.getTriviaLeaderboard = async (req, res) => {
+  try {
+    const triviaAnswers = await TriviaAnswers.find().populate("user");
+
+    const leaderboard = {};
+
+    triviaAnswers.forEach((trivia) => {
+      let weightedScore = 0;
+
+      // Use switch/case to determine the weighting based on the difficulty
+      switch (trivia.difficulty) {
+        case "easy":
+          weightedScore = trivia.correctAnswers; // 1 point per correct answer for easy
+          break;
+        case "medium":
+          weightedScore = trivia.correctAnswers * 2; // 2 points per correct answer for medium
+          break;
+        case "hard":
+          weightedScore = trivia.correctAnswers * 3; // 3 points per correct answer for hard
+          break;
+        default:
+          weightedScore = trivia.correctAnswers; // Default case (if difficulty is unknown or malformed)
+          break;
+      }
+
+      // Check if the user is already in the leaderboard
+      if (!leaderboard[trivia.user._id]) {
+        leaderboard[trivia.user._id] = {
+          username: trivia.user.username,
+          totalScore: 0,
+        };
+      }
+
+      leaderboard[trivia.user._id].totalScore += weightedScore;
+    });
+
+    const leaderboardArray = Object.values(leaderboard);
+
+    leaderboardArray.sort((a, b) => b.totalScore - a.totalScore);
+
+    res.status(200).json(leaderboardArray);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

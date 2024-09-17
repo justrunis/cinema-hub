@@ -11,4 +11,7 @@ router.get("/", auth, triviaController.getTriviaAnswers);
 // POST /trivia
 router.post("/", auth, triviaController.postUserTriviaAnswers);
 
+// GET /trivia/leaderboard
+router.get("/leaderboard", auth, triviaController.getTriviaLeaderboard);
+
 module.exports = router;

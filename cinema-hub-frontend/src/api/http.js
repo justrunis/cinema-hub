@@ -601,7 +601,7 @@ export async function deleteUser({ userId }) {
 // TRIVIA
 
 export async function fetchTriviaQuestions({ category, difficulty }) {
-  const TRIVIA_URL = "https://opentdb.com/api.php?amount=2";
+  const TRIVIA_URL = "https://opentdb.com/api.php?amount=10";
   const response = await fetch(
     `${TRIVIA_URL}&category=${category}&difficulty=${difficulty}&type=multiple`
   );
@@ -635,6 +635,21 @@ export async function addUserTriviaAnswers({
 
 export async function getUsersTriviaAnswers() {
   const response = await fetch(SERVER_URL + "/trivia", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("cinema-hub-token")}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function fetchTriviaLeaderboard() {
+  const response = await fetch(SERVER_URL + "/trivia/leaderboard", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

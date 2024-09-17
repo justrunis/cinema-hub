@@ -109,6 +109,12 @@ export default function Trivia() {
             >
               Trivia history
             </Button>
+            <Button
+              onClick={() => navigate("/trivia/leaderboard")}
+              className="btn btn-accent text-accent-content"
+            >
+              Leaderboard
+            </Button>
           </div>
         </div>
       ) : (

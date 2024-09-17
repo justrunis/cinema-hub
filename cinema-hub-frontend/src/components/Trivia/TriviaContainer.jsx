@@ -92,14 +92,19 @@ export default function TriviaContainer({ category, difficulty }) {
       className="flex flex-col items-center justify-center gap-4 p-6 bg-base-200 rounded-lg"
     >
       {questions.length > 0 && (
-        <Question
-          question={decodeHtml(currentQuestion.question)}
-          answers={[
-            ...currentQuestion.incorrect_answers.map(decodeHtml),
-            decodeHtml(currentQuestion.correct_answer),
-          ]}
-          onAnswer={handleAnswer}
-        />
+        <>
+          <p>
+            Question {currentQuestionIndex + 1} of {questions.length}
+          </p>
+          <Question
+            question={decodeHtml(currentQuestion.question)}
+            answers={[
+              ...currentQuestion.incorrect_answers.map(decodeHtml),
+              decodeHtml(currentQuestion.correct_answer),
+            ]}
+            onAnswer={handleAnswer}
+          />
+        </>
       )}
     </motion.div>
   );
