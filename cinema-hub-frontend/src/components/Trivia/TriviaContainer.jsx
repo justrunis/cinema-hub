@@ -27,15 +27,16 @@ export default function TriviaContainer({ category, difficulty }) {
   const handleAnswer = (answer) => {
     const isCorrect = answer === decodeHtml(currentQuestion.correct_answer);
 
-    setUserAnswers((prevAnswers) => [
-      ...prevAnswers,
-      {
-        question: decodeHtml(currentQuestion.question),
-        selectedAnswer: answer,
-        correctAnswer: decodeHtml(currentQuestion.correct_answer),
-        isCorrect,
-      },
-    ]);
+    const newAnswer = {
+      question: decodeHtml(currentQuestion.question),
+      selectedAnswer: answer,
+      correctAnswer: decodeHtml(currentQuestion.correct_answer),
+      isCorrect,
+    };
+
+    const updatedAnswers = [...userAnswers, newAnswer];
+
+    setUserAnswers(updatedAnswers);
 
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
@@ -43,8 +44,9 @@ export default function TriviaContainer({ category, difficulty }) {
       mutate({
         category,
         difficulty,
-        correctAnswers: userAnswers.filter((answer) => answer.isCorrect).length,
-        questions: userAnswers,
+        correctAnswers: updatedAnswers.filter((answer) => answer.isCorrect)
+          .length,
+        questions: updatedAnswers,
       });
       setShowScore(true);
     }
