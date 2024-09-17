@@ -69,7 +69,7 @@ export default function UsersTrivia() {
         </p>
       )}
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {data.map((trivia, index) => (
           <UserTriviaCard key={trivia._id} trivia={trivia} index={index} />
         ))}

@@ -36,7 +36,7 @@ export default function NavLinks() {
   return (
     <div className="flex flex-col lg:flex-row w-full justify-between items-center">
       {/* Left-aligned Navigation Links */}
-      <div className="flex space-x-5">
+      <div className="flex flex-col md:flex-row gap-4">
         <NavLink
           to="/"
           className={({ isActive }) =>
@@ -122,7 +122,7 @@ export default function NavLinks() {
       </div>
 
       {/* Right-aligned User Links */}
-      <div className="flex space-x-5">
+      <div className="flex flex-col md:flex-row gap-4 mt-4">
         {token && (
           <>
             <NavLink

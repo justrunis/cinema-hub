@@ -96,10 +96,10 @@ export default function Trivia() {
             className="bg-base-100 text-base-content w-60 h-10 p-2 rounded-lg border border-black focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
             onChange={handleChange}
           />
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
             <Button
               onClick={onClick}
-              className="btn btn-accent text-accent-content"
+              className="btn btn-primary text-primary-content"
             >
               Start Trivia
             </Button>
@@ -111,7 +111,7 @@ export default function Trivia() {
             </Button>
             <Button
               onClick={() => navigate("/trivia/leaderboard")}
-              className="btn btn-accent text-accent-content"
+              className="btn btn-warning text-warning-content"
             >
               Leaderboard
             </Button>
