@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUserFriendsProfileInfo } from "../api/http";
+import {
+  fetchUserFriendsProfileInfo,
+  fetchTriviaPointsForUser,
+} from "../api/http";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
 import ErrorIndicator from "../components/UI/ErrorIndicator";
 import { STALE_TIME } from "../utils/constants";
@@ -17,13 +20,26 @@ export default function FriendsProfile() {
     staleTime: STALE_TIME,
   });
 
+  const {
+    data: triviaData,
+    isLoading: triviaIsLoading,
+    isError: triviaIsError,
+    error: triviaError,
+  } = useQuery({
+    queryKey: ["triviaPoints", friendId],
+    queryFn: () => fetchTriviaPointsForUser({ id: friendId }),
+    staleTime: STALE_TIME,
+  });
+
+  console.log(triviaData);
+
   const friendInfo = data?.friendInfo;
 
   const friendFavorites = data?.favorites;
 
   const friendWatchlist = data?.watchlist;
 
-  if (isLoading) {
+  if (isLoading || triviaIsLoading) {
     return <LoadingIndicator />;
   }
 
@@ -31,6 +47,14 @@ export default function FriendsProfile() {
     return (
       <div className="flex flex-col items-center justify-center gap-4 w-full h-full p-6">
         <ErrorIndicator title="Failed to fetch friend's profile" />
+      </div>
+    );
+  }
+
+  if (triviaIsError) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 w-full h-full p-6">
+        <ErrorIndicator title="Failed to fetch friend's trivia points" />
       </div>
     );
   }
@@ -115,6 +139,11 @@ export default function FriendsProfile() {
               <h1 className="text-2xl font-bold mb-4">
                 Favorite Movies & Shows
               </h1>
+              {friendFavorites?.length <= 0 && (
+                <h1 className="text-lg font-light text-accent">
+                  No favorites found.
+                </h1>
+              )}
               <div className="grid grid-cols-3 gap-4">
                 {friendFavorites?.map((favorite) => (
                   <MovieCard key={favorite.itemId} movie={favorite} />
@@ -138,6 +167,11 @@ export default function FriendsProfile() {
               className="p-4"
             >
               <h1 className="text-2xl font-bold mb-4">Watchlist</h1>
+              {friendWatchlist?.length <= 0 && (
+                <h1 className="text-lg font-light text-accent">
+                  No watchlist found.
+                </h1>
+              )}
               <div className="grid grid-cols-3 gap-4">
                 {friendWatchlist?.map((watchlistItem) => (
                   <MovieCard key={watchlistItem.itemId} movie={watchlistItem} />
@@ -145,6 +179,37 @@ export default function FriendsProfile() {
               </div>
             </motion.div>
           </div>
+        </div>
+
+        <div className="bg-base-100 rounded-lg shadow-lg p-8 w-full max-w-xl mx-auto">
+          <h1 className="text-3xl font-bold text-primary mb-6 text-center">
+            Trivia Points
+          </h1>
+
+          <table className="table-auto w-full text-left">
+            <thead>
+              <tr className="bg-primary text-accent-content">
+                <th className="px-4 py-2 text-lg font-semibold">Category</th>
+                <th className="px-4 py-2 text-lg font-semibold">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="bg-primary-content text-primary">
+                <td className="border px-4 py-4 text-lg font-semibold">
+                  Total Points
+                </td>
+                <td className="border px-4 py-4 text-2xl font-extrabold text-center text-accent">
+                  {triviaData?.totalScore || 0}
+                </td>
+              </tr>
+              <tr className="bg-primary-content text-primary">
+                <td className="border px-4 py-4 text-lg font-semibold">Rank</td>
+                <td className="border px-4 py-4 text-2xl font-extrabold text-center text-accent">
+                  {triviaData?.rank || 0}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </motion.div>

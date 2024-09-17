@@ -1,4 +1,8 @@
 const User = require("../models/user");
+const Favorite = require("../models/favorite");
+const Friend = require("../models/friend");
+const Watchlist = require("../models/watchlist");
+const TriviaAnswers = require("../models/triviaAnswers");
 
 exports.getUsers = async (req, res) => {
   try {
@@ -85,14 +89,34 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-  if (req.user.role !== "admin") {
-    return res.status(401).json({ message: "Unauthorized" });
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { userId } = req.params;
+
+    // Delete user's favorites
+    await Favorite.deleteMany({ user: userId });
+
+    // Delete user's friends (where the user is the requester)
+    await Friend.deleteMany({ user: userId });
+
+    // Delete user's friends (where the user is the recipient)
+    await Friend.deleteMany({ friend: userId });
+
+    // Delete user's watchlist
+    await Watchlist.deleteMany({ user: userId });
+
+    // Delete user's trivia answers
+    await TriviaAnswers.deleteMany({ user: userId });
+
+    // Finally, delete the user
+    await User.findByIdAndDelete(userId);
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting user and related data:", err);
+    res.status(500).json({ error: "Server error. Could not delete user." });
   }
-  const { userId } = req.params;
-  User.findByIdAndDelete(userId)
-    .then(res.status(200).json({ message: "User deleted successfully" }))
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ error: err });
-    });
 };

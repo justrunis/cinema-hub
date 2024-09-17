@@ -21,9 +21,9 @@ export default function ResetPassword() {
     onError: (error) => {
       alert(error.response.data.message);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
       setFields({ password: "", confirmPassword: "" });
-      alert("Password reset successfully!");
+      alert(response.data.message);
       navigate("/login");
     },
   });

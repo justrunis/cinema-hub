@@ -5,6 +5,7 @@ import Button from "../components/UI/Button";
 import { validateRegistrationForm } from "../utils/validation";
 import { createUser } from "../api/http";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -45,6 +46,8 @@ export default function Register() {
     },
   ];
 
+  const navigate = useNavigate();
+
   async function handleSubmit(event) {
     event.preventDefault();
     const validationResponse = validateRegistrationForm(formData);
@@ -55,6 +58,7 @@ export default function Register() {
       if (response.status === 201) {
         alert("User created successfully!");
         clear();
+        navigate("/login");
       } else {
         alert(response.data.message);
       }

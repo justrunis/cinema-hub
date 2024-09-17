@@ -693,3 +693,18 @@ export async function fetchTriviaLeaderboard() {
   }
   return response.json();
 }
+
+export async function fetchTriviaPointsForUser({ id }) {
+  const response = await fetch(SERVER_URL + `/trivia/points/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("cinema-hub-token")}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}

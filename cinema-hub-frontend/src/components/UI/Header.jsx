@@ -8,6 +8,9 @@ import Logo from "../Header/Logo";
 export default function Header({ token }) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleMenuToggle = () => setIsOpen(!isOpen);
+  const handleCloseMenu = () => setIsOpen(false);
+
   return (
     <header className="bg-primary">
       <nav className="flex justify-between items-center mx-10">
@@ -22,13 +25,10 @@ export default function Header({ token }) {
         </div>
 
         <div className="hidden lg:flex flex-1 justify-between items-center">
-          <NavLinks token={token} />
+          <NavLinks closeMenu={handleCloseMenu} />
         </div>
 
-        <MobileMenuButton
-          isMenuOpen={isOpen}
-          toggleMenu={() => setIsOpen(!isOpen)}
-        />
+        <MobileMenuButton isMenuOpen={isOpen} toggleMenu={handleMenuToggle} />
 
         <AnimatePresence>
           {isOpen && (
@@ -38,7 +38,7 @@ export default function Header({ token }) {
               exit={{ opacity: 0, y: -50 }}
               className="lg:hidden absolute top-20 left-0 right-0 bg-primary p-4 z-50"
             >
-              <NavLinks token={token} />
+              <NavLinks closeMenu={handleCloseMenu} />
             </motion.div>
           )}
         </AnimatePresence>

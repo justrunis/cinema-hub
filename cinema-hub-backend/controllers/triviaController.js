@@ -83,3 +83,77 @@ exports.getTriviaLeaderboard = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.getTriviaPointsForUser = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    // Fetch all trivia answers for the user
+    const triviaAnswers = await TriviaAnswers.find({ user: userId });
+
+    // Calculate the total score for the current user
+    let totalScore = 0;
+
+    triviaAnswers.forEach((trivia) => {
+      let weightedScore = 0;
+
+      switch (trivia.difficulty) {
+        case "easy":
+          weightedScore = trivia.correctAnswers;
+          break;
+        case "medium":
+          weightedScore = trivia.correctAnswers * 2;
+          break;
+        case "hard":
+          weightedScore = trivia.correctAnswers * 3;
+          break;
+        default:
+          weightedScore = trivia.correctAnswers;
+          break;
+      }
+
+      totalScore += weightedScore;
+    });
+
+    // Fetch all users' scores to calculate rank
+    const allUsers = await TriviaAnswers.aggregate([
+      {
+        $group: {
+          _id: "$user",
+          totalScore: {
+            $sum: {
+              $switch: {
+                branches: [
+                  {
+                    case: { $eq: ["$difficulty", "easy"] },
+                    then: "$correctAnswers",
+                  },
+                  {
+                    case: { $eq: ["$difficulty", "medium"] },
+                    then: { $multiply: ["$correctAnswers", 2] },
+                  },
+                  {
+                    case: { $eq: ["$difficulty", "hard"] },
+                    then: { $multiply: ["$correctAnswers", 3] },
+                  },
+                ],
+                default: "$correctAnswers",
+              },
+            },
+          },
+        },
+      },
+      {
+        $sort: { totalScore: -1 }, // Sort by totalScore in descending order
+      },
+    ]);
+
+    // Find the rank of the current user
+    const rank =
+      allUsers.findIndex((user) => user._id.toString() === userId) + 1;
+
+    res.status(200).json({ totalScore, rank });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

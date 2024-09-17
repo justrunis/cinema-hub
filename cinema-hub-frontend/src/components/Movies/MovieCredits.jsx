@@ -40,7 +40,7 @@ export default function MovieCredits({ id }) {
         className="relative"
       >
         <Dropdown title="Cast" className="flex flex-col gap-2 items-center">
-          <ul className="grid grid-cols-2 lg:grid-cols-4 items-center gap-4">
+          <ul className="grid grid-cols-2 lg:grid-cols-4 items-start justify-center gap-4">
             {data.cast.map((person) => (
               <li key={person.credit_id}>
                 <Card className="flex flex-col items-center gap-2 bg-base-100 rounded-lg p-4">

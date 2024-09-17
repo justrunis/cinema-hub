@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { queryClient } from "../../api/http";
 import { useEffect } from "react";
 
-export default function NavLinks() {
+export default function NavLinks({ closeMenu }) {
   const token = localStorage.getItem("cinema-hub-token");
   const userRole = getUserRole(token);
   const dispatch = useDispatch();
@@ -33,12 +33,19 @@ export default function NavLinks() {
     AuthVerify(token);
   }, [token]);
 
+  const handleLinkClick = () => {
+    if (closeMenu) {
+      closeMenu();
+    }
+  };
+
   return (
-    <div className="flex flex-col lg:flex-row w-full justify-between items-center">
+    <div className="flex flex-col lg:flex-row w-full justify-between items-center lg:items-end">
       {/* Left-aligned Navigation Links */}
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex flex-col lg:flex-row gap-4">
         <NavLink
           to="/"
+          onClick={handleLinkClick}
           className={({ isActive }) =>
             `flex items-center text-sm lg:text-lg font-bold ${
               isActive
@@ -52,6 +59,7 @@ export default function NavLinks() {
         </NavLink>
         <NavLink
           to="/movies"
+          onClick={handleLinkClick}
           className={({ isActive }) =>
             `flex items-center text-sm lg:text-lg font-bold ${
               isActive
@@ -65,6 +73,7 @@ export default function NavLinks() {
         </NavLink>
         <NavLink
           to="/shows"
+          onClick={handleLinkClick}
           className={({ isActive }) =>
             `flex items-center text-sm lg:text-lg font-bold ${
               isActive
@@ -79,6 +88,7 @@ export default function NavLinks() {
         {token && (
           <NavLink
             to="/trivia"
+            onClick={handleLinkClick}
             className={({ isActive }) =>
               `flex items-center text-sm lg:text-lg font-bold ${
                 isActive
@@ -90,23 +100,11 @@ export default function NavLinks() {
             <FaRegQuestionCircle className="inline mr-2" />
             Trivia
           </NavLink>
-        )}
-        <NavLink
-          to="/about"
-          className={({ isActive }) =>
-            `flex items-center text-sm lg:text-lg font-bold ${
-              isActive
-                ? "text-accent"
-                : "text-primary-content hover:text-accent"
-            }`
-          }
-        >
-          <FaQuestionCircle className="inline mr-2" />
-          About
-        </NavLink>
+        )}{" "}
         {userRole === "admin" && (
           <NavLink
             to="/admin"
+            onClick={handleLinkClick}
             className={({ isActive }) =>
               `flex items-center text-sm lg:text-lg font-bold ${
                 isActive
@@ -119,14 +117,29 @@ export default function NavLinks() {
             Admin
           </NavLink>
         )}
+        <NavLink
+          to="/about"
+          onClick={handleLinkClick}
+          className={({ isActive }) =>
+            `flex items-center text-sm lg:text-lg font-bold ${
+              isActive
+                ? "text-accent"
+                : "text-primary-content hover:text-accent"
+            }`
+          }
+        >
+          <FaQuestionCircle className="inline mr-2" />
+          About
+        </NavLink>
       </div>
 
       {/* Right-aligned User Links */}
-      <div className="flex flex-col md:flex-row gap-4 mt-4">
+      <div className="flex flex-col lg:flex-row gap-4 mt-4">
         {token && (
           <>
             <NavLink
               to="/profile"
+              onClick={handleLinkClick}
               className={({ isActive }) =>
                 `flex items-center text-sm lg:text-lg font-bold ${
                   isActive
@@ -151,6 +164,7 @@ export default function NavLinks() {
           <>
             <NavLink
               to="/login"
+              onClick={handleLinkClick}
               className={({ isActive }) =>
                 `flex items-center text-sm lg:text-lg font-bold ${
                   isActive
@@ -164,6 +178,7 @@ export default function NavLinks() {
             </NavLink>
             <NavLink
               to="/register"
+              onClick={handleLinkClick}
               className={({ isActive }) =>
                 `flex items-center text-sm lg:text-lg font-bold ${
                   isActive
