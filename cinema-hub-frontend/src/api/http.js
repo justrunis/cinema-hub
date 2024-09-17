@@ -601,7 +601,7 @@ export async function deleteUser({ userId }) {
 // TRIVIA
 
 export async function fetchTriviaQuestions({ category, difficulty }) {
-  const TRIVIA_URL = "https://opentdb.com/api.php?amount=10";
+  const TRIVIA_URL = "https://opentdb.com/api.php?amount=2";
   const response = await fetch(
     `${TRIVIA_URL}&category=${category}&difficulty=${difficulty}&type=multiple`
   );

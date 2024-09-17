@@ -35,7 +35,10 @@ export default function UserTriviaCard({ trivia, index }) {
         <div className="flex justify-between text-lg">
           <span className="font-semibold text-white">Correct Answers:</span>
           <span className="font-bold text-white">
-            {(trivia.correctAnswers / 10) * 100}%
+            {Math.round(
+              (trivia.correctAnswers / trivia.questions.length) * 100
+            )}
+            %
           </span>
         </div>
         <div className="flex justify-between text-lg">

@@ -5,6 +5,7 @@ import { STALE_TIME } from "../utils/constants";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
 import ErrorIndicator from "../components/UI/ErrorIndicator";
 import UserTriviaCard from "../components/Trivia/UserTriviaCard";
+import { Link } from "react-router-dom";
 
 export default function UsersTrivia() {
   const { data, isLoading, isError, error } = useQuery({
@@ -12,6 +13,8 @@ export default function UsersTrivia() {
     queryFn: getUsersTriviaAnswers,
     staleTime: STALE_TIME,
   });
+
+  document.title = "Trivia History";
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -39,9 +42,14 @@ export default function UsersTrivia() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="flex flex-col items-center justify-center gap-8 p-6 bg-base-200 rounded-lg w-full max-w-4xl mx-auto"
+      className="flex flex-col gap-8 p-6 bg-base-200 rounded-lg w-full max-w-4xl mx-auto"
     >
       <h1 className="text-3xl font-bold text-center">My Trivia History</h1>
+      <div className="flex justify-start items-start">
+        <Link to="/trivia" className="text-accent hover:underline text-start">
+          To Trivia
+        </Link>
+      </div>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}

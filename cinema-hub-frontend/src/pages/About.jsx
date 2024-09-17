@@ -68,7 +68,7 @@ export default function About() {
           className="flex justify-center items-center gap-4"
           variants={childVariants}
         >
-          <Link to="/movies">
+          <Link to="/">
             <Button className="btn btn-primary text-primary-content">
               Explore Now
             </Button>

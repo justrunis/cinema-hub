@@ -20,6 +20,8 @@ export default function Trivia() {
   const [showQuestions, setShowQuestions] = useState(false);
   const [questions, setQuestions] = useState([]);
 
+  document.title = "Trivia";
+
   const { mutate } = useMutation({
     mutationFn: fetchTriviaQuestions,
     staleTime: STALE_TIME,
@@ -97,7 +99,7 @@ export default function Trivia() {
           <div className="flex items-center justify-center gap-4">
             <Button
               onClick={onClick}
-              className="btn btn-success text-success-content"
+              className="btn btn-accent text-accent-content"
             >
               Start Trivia
             </Button>

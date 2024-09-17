@@ -17,6 +17,12 @@ exports.postUserTriviaAnswers = async (req, res) => {
   const { category, difficulty, correctAnswers, questions } = req.body;
 
   try {
+    if (questions.length > 10) {
+      return res
+        .status(400)
+        .json({ message: "Questions length should be less than 10" });
+    }
+
     const triviaAnswers = new TriviaAnswers({
       user: userId,
       category,

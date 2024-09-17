@@ -7,6 +7,7 @@ import { decodeHtml } from "../../utils/formatting";
 import { useMutation } from "@tanstack/react-query";
 import { addUserTriviaAnswers } from "../../api/http";
 import { queryClient } from "../../api/http";
+import Button from "../UI/Button";
 
 export default function TriviaContainer({ category, difficulty }) {
   const questions = useSelector((state) => state.trivia.questions);
@@ -58,8 +59,16 @@ export default function TriviaContainer({ category, difficulty }) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col items-center justify-center gap-4 p-6 bg-base-200 rounded-lg"
+        className="flex flex-col gap-4 p-6 bg-base-200 rounded-lg"
       >
+        <div className="flex justify-start items-start mt-4">
+          <Button
+            className="text-accent hover:underline text-start"
+            onClick={() => window.location.reload()}
+          >
+            Play again
+          </Button>
+        </div>
         <h1 className="text-2xl text-center">
           You have answered{" "}
           {Math.round(
