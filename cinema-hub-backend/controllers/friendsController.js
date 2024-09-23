@@ -4,11 +4,18 @@ const Favorite = require("../models/favorite");
 const Watchlist = require("../models/watchlist");
 
 exports.getFriends = async (req, res) => {
-  const userId = req.user._id;
+  try {
+    const userId = req.user._id;
 
-  const friends = await Friend.find({ user: userId }).populate("friend");
+    const friends = await Friend.find({ user: userId }).populate("friend");
 
-  res.status(200).json(friends);
+    res.status(200).json(friends);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
 };
 
 exports.getSuggestedFriends = async (req, res) => {
@@ -34,123 +41,165 @@ exports.getSuggestedFriends = async (req, res) => {
 
     res.status(200).json(suggestedFriends);
   } catch (error) {
-    res.status(500).json({
-      message: "An error occurred while fetching suggested friends.",
-      error,
-    });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
 
 exports.getFriendsList = async (req, res) => {
-  const userId = req.user.id;
+  try {
+    const userId = req.user.id;
 
-  const friends = await Friend.find({
-    user: userId,
-    status: { $in: ["accepted"] },
-  }).populate("friend");
+    const friends = await Friend.find({
+      user: userId,
+      status: { $in: ["accepted"] },
+    }).populate("friend");
 
-  res.status(200).json(friends);
+    res.status(200).json(friends);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
 };
 
 exports.getFriendsRequests = async (req, res) => {
-  const userId = req.user.id;
+  try {
+    const userId = req.user.id;
 
-  const friends = await Friend.find({
-    friend: userId,
-    status: "pending",
-  }).populate("user");
+    const friends = await Friend.find({
+      friend: userId,
+      status: "pending",
+    }).populate("user");
 
-  res.status(200).json(friends);
+    res.status(200).json(friends);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
 };
 
 exports.addFriend = async (req, res) => {
-  const userId = req.user.id;
-  const { friendId } = req.body;
+  try {
+    const userId = req.user.id;
+    const { friendId } = req.body;
 
-  const existingFriend = await Friend.findOne({
-    user: userId,
-    friend: friendId,
-  });
+    const existingFriend = await Friend.findOne({
+      user: userId,
+      friend: friendId,
+    });
 
-  if (existingFriend) {
-    return res.status(400).json({ message: "Friend already added." });
+    if (existingFriend) {
+      return res.status(400).json({ message: "Friend already added." });
+    }
+
+    const newFriend = new Friend({ user: userId, friend: friendId });
+    await newFriend.save();
+
+    res.status(201).json({ message: "Friend added." });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
-
-  const newFriend = new Friend({ user: userId, friend: friendId });
-  await newFriend.save();
-
-  res.status(201).json({ message: "Friend added." });
 };
 
 exports.acceptFriendRequest = async (req, res) => {
-  const userId = req.user.id;
-  const friendId = req.params.id;
+  try {
+    const userId = req.user.id;
+    const friendId = req.params.id;
 
-  const friend = await Friend.findOne({ user: friendId, friend: userId });
+    const friend = await Friend.findOne({ user: friendId, friend: userId });
 
-  if (!friend) {
-    return res.status(404).json({ message: "Friend request not found." });
-  }
+    if (!friend) {
+      return res.status(404).json({ message: "Friend request not found." });
+    }
 
-  friend.status = "accepted";
-  await friend.save();
+    friend.status = "accepted";
+    await friend.save();
 
-  const reverseFriend = await Friend.findOne({
-    user: userId,
-    friend: friendId,
-  });
-
-  if (!reverseFriend) {
-    const newFriend = new Friend({
+    const reverseFriend = await Friend.findOne({
       user: userId,
       friend: friendId,
-      status: "accepted",
     });
-    await newFriend.save();
-  }
 
-  res.status(200).json({ message: "Friend request accepted." });
+    if (!reverseFriend) {
+      const newFriend = new Friend({
+        user: userId,
+        friend: friendId,
+        status: "accepted",
+      });
+      await newFriend.save();
+    }
+
+    res.status(200).json({ message: "Friend request accepted." });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
 };
 
 exports.rejectFriendRequest = async (req, res) => {
-  const userId = req.user.id;
-  const friendId = req.params.id;
+  try {
+    const userId = req.user.id;
+    const friendId = req.params.id;
 
-  const friend = await Friend.findOneAndDelete({
-    friend: friendId,
-    friend: userId,
-  });
+    const friend = await Friend.findOneAndDelete({
+      friend: friendId,
+      friend: userId,
+    });
 
-  if (!friend) {
-    return res.status(404).json({ message: "Friend request not found." });
+    if (!friend) {
+      return res.status(404).json({ message: "Friend request not found." });
+    }
+
+    res.status(200).json({ message: "Friend request rejected." });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
-
-  res.status(200).json({ message: "Friend request rejected." });
 };
 
 exports.deleteFriend = async (req, res) => {
-  const userId = req.user.id;
-  const friendId = req.params.id;
+  try {
+    const userId = req.user.id;
+    const friendId = req.params.id;
 
-  const friend = await Friend.findOneAndDelete({
-    user: userId,
-    friend: friendId,
-  });
+    const friend = await Friend.findOneAndDelete({
+      user: userId,
+      friend: friendId,
+    });
 
-  if (!friend) {
-    return res.status(404).json({ message: "Friend not found." });
+    if (!friend) {
+      return res.status(404).json({ message: "Friend not found." });
+    }
+
+    const otherFriend = await Friend.findOneAndDelete({
+      user: friendId,
+      friend: userId,
+    });
+
+    if (!otherFriend) {
+      return res.status(404).json({ message: "Friend not found." });
+    }
+
+    res.status(200).json({ message: "Friend deleted from both sides." });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
-
-  const otherFriend = await Friend.findOneAndDelete({
-    user: friendId,
-    friend: userId,
-  });
-
-  if (!otherFriend) {
-    return res.status(404).json({ message: "Friend not found." });
-  }
-
-  res.status(200).json({ message: "Friend deleted from both sides." });
 };
 
 exports.getFriendInfo = async (req, res) => {
@@ -199,9 +248,9 @@ exports.getFriendInfo = async (req, res) => {
 
     res.status(200).json(friendDetails);
   } catch (error) {
-    res.status(500).json({
-      message: "An error occurred while fetching friend details.",
-      error,
-    });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };

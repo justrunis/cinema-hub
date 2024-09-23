@@ -31,8 +31,6 @@ export default function FriendsProfile() {
     staleTime: STALE_TIME,
   });
 
-  console.log(triviaData);
-
   const friendInfo = data?.friendInfo;
 
   const friendFavorites = data?.favorites;

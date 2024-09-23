@@ -2,21 +2,22 @@ const User = require("../models/user");
 const TriviaAnswers = require("../models/triviaAnswers");
 
 exports.getTriviaAnswers = async (req, res) => {
-  const userId = req.user.id;
-
   try {
+    const userId = req.user.id;
     const triviaAnswers = await TriviaAnswers.find({ user: userId });
     res.status(200).json(triviaAnswers);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
 
 exports.postUserTriviaAnswers = async (req, res) => {
-  const userId = req.user.id;
-  const { category, difficulty, correctAnswers, questions } = req.body;
-
   try {
+    const userId = req.user.id;
+    const { category, difficulty, correctAnswers, questions } = req.body;
     if (questions.length > 10) {
       return res
         .status(400)
@@ -34,7 +35,10 @@ exports.postUserTriviaAnswers = async (req, res) => {
     await triviaAnswers.save();
     res.status(201).json(triviaAnswers);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
 
@@ -80,14 +84,16 @@ exports.getTriviaLeaderboard = async (req, res) => {
 
     res.status(200).json(leaderboardArray);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
 
 exports.getTriviaPointsForUser = async (req, res) => {
-  const userId = req.params.id;
-
   try {
+    const userId = req.params.id;
     // Fetch all trivia answers for the user
     const triviaAnswers = await TriviaAnswers.find({ user: userId });
 
@@ -154,6 +160,9 @@ exports.getTriviaPointsForUser = async (req, res) => {
 
     res.status(200).json({ totalScore, rank });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };

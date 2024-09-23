@@ -51,35 +51,54 @@ exports.addFavorite = async (req, res) => {
       .json({ message: "Item added to favorites.", favorite: newFavorite });
   } catch (error) {
     console.error("Error adding favorite:", error);
-    res.status(500).json({ message: "Server error." });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
 
 exports.isFavorite = async (req, res) => {
-  const userId = req.user.id;
-  const itemId = req.params.id;
+  try {
+    const userId = req.user.id;
+    const itemId = req.params.id;
 
-  const favorite = await Favorite.findOne({ user: userId, itemId: itemId });
+    const favorite = await Favorite.findOne({ user: userId, itemId: itemId });
 
-  if (favorite) {
-    return res.status(200).json({ isFavorite: true });
+    if (favorite) {
+      return res.status(200).json({ isFavorite: true });
+    }
+
+    res.status(200).json({ isFavorite: false });
+  } catch (error) {
+    console.error("Error checking if favorite:", error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
-
-  res.status(200).json({ isFavorite: false });
 };
 
 exports.deleteFavorite = async (req, res) => {
-  const userId = req.user.id;
-  const favoriteId = req.params.id;
+  try {
+    const userId = req.user.id;
+    const favoriteId = req.params.id;
 
-  const favorite = await Favorite.findOneAndDelete({
-    itemId: favoriteId,
-    user: userId,
-  });
+    const favorite = await Favorite.findOneAndDelete({
+      itemId: favoriteId,
+      user: userId,
+    });
 
-  if (!favorite) {
-    return res.status(404).json({ message: "Favorite not found." });
+    if (!favorite) {
+      return res.status(404).json({ message: "Favorite not found." });
+    }
+
+    res.status(200).json({ message: "Favorite deleted." });
+  } catch (error) {
+    console.error("Error deleting favorite:", error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
-
-  res.status(200).json({ message: "Favorite deleted." });
 };

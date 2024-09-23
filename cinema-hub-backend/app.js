@@ -7,8 +7,6 @@ const bodyParser = require("body-parser");
 
 const connectDB = require("./util/database");
 
-const User = require("./models/user");
-
 const app = express();
 
 const port = 3000;
@@ -40,7 +38,7 @@ app.use("/trivia", triviaRoutes);
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;
-  const message = error.message;
+  const message = error.message || "An unexpected error occurred";
   res.status(status).json({ message: message });
 });
 

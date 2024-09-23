@@ -51,41 +51,52 @@ exports.getUsers = async (req, res) => {
     res.status(200).json(results);
   } catch (error) {
     // Handle any errors that occur
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching users:", error);
+    next(error);
   }
 };
 
 exports.getUser = async (req, res) => {
-  if (req.user.role !== "admin") {
-    return res.status(401).json({ message: "Unauthorized" });
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ user });
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    next(err);
   }
-  const { userId } = req.params;
-  User.findById(userId)
-    .then((user) => {
-      res.status(200).json({ user });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ error: err });
-    });
 };
 
 exports.updateUser = async (req, res) => {
-  if (req.user.role !== "admin") {
-    return res.status(401).json({ message: "Unauthorized" });
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const { userId } = req.params;
+    const { username, email, role } = req.body;
+    const currentDateTime = new Date();
+
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: userId },
+      { username, email, role, updatedAt: currentDateTime },
+      { new: true } // Returns the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User updated successfully", updatedUser });
+  } catch (err) {
+    console.error("Error updating user:", err);
+    next(err);
   }
-  const { userId } = req.params;
-  const { username, email, role } = req.body;
-  const currentDateTime = new Date();
-  User.findByIdAndUpdate(
-    { _id: userId },
-    { username, email, role, updatedAt: currentDateTime }
-  )
-    .then(res.status(200).json({ message: "User updated successfully" }))
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ error: err });
-    });
 };
 
 exports.deleteUser = async (req, res) => {
@@ -96,27 +107,19 @@ exports.deleteUser = async (req, res) => {
 
     const { userId } = req.params;
 
-    // Delete user's favorites
-    await Favorite.deleteMany({ user: userId });
-
-    // Delete user's friends (where the user is the requester)
-    await Friend.deleteMany({ user: userId });
-
-    // Delete user's friends (where the user is the recipient)
-    await Friend.deleteMany({ friend: userId });
-
-    // Delete user's watchlist
-    await Watchlist.deleteMany({ user: userId });
-
-    // Delete user's trivia answers
-    await TriviaAnswers.deleteMany({ user: userId });
-
-    // Finally, delete the user
-    await User.findByIdAndDelete(userId);
+    // Run all deletions in parallel
+    await Promise.all([
+      Favorite.deleteMany({ user: userId }),
+      Friend.deleteMany({ user: userId }),
+      Friend.deleteMany({ friend: userId }),
+      Watchlist.deleteMany({ user: userId }),
+      TriviaAnswers.deleteMany({ user: userId }),
+      User.findByIdAndDelete(userId),
+    ]);
 
     res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
     console.error("Error deleting user and related data:", err);
-    res.status(500).json({ error: "Server error. Could not delete user." });
+    next(err);
   }
 };

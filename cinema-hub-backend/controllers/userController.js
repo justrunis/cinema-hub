@@ -16,7 +16,10 @@ exports.getUser = async (req, res) => {
 
     res.status(200).json({ user });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
 
@@ -36,6 +39,9 @@ exports.updateBio = async (req, res) => {
 
     res.status(200).json({ message: "Bio updated successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };

@@ -30,7 +30,7 @@ export default function Movies() {
   useEffect(() => {
     if (queryFunction !== currentFunction) {
       setSearchParams({
-        page: "1",
+        page: currentPage.toString(),
         query: currentQuery,
         function: queryFunction,
       });
@@ -46,7 +46,9 @@ export default function Movies() {
         ? fetchNowPlayingMovies({ currentPage, signal, query: currentQuery })
         : queryFunction === "top_rated"
         ? fetchTopRatedMovies({ currentPage, signal, query: currentQuery })
-        : fetchUpcomingMovies({ currentPage, signal, query: currentQuery }),
+        : queryFunction === "upcoming"
+        ? fetchUpcomingMovies({ currentPage, signal, query: currentQuery })
+        : fetchTrendingMovies({ currentPage, signal, query: currentQuery }),
 
     staleTime: STALE_TIME,
   });

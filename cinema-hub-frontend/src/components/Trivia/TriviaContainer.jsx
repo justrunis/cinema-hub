@@ -20,7 +20,6 @@ export default function TriviaContainer({ category, difficulty }) {
   const { mutate } = useMutation({
     mutationFn: addUserTriviaAnswers,
     onSuccess: () => {
-      console.log("Trivia answers added successfully");
       queryClient.invalidateQueries("usersTrivia");
     },
   });

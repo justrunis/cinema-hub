@@ -10,6 +10,7 @@ import { STALE_TIME, IMAGE_URL } from "../utils/constants";
 import ShowDetail from "../components/Shows/ShowDetail";
 import StarRating from "../components/Movies/StarRating";
 import Show from "./Show";
+import { PLACEHOLDER_IMAGE } from "../utils/constants";
 
 export default function ShowSeason() {
   const { id, season } = useParams();

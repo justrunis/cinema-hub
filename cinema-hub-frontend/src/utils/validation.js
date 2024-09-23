@@ -60,8 +60,6 @@ export const validateResetPasswordForm = (formData) => {
     return "Invalid password. Password must be at least 6 characters long.";
   }
 
-  console.log(formData);
-
   if (!validatePasswordRepeat(formData.password, formData.confirmPassword)) {
     return "Passwords do not match.";
   }

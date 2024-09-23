@@ -40,7 +40,10 @@ exports.createUser = async (req, res) => {
     res.status(201).json({ message: "User created successfully." });
   } catch (error) {
     console.error("Error creating user:", error);
-    res.status(500).json({ message: "Server error. Please try again later." });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
 
@@ -69,7 +72,10 @@ exports.loginUser = async (req, res) => {
     res.status(200).json({ message: "Login successful.", token });
   } catch (error) {
     console.error("Error logging in user:", error);
-    res.status(500).json({ message: "Server error. Please try again later." });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
 
@@ -97,7 +103,10 @@ exports.forgotPassword = async (req, res) => {
     res.status(200).json({ message: "Password reset token sent." });
   } catch (error) {
     console.error("Error sending password reset token:", error);
-    res.status(500).json({ message: "Server error. Please try again later." });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
 
@@ -132,14 +141,19 @@ exports.resetPassword = async (req, res) => {
     res.status(200).json({ message: "Password reset successful." });
   } catch (error) {
     if (error.name === "TokenExpiredError") {
-      return res
-        .status(400)
-        .json({ message: "Password reset token has expired." });
+      const err = new Error("Password reset token has expired.");
+      err.statusCode = 400;
+      next(err);
     } else if (error.name === "JsonWebTokenError") {
-      return res.status(400).json({ message: "Invalid token." });
+      const err = new Error("Invalid token.");
+      err.statusCode = 400;
+      next(err);
     } else {
       console.error("Error in resetPassword:", error);
-      return res.status(500).json({ message: "An error occurred." });
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     }
   }
 };

@@ -30,7 +30,7 @@ export default function Shows() {
   useEffect(() => {
     if (queryFunction !== currentFunction) {
       setSearchParams({
-        page: "1",
+        page: currentPage.toString(),
         query: currentQuery,
         function: queryFunction,
       });

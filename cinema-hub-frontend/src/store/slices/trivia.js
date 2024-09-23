@@ -20,7 +20,6 @@ const triviaSlice = createSlice({
       state.showQuestions = action.payload;
     },
     setTrivia(state, action) {
-      console.log(action.payload);
       state.trivia = action.payload;
     },
   },
