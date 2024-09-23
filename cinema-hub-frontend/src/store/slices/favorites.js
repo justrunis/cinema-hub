@@ -11,8 +11,8 @@ const favoritesSlice = createSlice({
   name: "favorites",
   initialState,
   reducers: {
-    addFavorite(state, action) {
-      addToFavorites({
+    async addFavorite(state, action) {
+      await addToFavorites({
         token: action.payload.token,
         itemId: action.payload.itemId,
         itemType: action.payload.itemType,
@@ -25,8 +25,8 @@ const favoritesSlice = createSlice({
       });
       state.favorites.push(action.payload);
     },
-    removeFavorite(state, action) {
-      removeFavorite({
+    async removeFavorite(state, action) {
+      await removeFavorite({
         token: action.payload.token,
         itemId: action.payload.id,
       });

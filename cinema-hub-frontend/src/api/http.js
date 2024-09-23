@@ -1,8 +1,9 @@
 import { QueryClient } from "@tanstack/react-query";
-import { API_URL, SERVER_URL } from "../utils/constants";
+import { API_URL } from "../utils/constants";
 
 const VITE_API_KEY = import.meta.env.VITE_API_KEY;
-const VITE_API_READ_ACCESS_TOKEN = import.meta.env.VITE_API_HOST;
+const VITE_API_READ_ACCESS_TOKEN = import.meta.env.VITE_API_READ_ACCESS_TOKEN;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 export const queryClient = new QueryClient();
 
@@ -278,7 +279,8 @@ export async function addToFavorites({
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
-  return response.json();
+  const res = await response.json();
+  return res;
 }
 
 export async function removeFavorite({ token, itemId }) {
@@ -297,8 +299,11 @@ export async function removeFavorite({ token, itemId }) {
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
-  return response.json();
+  const res = await response.json();
+  return res;
 }
+
+// WATCHLIST
 
 export async function fetchUsersWatchlist({ token }) {
   const response = await fetch(SERVER_URL + "/watchlist", {
@@ -345,7 +350,8 @@ export async function addToWatchlist({
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
-  return response.json();
+  const res = await response.json();
+  return res;
 }
 
 export async function removeFromWatchlist({ token, itemId }) {
@@ -364,7 +370,8 @@ export async function removeFromWatchlist({ token, itemId }) {
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
-  return response.json();
+  const res = await response.json();
+  return res;
 }
 
 export async function isItemFavorite({ token, itemId }) {

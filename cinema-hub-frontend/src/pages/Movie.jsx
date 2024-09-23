@@ -22,9 +22,12 @@ import VideoPlayer from "../components/UI/VideoPlayer";
 import MovieReviews from "../components/Movies/MovieReviews";
 import MovieCredits from "../components/Movies/MovieCredits";
 import MovieCard from "../components/Movies/MovieCard";
+import { useState, useEffect } from "react";
 
 export default function Movie() {
   const { id } = useParams();
+
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const token = localStorage.getItem("cinema-hub-token");
@@ -40,7 +43,13 @@ export default function Movie() {
     staleTime: STALE_TIME,
   });
 
-  const isFavorite = isFavoriteData?.isFavorite;
+  const [isFavorite, setIsFavorite] = useState(isFavoriteData?.isFavorite);
+
+  useEffect(() => {
+    if (isFavoriteData?.isFavorite !== undefined) {
+      setIsFavorite(isFavoriteData.isFavorite);
+    }
+  }, [isFavoriteData]);
 
   const { data: isInWatchlist, isLoading: isWatchlistLoading } = useQuery({
     queryKey: ["isWatchlist", id],
@@ -48,7 +57,13 @@ export default function Movie() {
     staleTime: STALE_TIME,
   });
 
-  const isWatchlist = isInWatchlist?.isInWatchlist;
+  const [isWatchlist, setIsWatchlist] = useState(isInWatchlist?.isInWatchlist);
+
+  useEffect(() => {
+    if (isInWatchlist?.isInWatchlist !== undefined) {
+      setIsWatchlist(isInWatchlist.isInWatchlist);
+    }
+  }, [isInWatchlist]);
 
   const { data: similarMovies, isLoading: isSimilarMoviesLoading } = useQuery({
     queryKey: ["similarMovies", id],
@@ -56,9 +71,8 @@ export default function Movie() {
     staleTime: STALE_TIME,
   });
 
-  console.log(similarMovies);
-
   function addFavorite() {
+    setLoading(true);
     const payload = {
       itemId: data.id,
       itemType: "movie",
@@ -69,19 +83,23 @@ export default function Movie() {
       token: localStorage.getItem("cinema-hub-token"),
     };
     dispatch(favoritesActions.addFavorite(payload));
-    window.location.reload();
+    setLoading(false);
+    setIsFavorite(true);
   }
 
   function removeFavorite() {
+    setLoading(true);
     const payload = {
       token: localStorage.getItem("cinema-hub-token"),
       id: data?.id,
     };
     dispatch(favoritesActions.removeFavorite(payload));
-    window.location.reload();
+    setLoading(false);
+    setIsFavorite(false);
   }
 
   function addWatchlist() {
+    setLoading(true);
     const payload = {
       itemId: data.id,
       itemType: "movie",
@@ -92,35 +110,19 @@ export default function Movie() {
       token: localStorage.getItem("cinema-hub-token"),
     };
     dispatch(watchlistActions.addWatchlist(payload));
-    window.location.reload();
+    setLoading(false);
+    setIsWatchlist(true);
   }
 
   function removeWatchlist() {
+    setLoading(true);
     const payload = {
       token: localStorage.getItem("cinema-hub-token"),
       id: data?.id,
     };
     dispatch(watchlistActions.removeWatchlist(payload));
-    window.location.reload();
-  }
-
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
-  if (isError) {
-    return (
-      <div className="flex justify-center p-6">
-        <ErrorIndicator
-          title="Failed to fetch movie details"
-          message={error?.message || "An unknown error occurred"}
-        />
-      </div>
-    );
-  }
-
-  if (data) {
-    document.title = `${data.title || data.original_title}`;
+    setLoading(false);
+    setIsWatchlist(false);
   }
 
   const buttonClass = "flex items-center gap-2 btn rounded-lg";
@@ -155,6 +157,25 @@ export default function Movie() {
         onClick: addWatchlist,
       };
 
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
+
+  if (isError) {
+    return (
+      <div className="flex justify-center p-6">
+        <ErrorIndicator
+          title="Failed to fetch movie details"
+          message={error?.message || "An unknown error occurred"}
+        />
+      </div>
+    );
+  }
+
+  if (data) {
+    document.title = `${data.title || data.original_title}`;
+  }
+
   return (
     <motion.div
       className="flex flex-col justify-center gap-5 items-center p-8"
@@ -162,6 +183,7 @@ export default function Movie() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+      {loading && <LoadingIndicator />}
       <div className="flex flex-col justify-center bg-base-300 rounded-lg shadow-md pt-6 w-full">
         <div className="flex flex-col lg:flex-row items-center justify-around p-8">
           <div className="flex flex-col gap-4 p-8">
@@ -235,7 +257,7 @@ export default function Movie() {
               <Button
                 onClick={favButtonProps.onClick}
                 className={favButtonProps.className}
-                disabled={isFavoriteLoading}
+                disabled={isFavoriteLoading || loading}
               >
                 {favButtonProps.icon}
                 <p className={`text-primary-content ${textClass}`}>
@@ -246,7 +268,7 @@ export default function Movie() {
               <Button
                 onClick={watchlistButtonProps.onClick}
                 className={watchlistButtonProps.className}
-                disabled={isWatchlistLoading}
+                disabled={isWatchlistLoading || loading}
               >
                 {watchlistButtonProps.icon}
                 <p className={`text-primary-content ${textClass}`}>

@@ -6,6 +6,7 @@ import { validateRegistrationForm } from "../utils/validation";
 import { createUser } from "../api/http";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import LoadingIndicator from "../components/UI/LoadingIndicator";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -46,6 +47,8 @@ export default function Register() {
     },
   ];
 
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   async function handleSubmit(event) {
@@ -54,13 +57,21 @@ export default function Register() {
     if (validationResponse) {
       alert(validationResponse);
     } else {
-      const response = await createUser({ formData });
-      if (response.status === 201) {
-        alert("User created successfully!");
-        clear();
-        navigate("/login");
-      } else {
-        alert(response.data.message);
+      setLoading(true);
+      try {
+        const response = await createUser({ formData });
+        setLoading(false);
+        if (response.status === 201) {
+          alert("User created successfully!");
+          clear();
+          navigate("/login");
+        } else {
+          alert(response.data.message);
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error("Error creating user:", error);
+        alert("An error occurred. Please try again later.");
       }
     }
   }
@@ -87,6 +98,7 @@ export default function Register() {
       <h1 className="text-5xl font-extrabold my-4 text-accent text-center">
         Register
       </h1>
+      {loading && <LoadingIndicator />}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -115,6 +127,7 @@ export default function Register() {
             <Button
               type="submit"
               className="p-3 bg-accent text-primary-content rounded-lg min-h-[40px]"
+              disabled={loading}
             >
               Register
             </Button>
@@ -122,6 +135,7 @@ export default function Register() {
               type="button"
               className="p-3 bg-warning text-primary-content rounded-lg min-h-[40px]"
               onClick={clear}
+              disabled={loading}
             >
               Clear
             </Button>

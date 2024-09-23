@@ -24,9 +24,12 @@ import ShowReviews from "../components/Shows/ShowReviews";
 import VideoPlayer from "../components/UI/VideoPlayer";
 import { Link } from "react-router-dom";
 import ShowCard from "../components/Shows/ShowCard";
+import { useState, useEffect } from "react";
 
 export default function Show() {
   const { id } = useParams();
+
+  const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("cinema-hub-token");
   const dispatch = useDispatch();
@@ -42,7 +45,13 @@ export default function Show() {
     staleTime: STALE_TIME,
   });
 
-  const isFavorite = isFavoriteData?.isFavorite;
+  const [isFavorite, setIsFavorite] = useState(isFavoriteData?.isFavorite);
+
+  useEffect(() => {
+    if (isFavoriteData?.isFavorite !== undefined) {
+      setIsFavorite(isFavoriteData?.isFavorite);
+    }
+  }, [isFavoriteData]);
 
   const { data: isInWatchlist, isLoading: isWatchlistLoading } = useQuery({
     queryKey: ["isWatchlist", id],
@@ -50,7 +59,13 @@ export default function Show() {
     staleTime: STALE_TIME,
   });
 
-  const isWatchlist = isInWatchlist?.isInWatchlist;
+  const [isWatchlist, setIsWatchlist] = useState(isInWatchlist?.isInWatchlist);
+
+  useEffect(() => {
+    if (isInWatchlist?.isInWatchlist !== undefined) {
+      setIsWatchlist(isInWatchlist.isInWatchlist);
+    }
+  }, [isInWatchlist]);
 
   const { data: similarShows, isLoading: isSimilarShowsLoading } = useQuery({
     queryKey: ["similarShows", id],
@@ -59,6 +74,7 @@ export default function Show() {
   });
 
   function addFavorite() {
+    setLoading(true);
     const payload = {
       itemId: data.id,
       itemType: "tv",
@@ -69,19 +85,23 @@ export default function Show() {
       token: localStorage.getItem("cinema-hub-token"),
     };
     dispatch(favoritesActions.addFavorite(payload));
-    window.location.reload();
+    setLoading(false);
+    setIsFavorite(true);
   }
 
   function removeFavorite() {
+    setLoading(true);
     const payload = {
       token: localStorage.getItem("cinema-hub-token"),
       id: data?.id,
     };
     dispatch(favoritesActions.removeFavorite(payload));
-    window.location.reload();
+    setLoading(false);
+    setIsFavorite(false);
   }
 
   function addWatchlist() {
+    setLoading(true);
     const payload = {
       itemId: data.id,
       itemType: "tv",
@@ -92,16 +112,19 @@ export default function Show() {
       token: localStorage.getItem("cinema-hub-token"),
     };
     dispatch(watchlistActions.addWatchlist(payload));
-    window.location.reload();
+    setLoading(false);
+    setIsWatchlist(true);
   }
 
   function removeWatchlist() {
+    setLoading(true);
     const payload = {
       token: localStorage.getItem("cinema-hub-token"),
       id: data?.id,
     };
     dispatch(watchlistActions.removeWatchlist(payload));
-    window.location.reload();
+    setLoading(false);
+    setIsWatchlist(false);
   }
 
   if (isLoading) {
@@ -162,6 +185,7 @@ export default function Show() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+      {loading && <LoadingIndicator />}
       <div className="flex flex-col justify-center bg-base-300 rounded-lg shadow-md p-6 w-full">
         <div className="flex justify-start px-4 py-6 gap-4">
           <Link

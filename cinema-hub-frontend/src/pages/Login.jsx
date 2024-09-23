@@ -8,6 +8,7 @@ import { loginUser, queryClient } from "../api/http";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginActions } from "../store/slices/login";
+import LoadingIndicator from "../components/UI/LoadingIndicator";
 
 export default function Login({ onLogin }) {
   const navigate = useNavigate();
@@ -35,14 +36,18 @@ export default function Login({ onLogin }) {
     },
   ];
 
+  const [loading, setLoading] = useState(false);
+
   function handleSubmit(event) {
     event.preventDefault();
     const validationResponse = validateLoginForm(formData);
     if (validationResponse) {
       alert(validationResponse);
     } else {
+      setLoading(true);
       loginUser({ formData })
         .then((response) => {
+          setLoading(false);
           if (response.status === 200) {
             const token = response.data.token;
             dispatch(loginActions.login(token));
@@ -54,6 +59,7 @@ export default function Login({ onLogin }) {
           }
         })
         .catch((error) => {
+          setLoading(false);
           console.error("Error logging in:", error);
           alert("An error occurred. Please try again later.");
         });
@@ -80,6 +86,7 @@ export default function Login({ onLogin }) {
       <h1 className="text-5xl font-extrabold my-4 text-accent text-center">
         Login
       </h1>
+      {loading && <LoadingIndicator />}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -108,6 +115,7 @@ export default function Login({ onLogin }) {
             <Button
               type="submit"
               className="p-3 bg-accent text-primary-content rounded-lg min-h-[40px]"
+              disabled={loading}
             >
               Log in
             </Button>
@@ -115,6 +123,7 @@ export default function Login({ onLogin }) {
               type="button"
               className="p-3 bg-warning text-primary-content rounded-lg min-h-[40px]"
               onClick={clear}
+              disabled={loading}
             >
               Clear
             </Button>
