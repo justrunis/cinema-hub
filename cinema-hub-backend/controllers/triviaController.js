@@ -3,9 +3,25 @@ const TriviaAnswers = require("../models/triviaAnswers");
 
 exports.getTriviaAnswers = async (req, res) => {
   try {
+    const currentPage = parseInt(req.query.page) || 1;
+    console.log(currentPage);
+    const perPage = 6;
+
     const userId = req.user.id;
     const triviaAnswers = await TriviaAnswers.find({ user: userId });
-    res.status(200).json(triviaAnswers);
+
+    const pagrinatedTriviaAnswers = triviaAnswers.slice(
+      (currentPage - 1) * perPage,
+      currentPage * perPage
+    );
+
+    const totalPages = Math.ceil(triviaAnswers.length / perPage);
+
+    res.status(200).json({
+      triviaAnswers: pagrinatedTriviaAnswers,
+      totalPages,
+      currentPage,
+    });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -42,47 +58,74 @@ exports.postUserTriviaAnswers = async (req, res) => {
   }
 };
 
-exports.getTriviaLeaderboard = async (req, res) => {
+exports.getTriviaLeaderboard = async (req, res, next) => {
   try {
+    const currentPage = parseInt(req.query.page) || 1;
+    const perPage = 10;
+
     const triviaAnswers = await TriviaAnswers.find().populate("user");
 
     const leaderboard = {};
 
     triviaAnswers.forEach((trivia) => {
-      let weightedScore = 0;
+      const { correctAnswers, difficulty } = trivia;
 
-      // Use switch/case to determine the weighting based on the difficulty
-      switch (trivia.difficulty) {
+      let weightedScore = 0;
+      let currentBestAttempt = 0;
+
+      switch (difficulty) {
         case "easy":
-          weightedScore = trivia.correctAnswers; // 1 point per correct answer for easy
+          weightedScore = correctAnswers; // 1 point per correct answer
+          currentBestAttempt = correctAnswers * 1;
           break;
         case "medium":
-          weightedScore = trivia.correctAnswers * 2; // 2 points per correct answer for medium
+          weightedScore = correctAnswers * 2; // 2 points per correct answer
+          currentBestAttempt = correctAnswers * 2;
           break;
         case "hard":
-          weightedScore = trivia.correctAnswers * 3; // 3 points per correct answer for hard
+          weightedScore = correctAnswers * 3; // 3 points per correct answer
+          currentBestAttempt = correctAnswers * 3;
           break;
         default:
-          weightedScore = trivia.correctAnswers; // Default case (if difficulty is unknown or malformed)
+          weightedScore = correctAnswers; // Default to 1 point per answer
+          currentBestAttempt = correctAnswers;
           break;
       }
 
-      // Check if the user is already in the leaderboard
       if (!leaderboard[trivia.user._id]) {
         leaderboard[trivia.user._id] = {
           username: trivia.user.username,
           totalScore: 0,
+          totalAttempts: 0,
+          bestAttempt: 0,
         };
       }
 
       leaderboard[trivia.user._id].totalScore += weightedScore;
+      leaderboard[trivia.user._id].totalAttempts += 1;
+
+      if (currentBestAttempt > leaderboard[trivia.user._id].bestAttempt) {
+        leaderboard[trivia.user._id].bestAttempt = currentBestAttempt;
+      }
     });
 
-    const leaderboardArray = Object.values(leaderboard);
+    const leaderboardArray = Object.values(leaderboard).sort(
+      (a, b) => b.totalScore - a.totalScore
+    );
 
-    leaderboardArray.sort((a, b) => b.totalScore - a.totalScore);
+    const totalCount = leaderboardArray.length;
+    const totalPages = totalCount > 0 ? Math.ceil(totalCount / perPage) : 0;
 
-    res.status(200).json(leaderboardArray);
+    const paginatedLeaderboard = leaderboardArray.slice(
+      (currentPage - 1) * perPage,
+      currentPage * perPage
+    );
+
+    res.status(200).json({
+      leaderboard: paginatedLeaderboard,
+      totalPages,
+      currentPage,
+    });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -94,10 +137,8 @@ exports.getTriviaLeaderboard = async (req, res) => {
 exports.getTriviaPointsForUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    // Fetch all trivia answers for the user
     const triviaAnswers = await TriviaAnswers.find({ user: userId });
 
-    // Calculate the total score for the current user
     let totalScore = 0;
 
     triviaAnswers.forEach((trivia) => {
@@ -121,7 +162,6 @@ exports.getTriviaPointsForUser = async (req, res) => {
       totalScore += weightedScore;
     });
 
-    // Fetch all users' scores to calculate rank
     const allUsers = await TriviaAnswers.aggregate([
       {
         $group: {
@@ -150,11 +190,10 @@ exports.getTriviaPointsForUser = async (req, res) => {
         },
       },
       {
-        $sort: { totalScore: -1 }, // Sort by totalScore in descending order
+        $sort: { totalScore: -1 },
       },
     ]);
 
-    // Find the rank of the current user
     const rank =
       allUsers.findIndex((user) => user._id.toString() === userId) + 1;
 

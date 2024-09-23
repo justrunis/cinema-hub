@@ -7,9 +7,12 @@ import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "../../api/http";
 import { changeBio } from "../../api/http";
 import { useSelector } from "react-redux";
+import LoadingIndicator from "../UI/LoadingIndicator";
 
 export default function ProfileModal({ isOpen, onClose, currentBio }) {
   const [bio, setBio] = useState(currentBio || "");
+  const [loading, setLoading] = useState(false);
+
   const token = useSelector((state) => state.login.token);
 
   const { mutate } = useMutation({
@@ -18,14 +21,19 @@ export default function ProfileModal({ isOpen, onClose, currentBio }) {
       queryClient.invalidateQueries("user");
       onClose();
     },
+    onSettled: () => {
+      setLoading(false);
+    },
   });
 
   const handleSaveChanges = () => {
+    setLoading(true);
     mutate({ token, bio });
   };
 
   return (
     <Modal open={isOpen} onClose={onClose}>
+      {loading && <LoadingIndicator />}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -47,8 +55,9 @@ export default function ProfileModal({ isOpen, onClose, currentBio }) {
           <Button
             className="btn btn-primary text-primary-content"
             onClick={handleSaveChanges}
+            disabled={loading}
           >
-            Save Changes
+            {loading ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </motion.div>

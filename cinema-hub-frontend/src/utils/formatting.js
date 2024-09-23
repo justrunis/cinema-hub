@@ -8,8 +8,10 @@ export function makeFirstLetterUpperCase(string) {
 }
 
 export function round(value, precision) {
-  var multiplier = Math.pow(10, precision || 0);
-  return Math.round(value * multiplier) / multiplier;
+  let multiplier = Math.pow(10, precision || 0);
+  let roundedValue = Math.round(value * multiplier) / multiplier;
+
+  return roundedValue.toFixed(precision);
 }
 
 export const dateFormating = new Intl.DateTimeFormat("en-GB", {

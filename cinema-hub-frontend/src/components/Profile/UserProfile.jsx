@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import { fetchUser } from "../../api/http";
 import { useQuery } from "@tanstack/react-query";
 import { STALE_TIME } from "../../utils/constants";
@@ -9,9 +8,12 @@ import Button from "../UI/Button";
 import { makeFirstLetterUpperCase } from "../../utils/formatting";
 import { useState } from "react";
 import ProfileModal from "./ProfileModal";
+import { useNavigate } from "react-router-dom";
 
 export default function UserProfile() {
   const token = localStorage.getItem("cinema-hub-token");
+  const navigate = useNavigate();
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user"],
     queryFn: () => fetchUser({ token }),
@@ -82,15 +84,24 @@ export default function UserProfile() {
           Joined: {new Date(data.user.createdAt).toLocaleDateString()}
         </p>
 
-        {/* Edit Profile Button */}
-        <Button
-          className="p-3 btn btn-primary text-primary-content rounded-lg min-h-[40px]"
-          onClick={() => {
-            setIsOpen(true);
-          }}
-        >
-          Edit Bio
-        </Button>
+        <motion.div className="flex justify-center gap-4 mt-4">
+          <Button
+            className="p-3 btn btn-primary text-primary-content rounded-lg min-h-[40px]"
+            onClick={() => {
+              setIsOpen(true);
+            }}
+          >
+            Edit Bio
+          </Button>
+          <Button
+            className="p-3 btn btn-primary text-primary-content rounded-lg min-h-[40px]"
+            onClick={() => {
+              navigate("/trivia/trivia-history");
+            }}
+          >
+            Trivia history
+          </Button>
+        </motion.div>
       </motion.div>
 
       {/* Additional Info */}

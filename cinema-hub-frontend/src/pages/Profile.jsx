@@ -48,7 +48,7 @@ export default function Profile({ token }) {
           </TabList>
 
           <TabPanel>
-            <UserProfile token={token} />
+            <UserProfile />
           </TabPanel>
           <TabPanel>
             <FavoriteMovies />

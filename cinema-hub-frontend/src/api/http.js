@@ -671,8 +671,8 @@ export async function addUserTriviaAnswers({
   return response.json();
 }
 
-export async function getUsersTriviaAnswers() {
-  const response = await fetch(SERVER_URL + "/trivia", {
+export async function getUsersTriviaAnswers({ page }) {
+  const response = await fetch(SERVER_URL + "/trivia?page=" + page, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -686,14 +686,17 @@ export async function getUsersTriviaAnswers() {
   return response.json();
 }
 
-export async function fetchTriviaLeaderboard() {
-  const response = await fetch(SERVER_URL + "/trivia/leaderboard", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("cinema-hub-token")}`,
-    },
-  });
+export async function fetchTriviaLeaderboard({ page }) {
+  const response = await fetch(
+    SERVER_URL + "/trivia/leaderboard?page=" + page,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("cinema-hub-token")}`,
+      },
+    }
+  );
 
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);

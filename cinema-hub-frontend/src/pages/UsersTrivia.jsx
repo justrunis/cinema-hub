@@ -6,22 +6,41 @@ import LoadingIndicator from "../components/UI/LoadingIndicator";
 import ErrorIndicator from "../components/UI/ErrorIndicator";
 import UserTriviaCard from "../components/Trivia/UserTriviaCard";
 import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import Pager from "../components/UI/Pager";
 
 export default function UsersTrivia() {
+  document.title = "Trivia History";
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get("page") || "1");
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["usersTrivia"],
-    queryFn: getUsersTriviaAnswers,
+    queryKey: ["usersTrivia", currentPage],
+    queryFn: () => getUsersTriviaAnswers({ page: currentPage }),
     staleTime: STALE_TIME,
+    keepPreviousData: true,
   });
 
-  document.title = "Trivia History";
+  console.log(data);
+
+  const handlePageChange = (page) => {
+    const newParams = { page: page.toString() };
+    setSearchParams(newParams);
+  };
 
   if (isLoading) {
     return <LoadingIndicator />;
   }
 
   if (isError) {
-    return <ErrorIndicator title="Failed to load users trivia" error={error} />;
+    return (
+      <ErrorIndicator
+        title="Failed to load users trivia"
+        message={error?.message}
+        error={error}
+      />
+    );
   }
 
   const containerVariants = {
@@ -31,8 +50,8 @@ export default function UsersTrivia() {
 
   const overallAverage =
     Math.round(
-      (data.reduce((acc, user) => acc + user.correctAnswers, 0) /
-        data.length /
+      (data?.triviaAnswers.reduce((acc, user) => acc + user.correctAnswers, 0) /
+        data?.triviaAnswers.length /
         10) *
         100
     ) || 0;
@@ -63,16 +82,23 @@ export default function UsersTrivia() {
         </h3>
       </motion.div>
 
-      {data.length === 0 && (
+      {data?.triviaAnswers.length === 0 && (
         <p className="text-lg text-center col-span-full text-error">
           You have not played any trivia yet.
         </p>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data.map((trivia, index) => (
+        {data?.triviaAnswers.map((trivia, index) => (
           <UserTriviaCard key={trivia._id} trivia={trivia} index={index} />
         ))}
+      </div>
+      <div className="flex justify-center items-center">
+        <Pager
+          currentPage={currentPage}
+          totalPages={data.totalPages}
+          setCurrentPage={handlePageChange}
+        />
       </div>
     </motion.div>
   );

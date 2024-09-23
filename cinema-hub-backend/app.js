@@ -42,6 +42,16 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message });
 });
 
+app.get("/", (req, res) => {
+  res
+    .status(200)
+    .json({ message: "Welcome to the Cinema Hub API", status: 200 });
+});
+
+app.get("*", (req, res) => {
+  res.status(404).json({ message: "Route not found", status: 404 });
+});
+
 // Connect to MongoDB and start the server
 connectDB().then(async () => {
   app.listen(port, () => {
